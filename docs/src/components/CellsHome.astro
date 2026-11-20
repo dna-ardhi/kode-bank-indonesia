@@ -9,14 +9,16 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 const prefix = lang === "en" ? `${base}/en` : base;
 const apiUrl = new URL(`${base}/v1/all.json`, Astro.site).href;
 
-const snippet = `const res = await fetch("${apiUrl}");
+const snippet = `const url = "${apiUrl}";
+const res = await fetch(url);
 const { data } = await res.json();
 
 const bca = data.find((r) => r.id === "bca");
 console.log(bca.bank_code); // "014"`;
 
 // Hand-highlighted instead of <Code>: one short snippet, and the home page stays free of expressive-code.
-const snippetHtml = `<span class="k">const</span> res = <span class="k">await</span> fetch(<span class="s">"${apiUrl}"</span>);
+const snippetHtml = `<span class="k">const</span> url = <span class="s">"${apiUrl}"</span>;
+<span class="k">const</span> res = <span class="k">await</span> fetch(url);
 <span class="k">const</span> { data } = <span class="k">await</span> res.json();
 
 <span class="k">const</span> bca = data.find((r) =&gt; r.id === <span class="s">"bca"</span>);
@@ -223,6 +225,10 @@ const caution = t.caution.replace("{faq}", `<a href="${prefix}/faq/">${t.faq}</a
     }
   }
   @media (prefers-reduced-motion: reduce) {
+    .cell,
+    .copy {
+      transition: none;
+    }
     .cell {
       animation: none;
       opacity: 1;
@@ -231,22 +237,33 @@ const caution = t.caution.replace("{faq}", `<a href="${prefix}/faq/">${t.faq}</a
       animation: none;
     }
   }
+  .cell:has(.snippet) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
   .snippet {
     position: relative;
+    flex: 1;
+    display: flex;
   }
+  /* The copy button sits in a band above the code, so no line runs under it; long URLs wrap instead of clipping. */
   pre {
+    flex: 1;
     margin: 0;
-    padding: 1rem 5rem 1rem 1.1rem;
-    overflow-x: auto;
+    padding: 2.9rem 1.1rem 1rem;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
     border: 1px solid var(--sl-color-gray-5);
     border-radius: 0.25rem;
     background: var(--sl-color-gray-6);
     color: var(--sl-color-gray-1);
     font: var(--sl-text-code-sm) / 1.65 var(--__sl-font-mono);
+    font-variant-ligatures: none;
   }
   pre :global(.k) { color: var(--sl-color-green-high); }
   pre :global(.s) { color: var(--sl-color-text-accent); }
-  pre :global(.c) { color: var(--sl-color-gray-4); }
+  pre :global(.c) { color: var(--sl-color-gray-3); }
   .snippet .copy {
     position: absolute;
     top: 0.5rem;
@@ -256,7 +273,7 @@ const caution = t.caution.replace("{faq}", `<a href="${prefix}/faq/">${t.faq}</a
     height: 1.75rem;
     min-width: 4.5rem;
     padding: 0 0.7rem;
-    border: 1px solid var(--sl-color-gray-5);
+    border: 1px solid var(--kbi-edge);
     border-radius: 0.25rem;
     background: var(--sl-color-bg);
     color: var(--sl-color-gray-3);
@@ -266,6 +283,11 @@ const caution = t.caution.replace("{faq}", `<a href="${prefix}/faq/">${t.faq}</a
   }
   .copy:active {
     transform: scale(0.97);
+  }
+  @media (pointer: coarse) {
+    .copy {
+      height: 2.75rem;
+    }
   }
   @media (hover: hover) and (pointer: fine) {
     .copy:hover {
@@ -277,7 +299,6 @@ const caution = t.caution.replace("{faq}", `<a href="${prefix}/faq/">${t.faq}</a
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    margin-top: 0.75rem;
     padding: 0.4rem 0.5rem 0.4rem 1.1rem;
     border: 1px solid var(--sl-color-gray-5);
     border-radius: 0.25rem;

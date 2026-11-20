@@ -14,6 +14,8 @@
   --sl-color-accent: #d99a1f;
   --sl-color-accent-high: #f2b544;
   --sl-color-hairline: #1c211e;
+  /* Control boundaries must reach 3:1 against the page (WCAG 1.4.11); decorative hairlines stay quiet. */
+  --kbi-edge: var(--sl-color-gray-4);
 }
 
 :root[data-theme="light"] {
@@ -27,8 +29,9 @@
   --sl-color-gray-7: #f4f1e8;
   --sl-color-black: #fbfaf5;
   --sl-color-accent-low: #fbe9c4;
-  --sl-color-accent: #9a6200;
+  --sl-color-accent: #855300;
   --sl-color-accent-high: #5c3b00;
+  --sl-color-hairline: #d8d5ca;
 }
 
 /* Quieter sidebar: Starlight fills the active page solid; use a tint with an accent rule instead. */
@@ -38,4 +41,64 @@
   background-color: var(--sl-color-accent-low);
   box-shadow: inset 2px 0 0 var(--sl-color-text-accent);
   color: var(--sl-color-accent-high);
+}
+
+/* Content pages carry the spec-sheet voice: hairline rules and mono table heads. */
+/* The rule goes on Starlight's heading wrapper, which spans the column; on the h2 itself it only spans the text. */
+.sl-markdown-content .sl-heading-wrapper.level-h2 {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--sl-color-gray-5);
+}
+.sl-markdown-content .sl-heading-wrapper.level-h2 > h2 {
+  margin-top: 0;
+}
+/* Code is copied, so === and => must stay what they are. */
+code,
+pre,
+kbd,
+samp {
+  font-variant-ligatures: none;
+  font-feature-settings:
+    "calt" 0,
+    "liga" 0;
+}
+/* Flat pagination cards: border, no shadow. */
+.pagination-links a {
+  box-shadow: none;
+  border: 1px solid var(--sl-color-gray-5);
+}
+.sl-markdown-content table {
+  border-collapse: collapse;
+}
+.sl-markdown-content th {
+  font-family: var(--sl-font-mono);
+  font-size: var(--sl-text-xs);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--sl-color-gray-3);
+}
+.sl-markdown-content th,
+.sl-markdown-content td {
+  border: 0;
+  border-top: 1px solid var(--sl-color-gray-5);
+}
+.sl-markdown-content tr:last-child td {
+  border-bottom: 1px solid var(--sl-color-gray-5);
+}
+.sl-markdown-content tbody tr:nth-child(2n) {
+  background: transparent;
+}
+
+/* Reading column: tighter display headings, balanced wrapping, inline code as a hairline-boxed token. */
+.sl-markdown-content :is(h1, h2, h3) {
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.sl-markdown-content :not(pre) > code {
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.25rem;
+  background: transparent;
+  padding: 0.05em 0.35em;
+  font-size: 0.9em;
 }

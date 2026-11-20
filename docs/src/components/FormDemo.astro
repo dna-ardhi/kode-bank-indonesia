@@ -7,22 +7,37 @@ const t = strings[lang].form;
 
 <div class="kbi-form" data-t={JSON.stringify(strings[lang].form)}>
   <label for="kbi-pick">{t.pick}</label>
-  <input id="kbi-pick" class="pick" type="text" placeholder={t.placeholder} autocomplete="off" aria-describedby="kbi-hint" />
+  <input
+    id="kbi-pick"
+    class="pick"
+    type="text"
+    role="combobox"
+    aria-expanded="false"
+    aria-controls="kbi-results"
+    aria-autocomplete="list"
+    placeholder={t.placeholder}
+    autocomplete="off"
+    aria-describedby="kbi-hint"
+  />
   <p id="kbi-hint" class="hint">{t.hint}</p>
-  <ul class="results" aria-label={t.pick} hidden></ul>
+  <p class="sr" aria-live="polite"></p>
+  <ul id="kbi-results" class="results" role="listbox" aria-label={t.pick} hidden></ul>
 
   <div class="chosen" hidden>
-    <p class="summary"></p>
+    <p class="summary"><span class="code"></span> <span class="badge"></span></p>
     <p class="warn" role="note" hidden>{t.unverified}</p>
 
     <label for="kbi-acc" class="acc-label"></label>
     <input id="kbi-acc" class="acc" type="text" autocomplete="off" />
 
     <label for="kbi-holder">{t.holder}</label>
-    <input id="kbi-holder" class="holder" type="text" autocomplete="off" />
+    <input id="kbi-holder" class="holder" type="text" autocomplete="off" placeholder={t.holderPlaceholder} />
     <p class="hint">{t.nameNote}</p>
 
-    <p class="payload-title">{t.payload}</p>
+    <div class="payload-head">
+      <p class="payload-title">{t.payload}</p>
+      <button type="button" class="copy" data-idle={t.copy} data-done={t.copied}>{t.copy}</button>
+    </div>
     <pre class="payload"><code></code></pre>
   </div>
 </div>
@@ -38,7 +53,9 @@ const t = strings[lang].form;
     const pick = $<HTMLInputElement>(".pick");
     const results = $<HTMLUListElement>(".results");
     const chosen = $<HTMLElement>(".chosen");
-    const summary = $<HTMLElement>(".summary");
+    const summaryCode = $<HTMLElement>(".summary .code");
+    const badge = $<HTMLElement>(".summary .badge");
+    const live = $<HTMLElement>(".sr");
     const warn = $<HTMLElement>(".warn");
     const accLabel = $<HTMLElement>(".acc-label");
     const acc = $<HTMLInputElement>(".acc");
@@ -63,43 +80,103 @@ const t = strings[lang].form;
     const choose = (r: Institution) => {
       selected = r;
       pick.value = r.display_name;
-      results.hidden = true;
+      close();
       chosen.hidden = false;
-      summary.textContent = `${t.code}: ${r.bank_code ?? t.noCode}${r.bic ? ` · BIC ${r.bic}` : ""}`;
+      summaryCode.textContent = `${r.display_name} · ${t.code}: ${r.bank_code ?? t.noCode}${r.bic ? ` · BIC ${r.bic}` : ""}`;
+      badge.textContent = r.verified ? t.badgeOk : t.badgeNo;
+      badge.className = r.verified ? "badge ok" : "badge no";
       warn.hidden = r.verified;
       accLabel.textContent = t[r.account_number.kind] ?? r.account_number.label;
       acc.inputMode = r.account_number.kind === "phone" ? "tel" : "numeric";
       showPayload();
     };
 
+    let rows: Institution[] = [];
+    let active = -1;
+
+    const close = () => {
+      results.hidden = true;
+      pick.setAttribute("aria-expanded", "false");
+      pick.removeAttribute("aria-activedescendant");
+      active = -1;
+    };
+    const highlight = (i: number) => {
+      active = i;
+      for (const [n, el] of results.querySelectorAll<HTMLElement>("[role=option]").entries()) {
+        el.setAttribute("aria-selected", String(n === i));
+        if (n === i) {
+          pick.setAttribute("aria-activedescendant", el.id);
+          el.scrollIntoView({ block: "nearest" });
+        }
+      }
+    };
+
     pick.addEventListener("input", () => {
-      selected = undefined;
-      chosen.hidden = true;
-      payload.textContent = "";
       const q = pick.value.trim();
       if (!q) {
-        results.hidden = true;
+        // Only an emptied field drops the choice, so a typo while editing keeps what was typed below.
+        selected = undefined;
+        chosen.hidden = true;
+        payload.textContent = "";
+        live.textContent = "";
+        close();
         return;
       }
-      const rows = pickable(matches(q));
+      const all = pickable(matches(q), Number.POSITIVE_INFINITY);
+      rows = all.slice(0, 8);
       results.replaceChildren(
-        ...rows.map((r) => {
+        ...rows.map((r, i) => {
           const li = document.createElement("li");
-          const b = document.createElement("button");
-          b.type = "button";
-          b.textContent = r.display_name;
-          b.addEventListener("click", () => choose(r));
-          li.append(b);
+          li.id = `kbi-opt-${i}`;
+          li.setAttribute("role", "option");
+          li.setAttribute("aria-selected", "false");
+          li.textContent = r.display_name;
+          // mousedown, so the pick lands before the input loses focus.
+          li.addEventListener("mousedown", (e) => {
+            e.preventDefault();
+            choose(r);
+          });
           return li;
         }),
       );
-      if (rows.length === 0) {
+      const note = (cls: string, text: string) => {
         const li = document.createElement("li");
-        li.className = "none";
-        li.textContent = t.none;
-        results.replaceChildren(li);
-      }
+        li.className = cls;
+        li.setAttribute("role", "presentation");
+        li.textContent = text;
+        results.append(li);
+      };
+      if (rows.length === 0) note("none", t.none);
+      else if (all.length > rows.length) note("none", t.more.replace("{n}", String(all.length - rows.length)));
+      live.textContent = t.found.replace("{n}", String(all.length));
       results.hidden = false;
+      pick.setAttribute("aria-expanded", "true");
+      active = -1;
+    });
+    pick.addEventListener("keydown", (e) => {
+      if (results.hidden || rows.length === 0) return;
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        highlight((active + 1) % rows.length);
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        highlight((active - 1 + rows.length) % rows.length);
+      } else if (e.key === "Enter" && active >= 0) {
+        e.preventDefault();
+        choose(rows[active]);
+      } else if (e.key === "Escape") {
+        close();
+      }
+    });
+    pick.addEventListener("blur", close);
+    const copy = $<HTMLButtonElement>(".copy");
+    copy.addEventListener("click", () => {
+      // Not awaited: a pending clipboard permission prompt must not freeze the label.
+      navigator.clipboard?.writeText(payload.textContent ?? "").catch(() => {});
+      copy.textContent = t.copied;
+      setTimeout(() => {
+        copy.textContent = t.copy;
+      }, 1300);
     });
     acc.addEventListener("input", showPayload);
     holder.addEventListener("input", showPayload);
@@ -121,7 +198,7 @@ const t = strings[lang].form;
   }
   input {
     padding: 0.55rem 0.65rem;
-    border: 1px solid var(--sl-color-gray-5);
+    border: 1px solid var(--kbi-edge);
     border-radius: 0.4rem;
     background: var(--sl-color-bg-nav);
     color: var(--sl-color-text);
@@ -136,23 +213,44 @@ const t = strings[lang].form;
     list-style: none;
     margin: 0;
     padding: 0;
-    border: 1px solid var(--sl-color-gray-5);
+    border: 1px solid var(--kbi-edge);
     border-radius: 0.4rem;
     overflow: hidden;
   }
-  .results :global(button) {
-    width: 100%;
-    padding: 0.55rem 0.65rem;
-    text-align: start;
-    background: transparent;
-    border: 0;
-    color: var(--sl-color-text);
-    font: inherit;
+  .results :global([role="option"]) {
+    padding: 0.7rem 0.65rem;
     cursor: pointer;
   }
-  .results :global(button:hover),
-  .results :global(button:focus-visible) {
+  .results :global([role="option"]:hover),
+  .results :global([role="option"][aria-selected="true"]) {
     background: var(--sl-color-gray-6);
+  }
+  .results :global([role="option"][aria-selected="true"]) {
+    outline: 2px solid var(--sl-color-text-accent);
+    outline-offset: -2px;
+  }
+  .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    margin: 0;
+  }
+  .badge {
+    display: inline-block;
+    padding: 0.1rem 0.5rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font-size: var(--sl-text-xs);
+  }
+  .badge.ok {
+    color: var(--sl-color-gray-1);
+    border-color: var(--kbi-edge);
+  }
+  .badge.no {
+    color: var(--sl-color-orange-high);
+    background: var(--sl-color-orange-low);
   }
   .results :global(.none) {
     padding: 0.55rem 0.65rem;
@@ -174,12 +272,32 @@ const t = strings[lang].form;
   .warn {
     margin: 0;
     padding: 0.6rem 0.75rem;
-    border-inline-start: 3px solid var(--sl-color-orange);
+    border: 1px solid var(--sl-color-orange);
+    border-radius: 0.4rem;
     background: var(--sl-color-orange-low);
     font-size: var(--sl-text-sm);
   }
+  .payload-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1rem;
+    margin-top: 0.75rem;
+  }
+  .copy {
+    min-height: 2.75rem;
+    min-width: 5rem;
+    padding: 0 0.8rem;
+    border: 1px solid var(--kbi-edge);
+    border-radius: 0.4rem;
+    background: transparent;
+    color: var(--sl-color-text);
+    font: inherit;
+    font-size: var(--sl-text-sm);
+    cursor: pointer;
+  }
   .payload-title {
-    margin: 0.75rem 0 0;
+    margin: 0;
     font-weight: 600;
     font-size: var(--sl-text-sm);
   }

@@ -4,6 +4,7 @@ import { strings, type Lang } from "./strings.ts";
 const { lang = "id" } = Astro.props as { lang?: Lang };
 const t = strings[lang].browser;
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const verifiedDoc = `${base}${lang === "en" ? "/en" : ""}/reference/verified/`;
 ---
 
 <div class="kbi-browser" data-lang={lang} data-base={base} data-t={JSON.stringify(strings[lang])}>
@@ -34,15 +35,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
           <th scope="col">{t.name}</th>
           <th scope="col">{t.code}</th>
           <th scope="col">{t.bic}</th>
+          <th scope="col"><a href={verifiedDoc}>{t.verified}</a></th>
           <th scope="col">{t.biFast}</th>
           <th scope="col">{t.sknbi}</th>
-          <th scope="col">{t.verified}</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
   </div>
-  <p class="empty" hidden>{t.empty}</p>
+  <p class="empty" hidden>{t.empty} <button type="button" class="reset">{t.reset}</button></p>
 </div>
 
 <script>
@@ -70,10 +71,51 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
       category.append(o);
     }
 
-    const cell = (text: string, cls = "") => {
+    const cell = (text: string, label: string, cls = "") => {
       const td = document.createElement("td");
       td.textContent = text;
+      td.dataset.label = label;
       if (cls) td.className = cls;
+      return td;
+    };
+    // The glyph is decoration; the hidden word is what a screen reader hears.
+    const flag = (on: boolean, label: string) => {
+      const td = cell("", label, "flag");
+      const g = document.createElement("span");
+      g.setAttribute("aria-hidden", "true");
+      g.textContent = on ? "✓" : "–";
+      const w = document.createElement("span");
+      w.className = "sr";
+      w.textContent = on ? t.yes : t.flagNo;
+      td.append(g, w);
+      return td;
+    };
+    const codeCell = (code: string | null) => {
+      if (!code) return cell(t.noCode, t.code, "muted");
+      const td = cell("", t.code, "mono");
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "code-copy";
+      b.textContent = code;
+      b.setAttribute("aria-label", `${t.copy} ${code}`);
+      b.addEventListener("click", () => {
+        // Not awaited: a pending clipboard permission prompt must not freeze the label.
+        navigator.clipboard?.writeText(code).catch(() => {});
+        b.dataset.done = t.copied;
+        count.textContent = `${t.copied} ${code}`;
+        setTimeout(() => {
+          delete b.dataset.done;
+        }, 1300);
+      });
+      td.append(b);
+      return td;
+    };
+    const badge = (on: boolean) => {
+      const td = cell("", t.verified);
+      const b = document.createElement("span");
+      b.className = on ? "badge ok" : "badge no";
+      b.textContent = on ? t.badgeOk : t.badgeNo;
+      td.append(b);
       return td;
     };
 
@@ -88,6 +130,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
         ...rows.map((r) => {
           const tr = document.createElement("tr");
           const name = document.createElement("td");
+          name.className = "name";
           const a = document.createElement("a");
           a.href = `${base}/v1/by-id/${r.id}.json`;
           a.textContent = r.display_name;
@@ -97,11 +140,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
           name.append(sub);
           tr.append(
             name,
-            cell(r.bank_code ?? t.noCode, r.bank_code ? "mono" : "muted"),
-            cell(r.bic ?? "–", "mono"),
-            cell(r.bi_fast ? "✓" : "–"),
-            cell(r.sknbi ? "✓" : "–"),
-            cell(r.verified ? t.yes : t.no, r.verified ? "ok" : "muted"),
+            codeCell(r.bank_code),
+            cell(r.bic ?? "–", t.bic, "mono"),
+            badge(r.verified),
+            flag(r.bi_fast, t.biFast),
+            flag(r.sknbi, t.sknbi),
           );
           return tr;
         }),
@@ -111,6 +154,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
     };
 
     for (const el of [q, type, category, verified]) el.addEventListener("input", render);
+    $<HTMLButtonElement>(".reset").addEventListener("click", () => {
+      q.value = type.value = category.value = "";
+      verified.checked = false;
+      render();
+      q.focus();
+    });
     render();
   }
 </script>
@@ -135,16 +184,31 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
     align-items: center;
     padding-block: 0.5rem;
   }
+  .controls > * {
+    margin: 0;
+  }
   input[type="search"],
   select {
+    box-sizing: border-box;
+    min-height: 2.75rem;
     width: 100%;
     min-width: 0;
     padding: 0.5rem 0.6rem;
-    border: 1px solid var(--sl-color-gray-5);
+    border: 1px solid var(--kbi-edge);
     border-radius: 0.4rem;
     background: var(--sl-color-bg-nav);
     color: var(--sl-color-text);
     font: inherit;
+  }
+  .reset {
+    min-height: 2.75rem;
+    padding: 0 0.9rem;
+    border: 1px solid var(--kbi-edge);
+    border-radius: 0.4rem;
+    background: transparent;
+    color: var(--sl-color-text-accent);
+    font: inherit;
+    cursor: pointer;
   }
   .count {
     color: var(--sl-color-gray-3);
@@ -159,6 +223,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
     border-collapse: collapse;
     font-size: var(--sl-text-sm);
   }
+  th {
+    white-space: nowrap;
+  }
   .kbi-browser :global(td),
   th {
     padding: 0.5rem 0.6rem;
@@ -172,8 +239,108 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
   .kbi-browser :global(td.muted) {
     color: var(--sl-color-gray-3);
   }
-  .kbi-browser :global(td.ok) {
+  .kbi-browser :global(.badge) {
+    display: inline-block;
+    padding: 0.1rem 0.5rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font-size: var(--sl-text-xs);
+    white-space: nowrap;
+  }
+  /* Most rows are verified, so that state stays quiet and the exceptions carry the colour. */
+  .kbi-browser :global(.badge.ok) {
+    color: var(--sl-color-gray-1);
+    border-color: var(--kbi-edge);
+  }
+  .kbi-browser :global(.badge.no) {
+    color: var(--sl-color-orange-high);
+    background: var(--sl-color-orange-low);
+  }
+  .kbi-browser :global(.code-copy) {
+    padding: 0.4rem 0.5rem;
+    margin-inline-start: -0.5rem;
+    border: 0;
+    border-radius: 0.25rem;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: copy;
+  }
+  .kbi-browser :global(.code-copy[data-done])::after {
+    content: attr(data-done);
+    margin-inline-start: 0.5rem;
     color: var(--sl-color-green-high);
+    font-family: var(--sl-font-sans);
+    font-size: var(--sl-text-xs);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .kbi-browser :global(.code-copy:hover) {
+      background: var(--sl-color-gray-6);
+    }
+  }
+  .kbi-browser :global(.sr) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .kbi-browser :global(td.name a) {
+    display: inline-block;
+    padding-block: 0.4rem;
+  }
+  input[type="checkbox"] {
+    width: 1.5rem;
+    height: 1.5rem;
+    accent-color: var(--sl-color-text-accent);
+  }
+  label.check {
+    min-height: 2.75rem;
+  }
+  /* Narrow screens: one record per card, low-value flags dropped. */
+  @media (max-width: 40rem) {
+    .controls {
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem 0.75rem;
+      margin-block: 0.75rem;
+    }
+    .controls > label:first-child,
+    .controls > label.check {
+      grid-column: 1 / -1;
+    }
+    .count {
+      margin-block: 0.25rem;
+    }
+    .kbi-browser :global(thead),
+    .kbi-browser :global(td.flag) {
+      display: none;
+    }
+    /* A grid row inside a table box shrinks to its content; make the box block so dividers span the card. */
+    .kbi-browser :global(table),
+    .kbi-browser :global(tbody) {
+      display: block;
+    }
+    .kbi-browser :global(tr) {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 1rem;
+      padding: 0.5rem 0;
+      border-top: 1px solid var(--sl-color-gray-5);
+    }
+    .kbi-browser :global(td) {
+      border: 0;
+      padding: 0.2rem 0;
+    }
+    .kbi-browser :global(td.name) {
+      grid-column: 1 / -1;
+    }
+    .kbi-browser :global(td[data-label]:not(.name))::before {
+      content: attr(data-label);
+      display: block;
+      color: var(--sl-color-gray-3);
+      font-size: var(--sl-text-xs);
+    }
   }
   .kbi-browser :global(small) {
     color: var(--sl-color-gray-3);
