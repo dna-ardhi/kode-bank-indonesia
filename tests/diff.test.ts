@@ -139,7 +139,7 @@ describe("diffSources with ASPI QRIS", () => {
     const operators = kinds().flatMap((c) => (c.kind === "qris-new" ? [c.operator] : []));
     for (const o of ["PT Dompet Anak Bangsa", "PT Visionet Internasional", "PT Espay Debit Indonesia Koe"])
       expect(operators).not.toContain(o);
-    expect(operators).toContain("PT Astra Digital Arta");
+    expect(operators).toContain("PT Capital Net Indonesia");
   });
 
   it("skips switching companies, which have no app name", () => {
@@ -148,7 +148,14 @@ describe("diffSources with ASPI QRIS", () => {
   });
 
   it("proposes only the app names we don't have yet", () => {
-    expect(kinds()).toContainEqual({ kind: "qris-apps", id: "bca", apps: ["myBCA", "BCA mobile", "Sakuku"] });
+    const bca = qris.banks.map((e) =>
+      e.operator === "PT Bank Central Asia, Tbk" ? { ...e, apps: [...e.apps, "BCA Baru"] } : e,
+    );
+    expect(kinds({ ...qris, banks: bca })).toContainEqual({
+      kind: "qris-apps",
+      id: "bca",
+      apps: ["BCA Baru"],
+    });
     const gopay = qris.nonBanks.map((e) =>
       e.operator === "PT Dompet Anak Bangsa" ? { ...e, apps: ["GoPay", "GoPay Later"] } : e,
     );

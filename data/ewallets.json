@@ -113,5 +113,97 @@
     "sources": [],
     "verified": false,
     "updated_at": "2026-11-20"
+  },
+  {
+    "id": "astrapay",
+    "type": "ewallet",
+    "category": "ewallet",
+    "name": "PT Astra Digital Arta",
+    "display_name": "AstraPay",
+    "aliases": [],
+    "parent_id": null,
+    "bank_code": null,
+    "bic": null,
+    "bi_fast": false,
+    "sknbi": false,
+    "account_number": {
+      "kind": "phone",
+      "label": "Nomor HP"
+    },
+    "logo": null,
+    "status": "active",
+    "merged_into": null,
+    "sources": ["aspi-qris"],
+    "verified": false,
+    "updated_at": "2026-11-21"
+  },
+  {
+    "id": "dokupay",
+    "type": "ewallet",
+    "category": "ewallet",
+    "name": "PT Nusa Satu Inti Artha",
+    "display_name": "DokuPay",
+    "aliases": [],
+    "parent_id": null,
+    "bank_code": null,
+    "bic": null,
+    "bi_fast": false,
+    "sknbi": false,
+    "account_number": {
+      "kind": "phone",
+      "label": "Nomor HP"
+    },
+    "logo": null,
+    "status": "active",
+    "merged_into": null,
+    "sources": ["aspi-qris"],
+    "verified": false,
+    "updated_at": "2026-11-21"
+  },
+  {
+    "id": "ottocash",
+    "type": "ewallet",
+    "category": "ewallet",
+    "name": "PT Transaksi Artha Gemilang",
+    "display_name": "OttoCash",
+    "aliases": [],
+    "parent_id": null,
+    "bank_code": null,
+    "bic": null,
+    "bi_fast": false,
+    "sknbi": false,
+    "account_number": {
+      "kind": "phone",
+      "label": "Nomor HP"
+    },
+    "logo": null,
+    "status": "active",
+    "merged_into": null,
+    "sources": ["aspi-qris"],
+    "verified": false,
+    "updated_at": "2026-11-21"
+  },
+  {
+    "id": "isaku",
+    "type": "ewallet",
+    "category": "ewallet",
+    "name": "PT Inti Dunia Sukses",
+    "display_name": "i.saku",
+    "aliases": [],
+    "parent_id": null,
+    "bank_code": null,
+    "bic": null,
+    "bi_fast": false,
+    "sknbi": false,
+    "account_number": {
+      "kind": "phone",
+      "label": "Nomor HP"
+    },
+    "logo": null,
+    "status": "active",
+    "merged_into": null,
+    "sources": ["aspi-qris"],
+    "verified": false,
+    "updated_at": "2026-11-21"
   }
 ]
