@@ -1,0 +1,355 @@
+---
+import { Aside, LinkButton } from "@astrojs/starlight/components";
+import { stats } from "../stats.ts";
+import { strings, type Lang } from "./strings.ts";
+
+const { lang = "id" } = Astro.props as { lang?: Lang };
+const t = strings[lang].home;
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const prefix = lang === "en" ? `${base}/en` : base;
+const apiUrl = new URL(`${base}/v1/all.json`, Astro.site).href;
+
+const snippet = `const res = await fetch("${apiUrl}");
+const { data } = await res.json();
+
+const bca = data.find((r) => r.id === "bca");
+console.log(bca.bank_code); // "014"`;
+
+// Hand-highlighted instead of <Code>: one short snippet, and the home page stays free of expressive-code.
+const snippetHtml = `<span class="k">const</span> res = <span class="k">await</span> fetch(<span class="s">"${apiUrl}"</span>);
+<span class="k">const</span> { data } = <span class="k">await</span> res.json();
+
+<span class="k">const</span> bca = data.find((r) =&gt; r.id === <span class="s">"bca"</span>);
+console.log(bca.bank_code); <span class="c">// "014"</span>`;
+const install = "npm install kode-bank-indonesia";
+
+const share = (n: number) => (n / stats.total).toFixed(3);
+const meters = [
+  { label: t.banks, n: stats.banks, accent: false },
+  { label: t.ewallets, n: stats.ewallets, accent: false },
+  { label: t.verified, n: stats.verified, accent: true },
+];
+const endpoints = [
+  ["/v1/all.json", t.ep.all],
+  ["/v1/banks.json", t.ep.banks],
+  ["/v1/ewallets.json", t.ep.ewallets],
+  ["/v1/by-id/{id}.json", t.ep.byId],
+  ["/v1/meta.json", t.ep.meta],
+];
+const caution = t.caution.replace("{faq}", `<a href="${prefix}/faq/">${t.faq}</a>`);
+---
+
+<div class="kbi-home not-content">
+  <section class="bento">
+    <div class="cell s7" style="--i:0">
+      <span class="label">{t.eyebrow}</span>
+      <h1>{t.titleBefore}<span class="mono">{t.titleMono}</span>.</h1>
+      <p class="sub">{t.sub}</p>
+      <div class="cta">
+        <LinkButton href={`${prefix}/quick-start/`} variant="primary" icon="right-arrow">{t.quickStart}</LinkButton>
+        <LinkButton href={`${prefix}/reference/api/`} variant="minimal">{t.api}</LinkButton>
+      </div>
+    </div>
+
+    <div class="cell s5" style="--i:1">
+      <span class="label">{t.listed}</span>
+      <div class="big">{stats.total}</div>
+      {
+        meters.map((m) => (
+          <>
+            <div class="meter-label"><span>{m.label}</span> <b>{m.n}</b></div>
+            <div class="bar"><i class:list={{ accent: m.accent }} style={`--p:${share(m.n)}`} /></div>
+          </>
+        ))
+      }
+    </div>
+
+    <div class="cell s7" style="--i:2">
+      <div class="snippet">
+        <button type="button" class="copy" data-copy={snippet} data-done={t.copied}>{t.copy}</button>
+        <pre><code set:html={snippetHtml} /></pre>
+      </div>
+      <div class="install">
+        <span class="prompt" aria-hidden="true">$</span>
+        <code>{install}</code>
+        <button type="button" class="copy" data-copy={install} data-done={t.copied}>{t.copy}</button>
+      </div>
+    </div>
+
+    <div class="cell s5" style="--i:3">
+      <span class="label">{t.endpoints}</span>
+      <table>
+        <tbody>
+          {endpoints.map(([path, text]) => (<tr><th scope="row"><code>GET {path}</code></th><td>{text}</td></tr>))}
+        </tbody>
+      </table>
+    </div>
+
+    {
+      t.cells.map((c, i) => (
+        <div class="cell s4" style={`--i:${4 + i}`}>
+          <h2>{c.title}</h2>
+          <p>{c.text}</p>
+        </div>
+      ))
+    }
+
+    <div class="cell s12" style="--i:7">
+      <Aside type="caution" title={t.cautionTitle}><Fragment set:html={caution} /></Aside>
+    </div>
+  </section>
+</div>
+
+<style is:global>
+  /* The splash template has no sidebar and a narrow content column; the grid needs room. */
+  :root:not([data-has-sidebar]) {
+    --sl-content-width: 72rem;
+  }
+  /* Starlight prints the page title above the content; the grid has its own h1. */
+  main:has(.kbi-home) > .content-panel:first-child {
+    display: none;
+  }
+</style>
+
+<style>
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 1px;
+    margin-block: 2rem 3rem;
+    background: var(--sl-color-gray-5);
+    border: 1px solid var(--sl-color-gray-5);
+  }
+  .cell {
+    min-width: 0;
+    padding: 1.5rem;
+    background: var(--sl-color-bg);
+    opacity: 0;
+    animation: rise 420ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    animation-delay: calc(var(--i, 0) * 55ms);
+    transition: background-color 150ms ease-out;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .cell:hover {
+      background: var(--sl-color-bg-nav);
+    }
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .s7 { grid-column: span 7; }
+  .s5 { grid-column: span 5; }
+  .s4 { grid-column: span 4; }
+  .s12 { grid-column: span 12; }
+
+  .label {
+    font: 500 var(--sl-text-2xs) var(--__sl-font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sl-color-gray-3);
+  }
+  h1 {
+    margin-top: 0.9rem;
+    font-size: clamp(1.9rem, 4.2vw, 3rem);
+    line-height: 1.06;
+    letter-spacing: -0.035em;
+    font-weight: 650;
+    color: var(--sl-color-white);
+  }
+  h1 .mono {
+    color: var(--sl-color-text-accent);
+    font-family: var(--__sl-font-mono);
+    font-weight: 500;
+    letter-spacing: -0.04em;
+  }
+  .sub {
+    margin-top: 0.9rem;
+    max-width: 44ch;
+    color: var(--sl-color-gray-3);
+  }
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.4rem;
+  }
+  .big {
+    margin-top: 0.6rem;
+    font: 500 clamp(4rem, 9vw, 7rem) / 0.9 var(--__sl-font-mono);
+    letter-spacing: -0.07em;
+    color: var(--sl-color-text-accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .meter-label {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.9rem;
+    font: var(--sl-text-2xs) var(--__sl-font-mono);
+    color: var(--sl-color-gray-3);
+  }
+  .meter-label b {
+    color: var(--sl-color-white);
+    font-weight: 500;
+  }
+  .bar {
+    position: relative;
+    height: 5px;
+    margin-top: 0.4rem;
+    overflow: hidden;
+    background: var(--sl-color-gray-5);
+  }
+  .bar i {
+    position: absolute;
+    inset: 0;
+    background: var(--sl-color-white);
+    transform-origin: left;
+    transform: scaleX(var(--p));
+    animation: grow 700ms cubic-bezier(0.23, 1, 0.32, 1) both;
+    animation-delay: 350ms;
+  }
+  .bar i.accent {
+    background: var(--sl-color-text-accent);
+  }
+  @keyframes grow {
+    from {
+      transform: scaleX(0);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cell {
+      animation: none;
+      opacity: 1;
+    }
+    .bar i {
+      animation: none;
+    }
+  }
+  .snippet {
+    position: relative;
+  }
+  pre {
+    margin: 0;
+    padding: 1rem 5rem 1rem 1.1rem;
+    overflow-x: auto;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.25rem;
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-gray-1);
+    font: var(--sl-text-code-sm) / 1.65 var(--__sl-font-mono);
+  }
+  pre :global(.k) { color: var(--sl-color-green-high); }
+  pre :global(.s) { color: var(--sl-color-text-accent); }
+  pre :global(.c) { color: var(--sl-color-gray-4); }
+  .snippet .copy {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+  .copy {
+    height: 1.75rem;
+    min-width: 4.5rem;
+    padding: 0 0.7rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.25rem;
+    background: var(--sl-color-bg);
+    color: var(--sl-color-gray-3);
+    font: var(--sl-text-2xs) var(--__sl-font-mono);
+    cursor: pointer;
+    transition: color 150ms ease-out, border-color 150ms ease-out, transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .copy:active {
+    transform: scale(0.97);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .copy:hover {
+      color: var(--sl-color-white);
+      border-color: var(--sl-color-gray-4);
+    }
+  }
+  .install {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.75rem;
+    padding: 0.4rem 0.5rem 0.4rem 1.1rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.25rem;
+    background: var(--sl-color-gray-6);
+    font: var(--sl-text-code-sm) var(--__sl-font-mono);
+  }
+  .install .prompt {
+    color: var(--sl-color-text-accent);
+  }
+  .install code {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: none;
+    padding: 0;
+    color: var(--sl-color-gray-1);
+  }
+  table {
+    width: 100%;
+    margin-top: 0.6rem;
+    border-collapse: collapse;
+    font-size: var(--sl-text-sm);
+  }
+  th,
+  td {
+    padding: 0.55rem 0;
+    border-top: 1px solid var(--sl-color-gray-5);
+    text-align: left;
+    vertical-align: top;
+    font-weight: 400;
+  }
+  td {
+    padding-left: 0.9rem;
+    color: var(--sl-color-gray-3);
+  }
+  th code {
+    color: var(--sl-color-text-accent);
+    font-size: var(--sl-text-xs);
+    background: none;
+    padding: 0;
+    white-space: nowrap;
+  }
+  h2 {
+    margin: 0 0 0.4rem;
+    font: 500 var(--sl-text-sm) var(--__sl-font-mono);
+    color: var(--sl-color-text-accent);
+  }
+  .cell p {
+    color: var(--sl-color-gray-3);
+    font-size: var(--sl-text-sm);
+    line-height: 1.6;
+  }
+  .cell :global(.starlight-aside) {
+    margin: 0;
+  }
+  @media (max-width: 860px) {
+    .s7, .s5, .s4 { grid-column: span 12; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>(".kbi-home .copy").forEach((btn) => {
+    const idle = btn.textContent;
+    btn.addEventListener("click", () => {
+      // Not awaited: a pending clipboard permission prompt must not freeze the label.
+      navigator.clipboard?.writeText(btn.dataset.copy ?? "").catch(() => {});
+      btn.textContent = btn.dataset.done ?? idle;
+      setTimeout(() => {
+        btn.textContent = idle;
+      }, 1300);
+    });
+  });
+</script>

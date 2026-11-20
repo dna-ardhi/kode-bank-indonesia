@@ -60,6 +60,46 @@ export const strings = {
         "Daftar ini nggak bisa mengecek apakah nama cocok dengan nomor rekening. Untuk itu kamu butuh API account inquiry berbayar.",
       payload: "Yang bisa kamu kirim ke backend",
     },
+    home: {
+      eyebrow: "// JSON statis · paket npm · MIT",
+      titleBefore: "Kode bank Indonesia, tinggal ",
+      titleMono: "fetch",
+      sub: "Semua bank dan e-wallet di Indonesia, lengkap dengan kode bank 3 digit dan BIC. Gratis, tanpa server, tanpa API key.",
+      quickStart: "Mulai cepat",
+      api: "Referensi API",
+      listed: "institusi tercatat",
+      banks: "bank",
+      ewallets: "e-wallet",
+      verified: "verified",
+      endpoints: "endpoint",
+      ep: {
+        all: "Semua record dalam satu envelope",
+        banks: "Bank, brand bank, unit usaha syariah",
+        ewallets: "E-wallet",
+        byId: "Satu record, tanpa envelope",
+        meta: "Versi, jumlah record, hash sumber resmi",
+      },
+      cells: [
+        {
+          title: "Tinggal fetch",
+          text: "File statis di GitHub Pages, tanpa rate limit dari sisi kami. Ada juga mirror CDN dan fallback ke data bawaan paket npm.",
+        },
+        {
+          title: "Tahu batasannya",
+          text: "Setiap record punya flag verified. Kalau false, ada field yang belum terkonfirmasi, dan kami bilang apa adanya, bukan ditebak.",
+        },
+        {
+          title: "Terbuka",
+          text: "Lisensi MIT. Koreksi data sangat disambut, terutama kode bank beserta buktinya.",
+        },
+      ],
+      cautionTitle: "Yang tidak bisa dilakukan daftar ini",
+      caution:
+        "Daftar ini membantu user <strong>memilih bank yang benar</strong>. Ia <strong>tidak bisa</strong> memastikan bahwa nomor rekening tertentu benar-benar milik nama tertentu. Untuk itu kamu butuh API <em>account inquiry</em> berbayar dari bank atau penyedia pembayaran. Baca juga {faq}.",
+      faq: "FAQ",
+      copy: "Salin",
+      copied: "Disalin ✓",
+    },
   },
   en: {
     categories: categories.en,
@@ -98,6 +138,46 @@ export const strings = {
       nameNote:
         "This list can't check whether a name matches an account number. That needs a paid account inquiry API.",
       payload: "What you could send to your backend",
+    },
+    home: {
+      eyebrow: "// Static JSON · npm package · MIT",
+      titleBefore: "Indonesian bank codes, just ",
+      titleMono: "fetch",
+      sub: "Every bank and e-wallet in Indonesia, with 3-digit bank codes and BICs. Free, no server, no API key.",
+      quickStart: "Quick start",
+      api: "API reference",
+      listed: "institutions listed",
+      banks: "banks",
+      ewallets: "e-wallets",
+      verified: "verified",
+      endpoints: "endpoints",
+      ep: {
+        all: "Every record in one envelope",
+        banks: "Banks, bank brands, sharia units",
+        ewallets: "E-wallets",
+        byId: "One record, no envelope",
+        meta: "Version, record counts, official source hashes",
+      },
+      cells: [
+        {
+          title: "Just fetch",
+          text: "Static files on GitHub Pages, no rate limits on our side. There are also CDN mirrors and a fallback to the data bundled in the npm package.",
+        },
+        {
+          title: "Honest about limits",
+          text: "Every record has a verified flag. If it's false, some field isn't confirmed, and we say so instead of guessing.",
+        },
+        {
+          title: "Open",
+          text: "MIT licensed. Corrections are very welcome, especially bank codes with evidence.",
+        },
+      ],
+      cautionTitle: "What this list can't do",
+      caution:
+        "It helps users <strong>pick the right bank</strong>. It <strong>can't</strong> confirm that an account number really belongs to a given holder name. That needs a paid <em>account inquiry</em> API from a bank or payment provider. See the {faq}.",
+      faq: "FAQ",
+      copy: "Copy",
+      copied: "Copied ✓",
     },
   },
 } as const;

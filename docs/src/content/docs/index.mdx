@@ -2,37 +2,8 @@
 title: kode-bank-indonesia
 description: Kode bank, BIC, dan daftar e-wallet Indonesia. Gratis, statis, tinggal fetch.
 template: splash
-hero:
-  tagline: Semua bank dan e-wallet di Indonesia, lengkap dengan kode bank 3 digit dan BIC. Gratis, tanpa server, tinggal fetch.
-  actions:
-    - text: Mulai cepat
-      link: ./quick-start/
-      icon: right-arrow
-    - text: Referensi API
-      link: ./reference/api/
-      variant: minimal
 ---
 
-import { Card, CardGrid, Aside } from "@astrojs/starlight/components";
-import { stats } from "@/stats.ts";
+import CellsHome from "@/components/CellsHome.astro";
 
-Lagi bikin form di mana user memilih bank atau e-wallet, lalu mengisi nomor rekening dan nama pemilik? Proyek ini menyediakan daftarnya sebagai **JSON statis** (di-host di GitHub Pages) dan **paket npm ber-TypeScript**. Nggak ada server yang perlu kamu urus, nggak perlu API key.
-
-<CardGrid>
-  <Card title="Isinya apa saja?" icon="list-format">
-    {stats.total} institusi: {stats.banks} bank (termasuk brand dan unit usaha syariah) dan {stats.ewallets} e-wallet. {stats.verified} di antaranya sudah `verified`.
-  </Card>
-  <Card title="Tinggal fetch" icon="rocket">
-    Satu `fetch` ke `/v1/all.json` dan datanya langsung bisa dipakai. Ada juga mirror CDN dan fallback ke data bawaan paket npm.
-  </Card>
-  <Card title="Tahu batasannya" icon="approve-check">
-    Setiap record punya flag `verified`. Kalau `false`, ada field yang belum terkonfirmasi, dan kami bilang apa adanya, bukan ditebak.
-  </Card>
-  <Card title="Terbuka" icon="github">
-    Lisensi MIT. Koreksi data sangat disambut, terutama kode bank beserta buktinya.
-  </Card>
-</CardGrid>
-
-<Aside type="caution" title="Yang tidak bisa dilakukan daftar ini">
-  Daftar ini membantu user **memilih bank yang benar**. Ia **tidak bisa** memastikan bahwa nomor rekening tertentu benar-benar milik nama tertentu. Untuk itu kamu butuh API *account inquiry* berbayar dari bank atau penyedia pembayaran. Baca juga [FAQ](./faq/).
-</Aside>
+<CellsHome lang="id" />

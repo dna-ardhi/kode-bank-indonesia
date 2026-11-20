@@ -111,6 +111,7 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
   parallel text with the same facts, not literal translations.
 - Facts mirror the README, schema and data. Counts come from `docs/src/stats.ts` (built from the
   package data), never typed by hand.
+- Theme: `docs/src/styles/custom.css` overrides only Starlight's tokens (dark amber "Ledger" plus a light mode). The home page is `components/CellsHome.astro`, a bento grid used by both `index.mdx` files. Don't pass `expressiveCode` options in `astro.config.mjs`: they make the build emit two stylesheets and only one lands in `dist/`.
 - Interactive pages (`data/browse`, `form-example`) use `docs/src/components/`, which import the real
   `search()` from `src/index.ts`. UI strings for both languages are in `components/strings.ts`.
 - Links in Markdown are relative (e.g. `../reference/schema/`), because the site is served under the

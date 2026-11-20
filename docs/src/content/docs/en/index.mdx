@@ -2,37 +2,8 @@
 title: kode-bank-indonesia
 description: Indonesian bank codes, BICs and e-wallets. Free, static, just fetch.
 template: splash
-hero:
-  tagline: Every bank and e-wallet in Indonesia, with 3-digit bank codes and BICs. Free, no server, just fetch.
-  actions:
-    - text: Quick start
-      link: ./quick-start/
-      icon: right-arrow
-    - text: API reference
-      link: ./reference/api/
-      variant: minimal
 ---
 
-import { Card, CardGrid, Aside } from "@astrojs/starlight/components";
-import { stats } from "@/stats.ts";
+import CellsHome from "@/components/CellsHome.astro";
 
-Building a form where users pick a bank or e-wallet and then enter an account number and holder name? This project gives you the list as **static JSON** (hosted on GitHub Pages) and a **typed npm package**. No server to run, no API key.
-
-<CardGrid>
-  <Card title="What's inside?" icon="list-format">
-    {stats.total} institutions: {stats.banks} banks (including brands and sharia units) and {stats.ewallets} e-wallets. {stats.verified} of them are `verified`.
-  </Card>
-  <Card title="Just fetch" icon="rocket">
-    One `fetch` to `/v1/all.json` and you're set. There are also CDN mirrors and a fallback to the data bundled in the npm package.
-  </Card>
-  <Card title="Honest about limits" icon="approve-check">
-    Every record has a `verified` flag. If it's `false`, some field isn't confirmed, and we say so instead of guessing.
-  </Card>
-  <Card title="Open" icon="github">
-    MIT licensed. Corrections are very welcome, especially bank codes with evidence.
-  </Card>
-</CardGrid>
-
-<Aside type="caution" title="What this list can't do">
-  It helps users **pick the right bank**. It **can't** confirm that an account number belongs to a given holder name. That needs a paid *account inquiry* API from a bank or payment provider. See the [FAQ](./faq/).
-</Aside>
+<CellsHome lang="en" />

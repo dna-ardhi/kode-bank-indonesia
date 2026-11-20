@@ -1,0 +1,32 @@
+/* Ledger theme: near-black with amber accent in dark mode, warm paper in light mode.
+   Only Starlight's own tokens are overridden, so every page inherits the look. */
+:root {
+  --sl-font-mono: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+  --sl-color-white: #f4f2ec;
+  --sl-color-gray-1: #e7e5df;
+  --sl-color-gray-2: #c4c3bc;
+  --sl-color-gray-3: #8d918b;
+  --sl-color-gray-4: #5f665f;
+  --sl-color-gray-5: #242926;
+  --sl-color-gray-6: #131614;
+  --sl-color-black: #0c0e0d;
+  --sl-color-accent-low: #2b2208;
+  --sl-color-accent: #d99a1f;
+  --sl-color-accent-high: #f2b544;
+  --sl-color-hairline: #1c211e;
+}
+
+:root[data-theme="light"] {
+  --sl-color-white: #1b1f1c;
+  --sl-color-gray-1: #232824;
+  --sl-color-gray-2: #3b413c;
+  --sl-color-gray-3: #5d635e;
+  --sl-color-gray-4: #8a8f89;
+  --sl-color-gray-5: #d8d5ca;
+  --sl-color-gray-6: #ebe8dd;
+  --sl-color-gray-7: #f4f1e8;
+  --sl-color-black: #fbfaf5;
+  --sl-color-accent-low: #fbe9c4;
+  --sl-color-accent: #9a6200;
+  --sl-color-accent-high: #5c3b00;
+}

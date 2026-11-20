@@ -10,6 +10,7 @@ export default defineConfig({
     starlight({
       title: "kode-bank-indonesia",
       description: "Kode bank, BIC, dan e-wallet Indonesia sebagai static JSON API dan paket npm.",
+      customCss: ["./src/styles/custom.css"],
       defaultLocale: "root",
       locales: {
         root: { label: "Bahasa Indonesia", lang: "id" },
