@@ -1,6 +1,6 @@
 {
   "name": "kode-bank-indonesia",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Indonesian banks and e-wallets with bank codes and BICs, as a static JSON API and a typed npm package",
   "type": "module",
   "license": "MIT",
