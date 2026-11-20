@@ -6,7 +6,7 @@ on:
 
 permissions:
   contents: read
-  id-token: write # npm provenance
+  id-token: write # npm trusted publishing (OIDC) and provenance
 
 jobs:
   publish:
@@ -26,6 +26,9 @@ jobs:
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
+      - name: Check that npm supports trusted publishing (11.5.1 or newer)
+        run: |
+          npm -v
+          node -e 'const [a, b, c] = process.argv[1].split(".").map(Number); process.exit(a > 11 || (a === 11 && (b > 5 || (b === 5 && c >= 1))) ? 0 : 1)' "$(npm -v)"
+      # No token: npm logs in with GitHub's OIDC identity. Configure it with `npm trust github`.
       - run: npm publish --provenance --access public # prepack builds dist/ and lib/
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

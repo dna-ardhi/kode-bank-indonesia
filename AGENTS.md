@@ -123,6 +123,9 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
   changes are major plus a new `/vN` path.
 - `npm version <x.y.z> -m "chore(release): %s"`, then `git push origin main --follow-tags`. The
   `v*` tag triggers `publish-npm.yml`. Pushing needs the user's OK.
+- Publishing uses npm trusted publishing (OIDC), so the workflow holds no npm token. The trusted
+  publisher is tied to the workflow file name `publish-npm.yml` in this repo: if you rename the file
+  or the repo, re-run `npm trust github kode-bank-indonesia --file <file> --repo <owner/repo>`.
 
 ## Working agreements
 
