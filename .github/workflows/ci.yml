@@ -27,5 +27,3 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test # also builds dist/
       - run: pnpm docs:build
-      - run: pnpm build:lib
-      - run: npm pack --dry-run

@@ -1,42 +1,16 @@
 {
   "name": "kode-bank-indonesia",
   "version": "1.0.1",
-  "description": "Indonesian banks and e-wallets with bank codes and BICs, as a static JSON API and a typed npm package",
+  "description": "Indonesian banks and e-wallets with bank codes and BICs, as a static JSON API",
   "type": "module",
+  "private": true,
   "license": "MIT",
-  "keywords": [
-    "indonesia",
-    "bank",
-    "bank-code",
-    "kode-bank",
-    "sandi-bank",
-    "bic",
-    "swift",
-    "bi-fast",
-    "e-wallet",
-    "ewallet"
-  ],
   "homepage": "https://dna-ardhi.github.io/kode-bank-indonesia/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dna-ardhi/kode-bank-indonesia.git"
   },
   "bugs": "https://github.com/dna-ardhi/kode-bank-indonesia/issues",
-  "exports": {
-    ".": {
-      "types": "./lib/index.d.ts",
-      "default": "./lib/index.js"
-    }
-  },
-  "types": "./lib/index.d.ts",
-  "files": [
-    "lib",
-    "dist"
-  ],
-  "sideEffects": false,
-  "engines": {
-    "node": ">=20.10"
-  },
   "scripts": {
     "validate": "node scripts/validate.ts",
     "test": "node scripts/build.ts && vitest run",
@@ -45,8 +19,6 @@
     "typecheck": "tsc --noEmit",
     "sync:fetch": "node scripts/sync/fetch-sources.ts",
     "build": "node scripts/build.ts",
-    "prepack": "node scripts/build.ts && tsc -p tsconfig.build.json",
-    "build:lib": "tsc -p tsconfig.build.json",
     "sync:diff": "node scripts/sync/diff.ts",
     "docs:dev": "node scripts/docs.ts dev",
     "docs:build": "node scripts/docs.ts build"
