@@ -25,24 +25,25 @@ export function parseAspiQris(html: string): QrisList {
   let current: string[] | undefined;
   let seen = 0;
   for (const { tag, text } of tokens) {
-    if (tag === "h3") {
-      const m = /^Penyelenggara Jasa Sistem Pembayaran \((BANK|NON BANK)\)$/.exec(text);
-      if (!m) throw new Error(`unexpected h3 ${JSON.stringify(text)}`);
+    const m = tag === "h3" ? /^Penyelenggara Jasa Sistem Pembayaran \((BANK|NON BANK)\)$/.exec(text) : null;
+    if (m) {
       current = groups[m[1] as "BANK" | "NON BANK"];
       seen++;
-    } else {
-      if (!current) throw new Error("operator heading before any group heading");
+    } else if (current) {
+      if (tag === "h3") throw new Error(`unexpected h3 after the lists began: ${JSON.stringify(text)}`);
       current.push(text);
-    }
+    } // else: FAQ headings before the first group
   }
   if (seen !== 2) throw new Error(`expected 2 groups, got ${seen}`);
+  const isOperator = (s: string) => /^PT\.? /i.test(s);
   const pairs = (list: string[], label: string): QrisEntry[] => {
+    // A footer heading follows the last list; it is not an operator.
+    if (list.length % 2 && !isOperator(list[list.length - 1])) list = list.slice(0, -1);
     if (list.length === 0 || list.length % 2)
       throw new Error(`${label}: odd or empty heading count ${list.length}`);
     const out: QrisEntry[] = [];
     for (let i = 0; i < list.length; i += 2) {
-      if (!/^PT\.? /i.test(list[i]))
-        throw new Error(`${label}: not an operator name: ${JSON.stringify(list[i])}`);
+      if (!isOperator(list[i])) throw new Error(`${label}: not an operator name: ${JSON.stringify(list[i])}`);
       out.push({ operator: list[i], apps: list[i + 1] ? list[i + 1].split(/\s*,\s*/) : [] });
     }
     return out;

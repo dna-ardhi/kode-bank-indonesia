@@ -79,7 +79,7 @@ describe("parseIndonesianDate", () => {
   it("throws on unknown formats", () => expect(() => parseIndonesianDate("2026-09-24")).toThrow());
 });
 
-describe("parseAspiQris (fetched 2026-11-21; fixture holds only the h2/h3 headings)", () => {
+describe("parseAspiQris (fetched 2026-11-21; fixture holds only the page's h2/h3 headings)", () => {
   const { banks, nonBanks } = parseAspiQris(readFileSync("tests/fixtures/aspi-qris-2026-11-21.html", "utf8"));
   it("returns every operator", () => {
     expect(banks).toHaveLength(49);

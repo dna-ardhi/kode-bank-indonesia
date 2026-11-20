@@ -130,6 +130,7 @@ treat their `bank_code` as certain. Always unverified:
 | [SKNBI participant list](https://www.bi.go.id/id/fungsi-utama/sistem-pembayaran/ritel/infrastruktur/Documents/List-Peserta-SKNBI.pdf) (Bank Indonesia, PDF) | `sknbi` membership by BIC only. The current edition's name column doesn't line up with its BICs, so its names aren't used. |
 | [BI licensed payment providers](https://www.bi.go.id/id/layanan/informasi-perizinan/sistem-pembayaran/default.aspx) | E-wallet operators (checked by hand) |
 | [OJK head-office list, Bank Umum dan Syariah](https://ojk.go.id/id/kanal/perbankan/data-dan-statistik/Pages/Daftar-Alamat-Kantor-Pusat-Bank-Umum-Dan-Syariah.aspx) (xlsx) | `bank_code` ("Sandi Bank") |
+| [ASPI QRIS directory](https://aspi-indonesia.or.id/standar-dan-layanan/qris/) | Operator ↔ app name links, as review evidence for aliases and new e-wallets (no BICs or codes) |
 | Published bank code lists | `bank_code` where OJK has no entry, and a cross-check |
 
 `bank_code` is the "Sandi Bank" in OJK's head-office list. For records OJK doesn't list (sharia

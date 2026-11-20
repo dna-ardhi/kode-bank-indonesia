@@ -80,6 +80,11 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
 - OJK's site has rejected non-browser clients before. A plain GET with our honest user agent works
   today and `fetch-sources.ts` uses it. If OJK blocks us, the sync fails loudly: do not try to get
   around its firewall, and fall back to saving the file by hand into `tests/fixtures/`.
+- ASPI's QRIS page (`aspi-qris`) lists operator -> app name pairs (49 banks, 37 non-banks; four
+  switching companies have no app). Its robots.txt allows the page but disallows `*.pdf`, so the
+  membership PDFs are not fetched. It is evidence for aliases and e-wallet candidates only: it has no
+  BICs or codes, and the sync reports it without changing data. The hash covers the parsed pairs, not
+  the raw HTML (which changes on every request).
 - BI's licensed payment provider register (`bi-pjp`):
   https://www.bi.go.id/id/layanan/informasi-perizinan/sistem-pembayaran/default.aspx. It is an
   ASP.NET list with an "Unduh" export and a product-name search. The server starts resetting

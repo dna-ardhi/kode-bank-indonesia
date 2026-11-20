@@ -9,6 +9,7 @@ description: Dari mana nama, BIC, dan kode bank berasal, termasuk batasan tiap s
 | [Daftar peserta SKNBI](https://www.bi.go.id/id/fungsi-utama/sistem-pembayaran/ritel/infrastruktur/Documents/List-Peserta-SKNBI.pdf) (Bank Indonesia, PDF) | Keanggotaan `sknbi`, hanya berdasarkan BIC |
 | [Penyelenggara jasa pembayaran berizin BI](https://www.bi.go.id/id/layanan/informasi-perizinan/sistem-pembayaran/default.aspx) | Operator e-wallet (dicek manual) |
 | [Daftar kantor pusat Bank Umum dan Syariah OJK](https://ojk.go.id/id/kanal/perbankan/data-dan-statistik/Pages/Daftar-Alamat-Kantor-Pusat-Bank-Umum-Dan-Syariah.aspx) (xlsx) | `bank_code` ("Sandi Bank") |
+| [Direktori QRIS ASPI](https://aspi-indonesia.or.id/standar-dan-layanan/qris/) | Hubungan operator ↔ nama aplikasi, sebagai bukti review untuk alias dan e-wallet baru (tanpa BIC atau kode) |
 | Daftar kode bank yang diterbitkan pihak lain | `bank_code` kalau OJK nggak punya entrinya, dan sebagai pembanding |
 
 ## Kenapa SKNBI hanya dipakai untuk BIC

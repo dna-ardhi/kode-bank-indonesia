@@ -4,6 +4,7 @@ import banksJson from "../data/banks.json" with { type: "json" };
 import ewalletsJson from "../data/ewallets.json" with { type: "json" };
 import type { ParticipantList } from "../scripts/lib/pdf-table.ts";
 import { diffSources } from "../scripts/sync/diff.ts";
+import { parseAspiQris } from "../scripts/sync/parse-aspi-qris.ts";
 import { parseBifast } from "../scripts/sync/parse-bifast.ts";
 import { parseOjkBanks } from "../scripts/sync/parse-ojk.ts";
 import { parseSknbi } from "../scripts/sync/parse-sknbi.ts";
@@ -14,6 +15,7 @@ import type { Institution } from "../src/index.ts";
 const fixture = (f: string) => readFileSync(new URL(`fixtures/${f}`, import.meta.url));
 const bifast = await parseBifast(fixture("bi-fast-2026-09-24.pdf"));
 const sknbi = await parseSknbi(fixture("sknbi-2026-09-24.pdf"));
+const qris = parseAspiQris(fixture("aspi-qris-2026-11-21.html").toString("utf8"));
 const ojk = parseOjkBanks(fixture("ojk-bank-umum-2026-06.xlsx"));
 const banks = banksJson as Institution[];
 const ewallets = ewalletsJson as Institution[];
@@ -119,5 +121,41 @@ describe("diffSources with OJK", () => {
   it("reports an OJK bank the data has never heard of", () => {
     const r = run([...ojk, { code: "888", name: "PT BANK BARU" }]);
     expect(r.changes).toEqual([{ kind: "ojk-new", code: "888", ojkName: "PT BANK BARU" }]);
+  });
+});
+
+describe("diffSources with ASPI QRIS", () => {
+  const run = (q = qris) => diffSources({ bifast, sknbi, banks, ewallets, ignored, qris: q, today });
+  const kinds = (q = qris) => run(q).changes;
+
+  it("reports app names and new operators but changes no data", () => {
+    const r = run();
+    expect(r.banks).toEqual(banks);
+    expect(r.ewallets).toEqual(ewallets);
+    expect(r.changes.every((c) => c.kind === "qris-apps" || c.kind === "qris-new")).toBe(true);
+  });
+
+  it("matches the e-wallets we already have, so they are not reported as new", () => {
+    const operators = kinds().flatMap((c) => (c.kind === "qris-new" ? [c.operator] : []));
+    for (const o of ["PT Dompet Anak Bangsa", "PT Visionet Internasional", "PT Espay Debit Indonesia Koe"])
+      expect(operators).not.toContain(o);
+    expect(operators).toContain("PT Astra Digital Arta");
+  });
+
+  it("skips switching companies, which have no app name", () => {
+    const operators = kinds().flatMap((c) => (c.kind === "qris-new" ? [c.operator] : []));
+    expect(operators).not.toContain("PT Alto Network");
+  });
+
+  it("proposes only the app names we don't have yet", () => {
+    expect(kinds()).toContainEqual({ kind: "qris-apps", id: "bca", apps: ["myBCA", "BCA mobile", "Sakuku"] });
+    const gopay = qris.nonBanks.map((e) =>
+      e.operator === "PT Dompet Anak Bangsa" ? { ...e, apps: ["GoPay", "GoPay Later"] } : e,
+    );
+    expect(kinds({ ...qris, nonBanks: gopay })).toContainEqual({
+      kind: "qris-apps",
+      id: "gopay",
+      apps: ["GoPay Later"],
+    });
   });
 });

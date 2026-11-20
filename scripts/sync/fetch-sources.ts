@@ -1,8 +1,9 @@
 import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import { parseAspiQris } from "./parse-aspi-qris.ts";
 
-export type Kind = "pdf" | "xlsx";
+export type Kind = "pdf" | "xlsx" | "html";
 /** `link` set: `url` is a page, and the file is the first href on it matching `link`. */
 export type Source = { key: string; url: string; file: string; kind: Kind; link?: RegExp };
 export type Hashes = Record<string, { sha256: string; updated_at: string }>;
@@ -29,6 +30,13 @@ export const SOURCES: Source[] = [
     kind: "xlsx",
     // The Indonesian edition ("Daftar Alamat …"); the English one starts with "List of".
     link: /href="([^"]*Daftar[^"]*Bank[^"]*Umum[^"]*\.xlsx)"/i,
+  },
+  // HTML with per-request noise (nonces, asset hashes): the hash covers the parsed pairs, see fetchSources.
+  {
+    key: "aspi-qris",
+    url: "https://aspi-indonesia.or.id/standar-dan-layanan/qris/",
+    file: "aspi-qris.html",
+    kind: "html",
   },
 ];
 
@@ -64,7 +72,7 @@ export function compare(prev: Hashes, key: string, hash: string): FetchResult["s
 }
 
 // Note: bi.go.id hangs on HEAD requests, so always GET.
-async function download(url: string, kind: Kind | "html", attempts = 3): Promise<Uint8Array> {
+async function download(url: string, kind: Kind, attempts = 3): Promise<Uint8Array> {
   for (let i = 1; ; i++) {
     try {
       const res = await fetch(url, {
@@ -100,7 +108,11 @@ export async function fetchSources({ write = false } = {}): Promise<FetchResult[
           : url;
         const body = await download(fileUrl, kind);
         writeFileSync(new URL(file, rawDir), body);
-        const hash = sha256(body);
+        const hash = sha256(
+          kind === "html"
+            ? new TextEncoder().encode(JSON.stringify(parseAspiQris(new TextDecoder().decode(body))))
+            : body,
+        );
         const status = compare(prev, key, hash);
         if (status !== "unchanged") next[key] = { sha256: hash, updated_at: today };
         return { key, status, sha256: hash };

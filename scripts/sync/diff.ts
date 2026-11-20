@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import type { Institution } from "../../src/index.ts";
 import type { Participant, ParticipantList } from "../lib/pdf-table.ts";
 import { validate } from "../validate.ts";
+import { parseAspiQris, type QrisList } from "./parse-aspi-qris.ts";
 import { parseBifast } from "./parse-bifast.ts";
 import { normName, type OjkBank, parseOjkBanks } from "./parse-ojk.ts";
 import { parseSknbi } from "./parse-sknbi.ts";
@@ -16,7 +17,9 @@ export type Change =
   | { kind: "sknbi-unknown"; bic: string }
   | { kind: "ojk-fill"; id: string; code: string; ojkName: string }
   | { kind: "ojk-conflict"; id: string; ours: string; code: string; ojkName: string }
-  | { kind: "ojk-new"; code: string; ojkName: string };
+  | { kind: "ojk-new"; code: string; ojkName: string }
+  | { kind: "qris-apps"; id: string; apps: string[] }
+  | { kind: "qris-new"; operator: string; apps: string[] };
 
 export type DiffInput = {
   bifast: ParticipantList;
@@ -27,6 +30,8 @@ export type DiffInput = {
   ignored: Record<string, string>;
   /** OJK "Sandi Bank" list. Report only: bank_code is never rewritten here. */
   ojk?: OjkBank[];
+  /** ASPI QRIS directory. Report only: app names for review, and e-wallet operators not in the data. */
+  qris?: QrisList;
   today: string;
 };
 
@@ -153,6 +158,23 @@ export function diffSources(input: DiffInput) {
     else changes.push({ kind: "ojk-fill", id: named[0].id, code: o.code, ojkName: o.name });
   }
 
+  // ASPI QRIS: operator -> app names. Report only, a human decides what becomes an alias or a record.
+  if (input.qris) {
+    const all = [...banks, ...ewallets];
+    const named = (operator: string) =>
+      all.filter((r) =>
+        [r.name, r.display_name, ...r.aliases].some((n) => normName(n) === normName(operator)),
+      );
+    for (const { operator, apps } of [...input.qris.banks, ...input.qris.nonBanks]) {
+      const rs = named(operator);
+      const known = new Set(rs.flatMap((r) => [r.display_name, ...r.aliases]).map((n) => n.toLowerCase()));
+      const fresh = apps.filter((a) => !known.has(a.toLowerCase()));
+      if (rs.length === 1 && fresh.length) changes.push({ kind: "qris-apps", id: rs[0].id, apps: fresh });
+      else if (rs.length === 0 && apps.length && input.qris.nonBanks.some((e) => e.operator === operator))
+        changes.push({ kind: "qris-new", operator, apps });
+    }
+  }
+
   // Brands (no BIC of their own) carry their parent's network flags.
   const byId = new Map([...banks, ...ewallets].map((r) => [r.id, r]));
   for (const r of banks) {
@@ -225,6 +247,17 @@ function report({ bifast, sknbi }: DiffInput, changes: Change[]) {
     of("ojk-new").map((c) => `| ${code(c.code)} | ${c.ojkName} |`),
   );
 
+  section(
+    "ASPI QRIS: app names not yet in the data",
+    "| id | App names |",
+    of("qris-apps").map((c) => `| ${code(c.id)} | ${c.apps.join(", ")} |`),
+  );
+  section(
+    "ASPI QRIS: e-wallet operators not in the data",
+    "| Operator | App names |",
+    of("qris-new").map((c) => `| ${c.operator} | ${c.apps.join(", ")} |`),
+  );
+
   if (changes.length === 0) {
     lines.push("No participant changes. Only the source files' hashes changed.", "");
   } else {
@@ -233,6 +266,7 @@ function report({ bifast, sknbi }: DiffInput, changes: Change[]) {
       "",
       "- [ ] New records: set `id`, `category`, `display_name`, `aliases`, and `bank_code` (with evidence in `sources/bank-codes.json`). Move e-wallet operators to `ewallets.json` or list them in `sources/ignored-bics.json`.",
       "- [ ] OJK sections: apply a proposed `bank_code` only after checking the name really is the same bank; for a conflict, decide which is right and update `sources/bank-codes.json`.",
+      "- [ ] ASPI QRIS sections: add app names to `aliases` only for the same operator; before adding an e-wallet, check its licence on the BI register by hand and that it can receive bank transfers.",
       "- [ ] Removed participants: check whether the bank closed, merged or rebranded, and set `status` / `merged_into` if so. Records are never deleted.",
       "- [ ] Renames: update `display_name` / `aliases` if the brand changed.",
       "- [ ] Set `verified: true` again only for records that meet the rule in AGENTS.md.",
@@ -259,6 +293,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     ignored: json("sources/ignored-bics.json"),
     ojk: existsSync(new URL("sources/raw/ojk-bank-umum.xlsx", root))
       ? parseOjkBanks(read("sources/raw/ojk-bank-umum.xlsx"))
+      : undefined,
+    qris: existsSync(new URL("sources/raw/aspi-qris.html", root))
+      ? parseAspiQris(read("sources/raw/aspi-qris.html").toString("utf8"))
       : undefined,
     today: new Date().toISOString().slice(0, 10),
   });

@@ -1,4 +1,8 @@
 {
+  "aspi-qris": {
+    "sha256": "5a7ddce66da3c6bf5b49a15e157fbd8a49648f2443eacd96582238d96c0b1b2b",
+    "updated_at": "2026-11-20"
+  },
   "bi-fast": {
     "sha256": "0f49be692bc7d881ad65409bdfd1e7bc16805c66c88d9548a4d0a2f6d1f0e4d5",
     "updated_at": "2026-11-20"
