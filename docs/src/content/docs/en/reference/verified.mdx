@@ -34,10 +34,9 @@ Right now: {stats.withCode} records have a `bank_code`, and {stats.withoutCode} 
 ## Using it in your app
 
 ```ts
-import { findById } from "kode-bank-indonesia";
-
-const bank = findById("jenius");
-if (bank && !bank.verified) {
+const res = await fetch("https://dna-ardhi.github.io/kode-bank-indonesia/v1/by-id/jenius.json");
+const bank = await res.json();
+if (!bank.verified) {
   // still show it, but don't treat it as the single source of truth
   console.warn(`Code ${bank.bank_code} is not verified`);
 }

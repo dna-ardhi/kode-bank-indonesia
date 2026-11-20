@@ -34,10 +34,9 @@ Saat ini: {stats.withCode} record punya `bank_code`, dan {stats.withoutCode} mas
 ## Cara memakainya di aplikasimu
 
 ```ts
-import { findById } from "kode-bank-indonesia";
-
-const bank = findById("jenius");
-if (bank && !bank.verified) {
+const res = await fetch("https://dna-ardhi.github.io/kode-bank-indonesia/v1/by-id/jenius.json");
+const bank = await res.json();
+if (!bank.verified) {
   // tetap tampilkan, tapi jangan jadikan satu-satunya sumber kebenaran
   console.warn(`Kode ${bank.bank_code} belum terverifikasi`);
 }
