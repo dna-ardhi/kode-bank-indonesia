@@ -1,7 +1,10 @@
 node_modules/
-dist/
-lib/
-coverage/
-sources/raw/
+/dist/
+/lib/
+/coverage/
+/sources/raw/
 *.log
 .DS_Store
+
+# local planning notes, never committed
+/PLAN.md
