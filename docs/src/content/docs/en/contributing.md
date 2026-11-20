@@ -31,7 +31,6 @@ You need **Node ≥ 22.18** (see `.nvmrc`) and [pnpm](https://pnpm.io/installati
 | `pnpm validate` | Schema and cross-record checks on `data/` |
 | `pnpm test` | Builds `dist/`, then runs the test suite |
 | `pnpm build` | Writes the static API to `dist/` |
-| `pnpm build:lib` | Compiles the npm package to `lib/` |
 | `pnpm sync:fetch` | Downloads the official PDFs and reports hash changes |
 | `pnpm sync:diff` | Compares the downloaded PDFs with `data/` |
 | `pnpm docs:dev` | Runs this documentation site locally |

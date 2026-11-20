@@ -3,7 +3,7 @@
 Docs: [Bahasa Indonesia](https://dna-ardhi.github.io/kode-bank-indonesia/) · [English](https://dna-ardhi.github.io/kode-bank-indonesia/en/)
 
 Every bank and e-wallet in Indonesia, with 3-digit bank codes (sandi bank) and BICs, as a free
-static JSON API and a typed npm package. Built for forms where a user picks a bank or e-wallet and
+static JSON API. Built for forms where a user picks a bank or e-wallet and
 enters an account number and holder name.
 
 > **Not included:** checking that an account number belongs to a holder name. That needs a paid
@@ -22,67 +22,34 @@ Base URL: `https://dna-ardhi.github.io/kode-bank-indonesia`
 | `/v1/by-id/{id}.json` | One record, e.g. `/v1/by-id/bca.json` |
 | `/v1/meta.json` | Version, counts and hashes of the official source files |
 
-Lists are sorted by `display_name` (case-insensitive, then `id`). The npm package also serves the
-same files from CDN mirrors:
-
-- `https://cdn.jsdelivr.net/npm/kode-bank-indonesia@1/dist/v1/all.json`
-- `https://unpkg.com/kode-bank-indonesia@1/dist/v1/all.json`
+Lists are sorted by `display_name` (case-insensitive, then `id`).
 
 `/v1` paths, fields and ids are stable. Breaking changes will go to `/v2`, next to `/v1`.
 
 ## Usage
 
-### Fetch with fallbacks
+### Fetch with a fallback
 
-Try GitHub Pages, then jsDelivr, then the data bundled in the npm package:
+Fetch the live API, and keep your own copy of `all.json` for when the request fails:
 
 ```js
-import { all as bundled } from "kode-bank-indonesia";
-
-const URLS = [
-  "https://dna-ardhi.github.io/kode-bank-indonesia/v1/all.json",
-  "https://cdn.jsdelivr.net/npm/kode-bank-indonesia@1/dist/v1/all.json",
-];
+import fallback from "./all.json"; // a copy you saved from /v1/all.json
 
 export async function loadInstitutions() {
-  for (const url of URLS) {
-    try {
-      const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
-      if (res.ok) return (await res.json()).data;
-    } catch {
-      // try the next mirror
-    }
+  try {
+    const res = await fetch("https://dna-ardhi.github.io/kode-bank-indonesia/v1/all.json", {
+      signal: AbortSignal.timeout(5000),
+    });
+    if (res.ok) return (await res.json()).data;
+  } catch {
+    // network error or timeout: use the saved copy
   }
-  return bundled;
+  return fallback.data;
 }
 ```
 
-Without the npm package, drop the import and the last line, and handle the error yourself.
-
-### npm package
-
-```sh
-npm install kode-bank-indonesia
-```
-
-```ts
-import { all, banks, ewallets, findById, search, type Institution } from "kode-bank-indonesia";
-
-findById("bca")?.bank_code; // "014"
-search("mandiri"); // exact matches first, then prefix, then substring
-search("014"); // bank code or BIC, exact
-const choices = search(query).filter((r) => r.status === "active");
-```
-
-| Export | |
-|---|---|
-| `all`, `banks`, `ewallets` | Read-only arrays of records, sorted like the API |
-| `findById(id)` | One record, or `undefined` |
-| `search(query)` | Matches `display_name`, `aliases`, `name` and `id`, ignoring case, punctuation and accents; also exact `bank_code` and BIC. An empty query returns everything. Includes inactive records. |
-| `Institution`, `AccountNumber`, `Category`, `InstitutionType`, `Status` | Types |
-
-The package is ESM-only. It imports its data with `import … with { type: "json" }`, which needs
-Node ≥ 20.10 or a current bundler (Vite, esbuild, webpack 5, Rollup).
+> The `kode-bank-indonesia` npm package is retired (1.0.1 was the last release) because it only
+> refreshed on a manual release. Use the API above.
 
 ## Record shape
 
@@ -173,14 +140,14 @@ in [`sources/ignored-bics.json`](sources/ignored-bics.json).
    is set to `verified: false`, and nothing is deleted or deactivated automatically.
 3. A maintainer reviews the PR, fills in what can't be automated (category, display name, bank
    code evidence), and merges it.
-4. Merging to `main` redeploys GitHub Pages. A new npm version updates the CDN mirrors.
+4. Merging to `main` redeploys GitHub Pages.
 
 If the download or the parser fails, for example because Bank Indonesia changed the PDF layout,
 the workflow opens an issue labelled `sync-failure` instead of a PR.
 
 ## Versioning
 
-The npm package follows semver, and its version is the `version` field in every API response.
+The dataset follows semver, and its version is the `version` field in every API response.
 
 - **Patch:** data changes (new, corrected or deactivated records).
 - **Minor:** new optional fields or endpoints.
@@ -221,7 +188,6 @@ Repository layout and conventions for contributors (and coding agents) are in
 | `pnpm validate` | Schema and cross-record checks on `data/` |
 | `pnpm test` | Builds `dist/`, then runs the test suite |
 | `pnpm build` | Writes the static API to `dist/` |
-| `pnpm build:lib` | Compiles the npm package to `lib/` |
 | `pnpm sync:fetch` | Downloads the official PDFs and reports hash changes |
 | `pnpm sync:diff` | Compares the downloaded PDFs with `data/` |
 | `pnpm docs:dev` / `pnpm docs:build` | Runs / builds the docs site (needs Node ≥ 22.23.4) |

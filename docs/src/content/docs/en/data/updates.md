@@ -10,7 +10,7 @@ The data is kept up to date with a mix of automation and human review.
 1. **Every Monday at 02:00 UTC**, the [sync workflow](https://github.com/dna-ardhi/kode-bank-indonesia/blob/main/.github/workflows/sync.yml) downloads the BI-FAST and SKNBI PDFs and compares their SHA-256 hashes with [`sources/hashes.json`](https://github.com/dna-ardhi/kode-bank-indonesia/blob/main/sources/hashes.json).
 2. **If a file changed**, it parses it and compares it with `data/`. It opens a pull request with the proposed changes and a report of added, removed and renamed participants.
 3. **A maintainer reviews the PR**, fills in what can't be automated (category, display name, bank code evidence), and merges it.
-4. **Merging to `main`** redeploys GitHub Pages. A new npm version updates the CDN mirrors.
+4. **Merging to `main`** redeploys GitHub Pages.
 
 ## Safety rules
 

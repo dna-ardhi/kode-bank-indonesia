@@ -63,7 +63,7 @@ export const strings = {
       phone: "Nomor HP",
     },
     home: {
-      eyebrow: "// JSON statis · paket npm · MIT",
+      eyebrow: "// JSON statis · tanpa server · MIT",
       titleBefore: "Kode bank Indonesia, tinggal ",
       titleMono: "fetch",
       sub: "Semua bank dan e-wallet di Indonesia, lengkap dengan kode bank 3 digit dan BIC. Gratis, tanpa server, tanpa API key.",
@@ -84,7 +84,7 @@ export const strings = {
       cells: [
         {
           title: "Tinggal fetch",
-          text: "File statis di GitHub Pages, tanpa rate limit dari sisi kami. Ada juga mirror CDN dan fallback ke data bawaan paket npm.",
+          text: "File statis di GitHub Pages, tanpa rate limit dari sisi kami, dan datanya selalu yang terbaru.",
         },
         {
           title: "Tahu batasannya",
@@ -144,7 +144,7 @@ export const strings = {
       phone: "Phone number",
     },
     home: {
-      eyebrow: "// Static JSON · npm package · MIT",
+      eyebrow: "// Static JSON · no server · MIT",
       titleBefore: "Indonesian bank codes, just ",
       titleMono: "fetch",
       sub: "Every bank and e-wallet in Indonesia, with 3-digit bank codes and BICs. Free, no server, no API key.",
@@ -165,7 +165,7 @@ export const strings = {
       cells: [
         {
           title: "Just fetch",
-          text: "Static files on GitHub Pages, no rate limits on our side. There are also CDN mirrors and a fallback to the data bundled in the npm package.",
+          text: "Static files on GitHub Pages, no rate limits on our side, and always the latest data.",
         },
         {
           title: "Honest about limits",

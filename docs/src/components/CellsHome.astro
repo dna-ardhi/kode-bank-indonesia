@@ -21,7 +21,7 @@ const snippetHtml = `<span class="k">const</span> res = <span class="k">await</s
 
 <span class="k">const</span> bca = data.find((r) =&gt; r.id === <span class="s">"bca"</span>);
 console.log(bca.bank_code); <span class="c">// "014"</span>`;
-const install = "npm install kode-bank-indonesia";
+const install = `curl ${apiUrl}`;
 
 const share = (n: number) => (n / stats.total).toFixed(3);
 const meters = [

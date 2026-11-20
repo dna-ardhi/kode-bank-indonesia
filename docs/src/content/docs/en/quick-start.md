@@ -1,9 +1,9 @@
 ---
 title: Quick start
-description: Use the Indonesian bank list in your project in two minutes, with fetch or the npm package.
+description: Use the Indonesian bank list in your project in two minutes, with a plain fetch.
 ---
 
-There are two ways to use it. Pick whichever fits your project, or combine them.
+There are two ways to use it. Pick whichever fits your project.
 
 ## Option 1: plain fetch
 
@@ -23,49 +23,27 @@ Only need one bank? Fetch it by `id`:
 const bca = await fetch("https://dna-ardhi.github.io/kode-bank-indonesia/v1/by-id/bca.json").then((r) => r.json());
 ```
 
-## Option 2: the npm package
+## Option 2: fetch with a fallback (recommended for production)
 
-```sh
-npm install kode-bank-indonesia
-```
-
-```ts
-import { all, banks, ewallets, findById, search, type Institution } from "kode-bank-indonesia";
-
-findById("bca")?.bank_code; // "014"
-search("mandiri"); // exact matches first, then prefix, then substring
-search("014"); // bank code or BIC, exact
-const choices = search(query).filter((r) => r.status === "active");
-```
-
-The data ships inside the package, so your app works without reaching any server. Export details are in the [npm package reference](../reference/npm/).
-
-## Option 3: fetch with fallbacks (recommended for production)
-
-Try GitHub Pages first, then jsDelivr, and if both fail, use the data bundled in the package:
+Fetch the live API, and keep your own copy of `all.json` in your app for when the request fails:
 
 ```js
-import { all as bundled } from "kode-bank-indonesia";
-
-const URLS = [
-  "https://dna-ardhi.github.io/kode-bank-indonesia/v1/all.json",
-  "https://cdn.jsdelivr.net/npm/kode-bank-indonesia@1/dist/v1/all.json",
-];
+import fallback from "./all.json"; // a copy you saved from /v1/all.json
 
 export async function loadInstitutions() {
-  for (const url of URLS) {
-    try {
-      const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
-      if (res.ok) return (await res.json()).data;
-    } catch {
-      // try the next mirror
-    }
+  try {
+    const res = await fetch("https://dna-ardhi.github.io/kode-bank-indonesia/v1/all.json", {
+      signal: AbortSignal.timeout(5000),
+    });
+    if (res.ok) return (await res.json()).data;
+  } catch {
+    // network error or timeout: use the saved copy
   }
-  return bundled;
+  return fallback.data;
 }
 ```
 
-Not using the npm package? Drop the `import` and the `return bundled` line, and handle the error yourself.
+Refresh the saved copy now and then. `/v1/meta.json` has `generated_at` if you want to check how old it is.
 
 ## What's next
 

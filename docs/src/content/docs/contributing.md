@@ -31,7 +31,6 @@ Kamu butuh **Node ≥ 22.18** (lihat `.nvmrc`) dan [pnpm](https://pnpm.io/instal
 | `pnpm validate` | Cek skema dan konsistensi antar-record di `data/` |
 | `pnpm test` | Membangun `dist/`, lalu menjalankan seluruh tes |
 | `pnpm build` | Menulis API statis ke `dist/` |
-| `pnpm build:lib` | Mengompilasi paket npm ke `lib/` |
 | `pnpm sync:fetch` | Mengunduh PDF resmi dan melaporkan perubahan hash |
 | `pnpm sync:diff` | Membandingkan PDF yang diunduh dengan `data/` |
 | `pnpm docs:dev` | Menjalankan situs dokumentasi ini di lokal |

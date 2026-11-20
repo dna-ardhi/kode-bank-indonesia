@@ -28,20 +28,11 @@ List endpoints wrap the data in an *envelope*:
 }
 ```
 
-- `version` matches the npm package version.
+- `version` is the dataset version (see the [changelog](../../changelog/)).
 - Lists are sorted by `display_name` (case-insensitive), then `id`.
 - `/v1/by-id/{id}.json` returns **one bare record**, with no envelope.
 
 `/v1/meta.json` holds `version`, `generated_at`, `counts` (`all`, `banks`, `ewallets`, `verified`) and `sources` (the SHA-256 of each official source file in use).
-
-## CDN mirrors
-
-The npm package is also served through CDNs:
-
-- `https://cdn.jsdelivr.net/npm/kode-bank-indonesia@1/dist/v1/all.json`
-- `https://unpkg.com/kode-bank-indonesia@1/dist/v1/all.json`
-
-`@1` follows the latest 1.x release. To pin an exact version, use `@1.0.0` instead.
 
 ## Stability promise
 

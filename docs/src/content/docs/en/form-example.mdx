@@ -11,13 +11,15 @@ This is a typical form: the user picks a bank or e-wallet, then enters an accoun
 
 ## The code
 
-The search uses `search()` from the npm package. Only `active` institutions are shown to the user, and a warning appears when a record isn't `verified`:
+The list comes from the API. Only `active` institutions are shown to the user, and a warning appears when a record isn't `verified`:
 
 ```ts
-import { search } from "kode-bank-indonesia";
+const { data } = await fetch("https://dna-ardhi.github.io/kode-bank-indonesia/v1/all.json").then((r) => r.json());
 
-const results = search(input.value)
+const q = input.value.trim().toLowerCase();
+const results = data
   .filter((r) => r.status === "active")
+  .filter((r) => [r.display_name, ...r.aliases].some((n) => n.toLowerCase().includes(q)) || r.bank_code === q)
   .slice(0, 8);
 
 function pick(bank) {

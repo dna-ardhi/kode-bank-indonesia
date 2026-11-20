@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Static JSON API (plus npm package) listing Indonesian banks and e-wallets, for "pick a bank,
+Static JSON API listing Indonesian banks and e-wallets, for "pick a bank,
 enter account number + holder name" forms. No server. Data is hand-reviewed; official sources are
 synced on a schedule and changes arrive as PRs for review.
 
@@ -9,12 +9,11 @@ synced on a schedule and changes arrive as PRs for review.
 ```sh
 pnpm install
 pnpm validate        # schema + cross-record checks on data/*.json
-pnpm test            # builds dist/, then vitest (the package tests import dist/v1/all.json)
+pnpm test            # builds dist/, then vitest (the tests import dist/v1/all.json)
 pnpm lint            # biome check (lint + format check)
 pnpm format          # biome format --write
 pnpm typecheck       # tsc --noEmit
 pnpm build           # data/ -> dist/ (static API; refuses invalid data, wipes dist/ first)
-pnpm build:lib       # compile the npm package src/ -> lib/
 pnpm sync:fetch      # download official sources to sources/raw/ and report hash changes (--write to record)
 pnpm sync:diff       # parse sources/raw/ PDFs, diff against data/ (--write to apply, --report <file>)
 pnpm docs:dev        # docs site (Astro Starlight) dev server; builds dist/ and copies dist/v1 into docs/public/v1 first
@@ -28,21 +27,18 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
 - `data/banks.json`, `data/ewallets.json`: source of truth, arrays of records.
 - `schema/institution.schema.json`: one record shape for both files.
 - `scripts/build.ts`: writes `dist/v1/*` (minified, sorted by lowercase `display_name`, then `id`) and `dist/index.html`. `/v1` paths are pinned by `tests/build.test.ts`.
-- `src/index.ts`: the npm package, compiled by `tsc -p tsconfig.build.json` into `lib/`
-  (gitignored; `pnpm build:lib`, run by `prepack`). It imports `dist/v1/all.json`, so build `dist/`
-  first. `src/data.d.ts` lets the build config skip the JSON so tsc doesn't copy it into `lib/`; the
-  tarball ships the data once, in `dist/`. `tests/types.test.ts` fails when the types drift from
-  the schema.
+- `src/index.ts`: internal types and `search()` over `dist/v1/all.json` (build `dist/` first). Not
+  published: the docs, `scripts/sync/diff.ts` and the tests import it. `tests/types.test.ts` fails
+  when the types drift from the schema.
 - `scripts/validate.ts`: schema plus checks the schema can't express (unique id/bic/bank_code, references).
 - `scripts/sync/`: `fetch-sources.ts` (download + SHA-256), `parse-*.ts` (PDF participant lists),
   `diff.ts` (proposes record changes, all `verified: false`; never deletes or deactivates).
 - `docs/`: the documentation site (Astro Starlight), deployed to GitHub Pages together with the API.
   Needs Node ≥ 22.23.4. `scripts/docs.ts` builds `dist/` and copies `dist/v1` into `docs/public/v1`
   (gitignored), so the site serves `/v1/*` at the same URLs as before. Output is `docs/dist/`, not
-  `dist/`, which ships in the npm package. See "Docs" below.
+  `dist/`. See "Docs" below.
 - `.github/workflows/`: `ci.yml` (PRs and main, Node 22 + 24), `deploy-pages.yml` (main → Pages),
   `sync.yml` (Mondays 02:00 UTC: PR on source changes, issue labelled `sync-failure` on failure),
-  `publish-npm.yml` (`v*` tag → npm with provenance; tag must equal the package.json version).
 - `scripts/lib/pdf-table.ts`: shared strict parser for BI participant tables.
 - `sources/hashes.json`: last-seen hash per source. `sources/raw/` is gitignored.
 - `sources/bank-codes.json`: evidence for every `bank_code` (publisher URLs, matched lines, votes).
@@ -126,15 +122,13 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
 
 - Data-only changes are a patch release, new optional fields or endpoints are minor, and breaking
   changes are major plus a new `/vN` path.
-- `npm version <x.y.z> -m "chore(release): %s"`, then `git push origin main --follow-tags`. The
-  `v*` tag triggers `publish-npm.yml`. Pushing needs the user's OK.
-- Publishing uses npm trusted publishing (OIDC), so the workflow holds no npm token. The trusted
-  publisher is tied to the workflow file name `publish-npm.yml` in this repo: if you rename the file
-  or the repo, re-run `npm trust github kode-bank-indonesia --file <file> --repo <owner/repo>`.
+- The `version` in `package.json` is the dataset version: `scripts/build.ts` writes it into every API
+  response. Bump it in a `chore(release): <x.y.z>` commit. Merging to `main` deploys; there is no tag
+  or publish step. The package is `private` and is no longer published to npm (1.0.1 was the last).
 
 ## Working agreements
 
-- Never push, publish to npm, create GitHub repos, or add secrets without asking first.
+- Never push, create GitHub repos, or add secrets without asking first.
 - `PLAN.md` holds local planning notes, is gitignored, and must never be committed.
 - Conventional Commits (`type(scope): subject`, imperative, lowercase, ≤ 72 chars), one logical
   change per commit, no AI attribution or session links.

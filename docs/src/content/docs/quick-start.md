@@ -1,6 +1,6 @@
 ---
 title: Mulai cepat
-description: Pakai daftar bank Indonesia di proyekmu dalam dua menit, lewat fetch atau paket npm.
+description: Pakai daftar bank Indonesia di proyekmu dalam dua menit, lewat fetch biasa.
 ---
 
 Ada dua cara pakai. Pilih yang cocok sama proyekmu, atau gabungkan keduanya.
@@ -23,49 +23,27 @@ Cuma butuh satu bank? Ambil per `id`:
 const bca = await fetch("https://dna-ardhi.github.io/kode-bank-indonesia/v1/by-id/bca.json").then((r) => r.json());
 ```
 
-## Cara 2: paket npm
+## Cara 2: fetch dengan fallback (disarankan untuk produksi)
 
-```sh
-npm install kode-bank-indonesia
-```
-
-```ts
-import { all, banks, ewallets, findById, search, type Institution } from "kode-bank-indonesia";
-
-findById("bca")?.bank_code; // "014"
-search("mandiri"); // exact match dulu, lalu prefix, lalu substring
-search("014"); // kode bank atau BIC, harus persis sama
-const pilihan = search(query).filter((r) => r.status === "active");
-```
-
-Data ikut terpaket, jadi aplikasimu jalan tanpa koneksi ke mana-mana. Detail ekspor ada di [referensi paket npm](../reference/npm/).
-
-## Cara 3: fetch dengan fallback (disarankan untuk produksi)
-
-Coba GitHub Pages dulu, lalu jsDelivr, dan kalau dua-duanya gagal, pakai data bawaan paket:
+Ambil API langsung, dan simpan salinan `all.json` di aplikasimu untuk jaga-jaga kalau request gagal:
 
 ```js
-import { all as bundled } from "kode-bank-indonesia";
-
-const URLS = [
-  "https://dna-ardhi.github.io/kode-bank-indonesia/v1/all.json",
-  "https://cdn.jsdelivr.net/npm/kode-bank-indonesia@1/dist/v1/all.json",
-];
+import fallback from "./all.json"; // salinan yang kamu simpan dari /v1/all.json
 
 export async function loadInstitutions() {
-  for (const url of URLS) {
-    try {
-      const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
-      if (res.ok) return (await res.json()).data;
-    } catch {
-      // coba mirror berikutnya
-    }
+  try {
+    const res = await fetch("https://dna-ardhi.github.io/kode-bank-indonesia/v1/all.json", {
+      signal: AbortSignal.timeout(5000),
+    });
+    if (res.ok) return (await res.json()).data;
+  } catch {
+    // error jaringan atau timeout: pakai salinan yang disimpan
   }
-  return bundled;
+  return fallback.data;
 }
 ```
 
-Nggak pakai paket npm? Hapus `import` dan baris `return bundled`, lalu tangani error-nya sendiri.
+Perbarui salinan itu sesekali. `/v1/meta.json` punya `generated_at` kalau kamu mau cek seberapa lama.
 
 ## Langkah berikutnya
 

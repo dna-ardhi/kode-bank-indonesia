@@ -9,7 +9,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: "kode-bank-indonesia",
-      description: "Kode bank, BIC, dan e-wallet Indonesia sebagai static JSON API dan paket npm.",
+      description: "Kode bank, BIC, dan e-wallet Indonesia sebagai static JSON API.",
       customCss: ["./src/styles/custom.css"],
       defaultLocale: "root",
       locales: {
@@ -27,7 +27,7 @@ export default defineConfig({
         {
           label: "Referensi",
           translations: { en: "Reference" },
-          items: ["reference/api", "reference/npm", "reference/schema", "reference/verified"],
+          items: ["reference/api", "reference/schema", "reference/verified"],
         },
         {
           label: "Data",

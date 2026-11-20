@@ -28,20 +28,11 @@ Endpoint daftar membungkus data dalam *envelope*:
 }
 ```
 
-- `version` sama dengan versi paket npm.
+- `version` adalah versi dataset (lihat [changelog](../../changelog/)).
 - Daftar diurutkan menurut `display_name` (tanpa membedakan huruf besar-kecil), lalu `id`.
 - `/v1/by-id/{id}.json` mengembalikan **satu record langsung**, tanpa envelope.
 
 `/v1/meta.json` berisi `version`, `generated_at`, `counts` (`all`, `banks`, `ewallets`, `verified`), dan `sources` (SHA-256 tiap file sumber resmi yang dipakai).
-
-## Mirror CDN
-
-Paket npm yang sama juga disajikan lewat CDN:
-
-- `https://cdn.jsdelivr.net/npm/kode-bank-indonesia@1/dist/v1/all.json`
-- `https://unpkg.com/kode-bank-indonesia@1/dist/v1/all.json`
-
-Tanda `@1` mengikuti rilis terbaru versi 1.x. Mau mengunci versi persis? Ganti dengan `@1.0.0`.
 
 ## Jaminan stabilitas
 
