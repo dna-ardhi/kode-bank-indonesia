@@ -13,6 +13,7 @@ pnpm test            # vitest
 pnpm lint            # biome check (lint + format check)
 pnpm format          # biome format --write
 pnpm typecheck       # tsc --noEmit
+pnpm build           # data/ -> dist/ (static API; refuses invalid data, wipes dist/ first)
 pnpm sync:fetch      # download official sources to sources/raw/ and report hash changes (--write to record)
 ```
 
@@ -22,6 +23,7 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
 
 - `data/banks.json`, `data/ewallets.json`: source of truth, arrays of records.
 - `schema/institution.schema.json`: one record shape for both files.
+- `scripts/build.ts`: writes `dist/v1/*` (minified, sorted by lowercase `display_name`, then `id`) and `dist/index.html`. `/v1` paths are pinned by `tests/build.test.ts`.
 - `scripts/validate.ts`: schema plus checks the schema can't express (unique id/bic/bank_code, references).
 - `scripts/sync/`: `fetch-sources.ts` (download + SHA-256), `parse-*.ts` (PDF participant lists).
 - `scripts/lib/pdf-table.ts`: shared strict parser for BI participant tables.

@@ -14,7 +14,8 @@
     "lint": "biome check .",
     "format": "biome format --write .",
     "typecheck": "tsc --noEmit",
-    "sync:fetch": "node scripts/sync/fetch-sources.ts"
+    "sync:fetch": "node scripts/sync/fetch-sources.ts",
+    "build": "node scripts/build.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.6.8",
