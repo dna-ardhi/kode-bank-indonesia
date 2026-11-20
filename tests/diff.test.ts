@@ -5,6 +5,7 @@ import ewalletsJson from "../data/ewallets.json" with { type: "json" };
 import type { ParticipantList } from "../scripts/lib/pdf-table.ts";
 import { diffSources } from "../scripts/sync/diff.ts";
 import { parseBifast } from "../scripts/sync/parse-bifast.ts";
+import { parseOjkBanks } from "../scripts/sync/parse-ojk.ts";
 import { parseSknbi } from "../scripts/sync/parse-sknbi.ts";
 import { validate } from "../scripts/validate.ts";
 import ignored from "../sources/ignored-bics.json" with { type: "json" };
@@ -13,6 +14,7 @@ import type { Institution } from "../src/index.ts";
 const fixture = (f: string) => readFileSync(new URL(`fixtures/${f}`, import.meta.url));
 const bifast = await parseBifast(fixture("bi-fast-2026-09-24.pdf"));
 const sknbi = await parseSknbi(fixture("sknbi-2026-09-24.pdf"));
+const ojk = parseOjkBanks(fixture("ojk-bank-umum-2026-06.xlsx"));
 const banks = banksJson as Institution[];
 const ewallets = ewalletsJson as Institution[];
 const today = "2030-01-01";
@@ -74,7 +76,7 @@ describe("diffSources", () => {
     expect(find(r.banks, "smbc-indonesia")).toMatchObject({
       bi_fast: false,
       status: "active",
-      sources: ["sknbi"],
+      sources: ["sknbi", "ojk"],
     });
     expect(find(r.banks, "jenius")?.bi_fast).toBe(false); // brand follows its parent
     expect(validate(r.banks, r.ewallets)).toEqual([]);
@@ -83,7 +85,7 @@ describe("diffSources", () => {
   it("tracks SKNBI membership through sknbi_bic", () => {
     const r = run({ sknbi: without(sknbi, "PDKSIDBB") });
     expect(r.changes).toEqual([{ kind: "sknbi-left", bic: "PDKSIDBB", id: "bank-kalsel" }]);
-    expect(find(r.banks, "bank-kalsel")).toMatchObject({ sknbi: false, sources: ["bi-fast"] });
+    expect(find(r.banks, "bank-kalsel")).toMatchObject({ sknbi: false, sources: ["bi-fast", "ojk"] });
   });
 
   it("reports unknown SKNBI-only BICs without inventing records", () => {
@@ -92,5 +94,30 @@ describe("diffSources", () => {
     });
     expect(r.changes).toEqual([{ kind: "sknbi-unknown", bic: "ZZZZIDJ1" }]);
     expect(r.banks).toEqual(banks);
+  });
+});
+
+describe("diffSources with OJK", () => {
+  const run = (list = ojk) => diffSources({ bifast, sknbi, banks, ewallets, ignored, ojk: list, today });
+
+  it("finds no OJK changes: every OJK code is already in the data", () => {
+    const r = run();
+    expect(r.changes).toEqual([]);
+    expect(r.banks).toEqual(banks);
+  });
+
+  it("reports a conflict without rewriting the code", () => {
+    const bca = ojk.map((o) => (o.code === "014" ? { ...o, code: "999" } : o));
+    const r = run(bca);
+    expect(r.changes).toEqual([
+      { kind: "ojk-conflict", id: "bca", ours: "014", code: "999", ojkName: "PT BANK CENTRAL ASIA Tbk" },
+    ]);
+    expect(find(r.banks, "bca")?.bank_code).toBe("014");
+    expect(r.report).toContain("OJK disagrees with our bank code (1)");
+  });
+
+  it("reports an OJK bank the data has never heard of", () => {
+    const r = run([...ojk, { code: "888", name: "PT BANK BARU" }]);
+    expect(r.changes).toEqual([{ kind: "ojk-new", code: "888", ojkName: "PT BANK BARU" }]);
   });
 });

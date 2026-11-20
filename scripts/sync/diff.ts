@@ -1,9 +1,10 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import type { Institution } from "../../src/index.ts";
 import type { Participant, ParticipantList } from "../lib/pdf-table.ts";
 import { validate } from "../validate.ts";
 import { parseBifast } from "./parse-bifast.ts";
+import { normName, type OjkBank, parseOjkBanks } from "./parse-ojk.ts";
 import { parseSknbi } from "./parse-sknbi.ts";
 
 export type Change =
@@ -12,7 +13,10 @@ export type Change =
   | { kind: "renamed"; bic: string; id: string; from: string; to: string }
   | { kind: "sknbi-joined"; bic: string; id: string }
   | { kind: "sknbi-left"; bic: string; id: string }
-  | { kind: "sknbi-unknown"; bic: string };
+  | { kind: "sknbi-unknown"; bic: string }
+  | { kind: "ojk-fill"; id: string; code: string; ojkName: string }
+  | { kind: "ojk-conflict"; id: string; ours: string; code: string; ojkName: string }
+  | { kind: "ojk-new"; code: string; ojkName: string };
 
 export type DiffInput = {
   bifast: ParticipantList;
@@ -21,6 +25,8 @@ export type DiffInput = {
   ewallets: Institution[];
   /** BICs deliberately not published (sources/ignored-bics.json). */
   ignored: Record<string, string>;
+  /** OJK "Sandi Bank" list. Report only: bank_code is never rewritten here. */
+  ojk?: OjkBank[];
   today: string;
 };
 
@@ -128,6 +134,25 @@ export function diffSources(input: DiffInput) {
     if (!byBic.has(bic) && !fastBics.has(bic) && !ignored[bic]) changes.push({ kind: "sknbi-unknown", bic });
   }
 
+  // OJK is the primary source for bank_code, but a human applies it: report fills, conflicts and unknowns.
+  const legal = banks.filter((r) => !r.parent_id && r.category !== "sharia-unit");
+  for (const o of input.ojk ?? []) {
+    if (legal.some((r) => r.bank_code === o.code)) continue;
+    const named = legal.filter((r) =>
+      [r.name, r.display_name, ...r.aliases].some((n) => normName(n) === normName(o.name)),
+    );
+    if (named.length !== 1) changes.push({ kind: "ojk-new", code: o.code, ojkName: o.name });
+    else if (named[0].bank_code)
+      changes.push({
+        kind: "ojk-conflict",
+        id: named[0].id,
+        ours: named[0].bank_code,
+        code: o.code,
+        ojkName: o.name,
+      });
+    else changes.push({ kind: "ojk-fill", id: named[0].id, code: o.code, ojkName: o.name });
+  }
+
   // Brands (no BIC of their own) carry their parent's network flags.
   const byId = new Map([...banks, ...ewallets].map((r) => [r.id, r]));
   for (const r of banks) {
@@ -184,6 +209,22 @@ function report({ bifast, sknbi }: DiffInput, changes: Change[]) {
     of("sknbi-unknown").map((c) => `| ${code(c.bic)} |`),
   );
 
+  section(
+    "OJK proposes a bank code",
+    "| id | Sandi Bank | OJK name |",
+    of("ojk-fill").map((c) => `| ${code(c.id)} | ${code(c.code)} | ${c.ojkName} |`),
+  );
+  section(
+    "OJK disagrees with our bank code",
+    "| id | Ours | OJK | OJK name |",
+    of("ojk-conflict").map((c) => `| ${code(c.id)} | ${code(c.ours)} | ${code(c.code)} | ${c.ojkName} |`),
+  );
+  section(
+    "OJK banks not in data",
+    "| Sandi Bank | OJK name |",
+    of("ojk-new").map((c) => `| ${code(c.code)} | ${c.ojkName} |`),
+  );
+
   if (changes.length === 0) {
     lines.push("No participant changes. Only the source files' hashes changed.", "");
   } else {
@@ -191,6 +232,7 @@ function report({ bifast, sknbi }: DiffInput, changes: Change[]) {
       "### Review checklist",
       "",
       "- [ ] New records: set `id`, `category`, `display_name`, `aliases`, and `bank_code` (with evidence in `sources/bank-codes.json`). Move e-wallet operators to `ewallets.json` or list them in `sources/ignored-bics.json`.",
+      "- [ ] OJK sections: apply a proposed `bank_code` only after checking the name really is the same bank; for a conflict, decide which is right and update `sources/bank-codes.json`.",
       "- [ ] Removed participants: check whether the bank closed, merged or rebranded, and set `status` / `merged_into` if so. Records are never deleted.",
       "- [ ] Renames: update `display_name` / `aliases` if the brand changed.",
       "- [ ] Set `verified: true` again only for records that meet the rule in AGENTS.md.",
@@ -215,6 +257,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     banks: json("data/banks.json"),
     ewallets: json("data/ewallets.json"),
     ignored: json("sources/ignored-bics.json"),
+    ojk: existsSync(new URL("sources/raw/ojk-bank-umum.xlsx", root))
+      ? parseOjkBanks(read("sources/raw/ojk-bank-umum.xlsx"))
+      : undefined,
     today: new Date().toISOString().slice(0, 10),
   });
   const errors = validate(result.banks, result.ewallets);

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-20",
+  "generated_at": "2026-11-21",
   "rule": "bank_code = the code reported by the most publishers (at least 2, no tie). Confirmed when no other code is reported by 2 or more publishers. Records linked by inference stay unverified.",
   "publishers": {
     "okezone": "https://economy.okezone.com/read/2024/02/16/622/2971181/daftar-128-kode-bank-di-indonesia?page=all",
@@ -9,14 +9,15 @@
     "cnn": "https://www.cnnindonesia.com/ekonomi/20210722165857-83-670969/daftar-kode-bank-di-indonesia-lengkap",
     "viva": "https://www.viva.co.id/bisnis/1745966-daftar-kode-bank-indonesia-terlengkap-2024-swasta-hingga-asing",
     "metro": "https://www.metrotvnews.com/read/KRXCdZeD-wajib-tahu-daftar-lengkap-kode-bank-untuk-transfer-antar-bank-di-indonesia",
-    "rapyd": "https://docs.rapyd.net/en/bank-payout-indonesia.html"
+    "rapyd": "https://docs.rapyd.net/en/bank-payout-indonesia.html",
+    "ojk": "https://ojk.go.id/id/kanal/perbankan/data-dan-statistik/Pages/Daftar-Alamat-Kantor-Pusat-Bank-Umum-Dan-Syariah.aspx"
   },
   "records": {
     "bpd-bali": {
       "bank_code": "129",
       "confirmed": true,
       "votes": {
-        "129": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "viva"]
+        "129": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK BPD BALI → 129",
@@ -26,34 +27,37 @@
         "cnn: Bank BPD Bali → 129",
         "viva: Bank Bali → 129",
         "metro: Bank BPD Bali → 129",
-        "rapyd: BANK BPD BALI → 129"
+        "rapyd: BANK BPD BALI → 129",
+        "ojk: PT BANK PEMBANGUNAN DAERAH BALI → 129"
       ]
     },
     "bank-raya": {
       "bank_code": "494",
       "confirmed": true,
       "votes": {
-        "494": ["cnn", "detik", "kontan", "okezone", "rapyd"]
+        "494": ["cnn", "detik", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Bank Raya (BRI Agro Niaga) → 494",
         "kontan: Bank BRI Agro → 494",
         "detik: Bank Raya (BRI Agro Niaga) → 494",
         "cnn: Bank BRI Agro → 494",
-        "rapyd: BRI AGRONIAGA → 494"
+        "rapyd: BRI AGRONIAGA → 494",
+        "ojk: PT BANK RAYA INDONESIA Tbk → 494"
       ]
     },
     "allo-bank": {
       "bank_code": "567",
       "confirmed": true,
       "votes": {
-        "567": ["cnn", "detik", "fortune", "rapyd"]
+        "567": ["cnn", "detik", "fortune", "rapyd", "ojk"]
       },
       "matches": [
         "detik: Allo Bank (Eks Bank Harda) → 567",
         "fortune: Bank Harda Internasional → 567",
         "cnn: Bank Harda Internasional → 567",
-        "rapyd: HARDA INTERNATIONAL → 567"
+        "rapyd: HARDA INTERNATIONAL → 567",
+        "ojk: PT ALLO BANK INDONESIA Tbk → 567"
       ]
     },
     "anz-indonesia": {
@@ -61,21 +65,22 @@
       "confirmed": true,
       "votes": {
         "622": ["rapyd"],
-        "061": ["cnn", "detik", "kontan", "okezone"]
+        "061": ["cnn", "detik", "kontan", "okezone", "ojk"]
       },
       "matches": [
         "okezone: Bank ANZ Indonesia → 061",
         "kontan: Bank ANZ Indonesia → 061",
         "detik: Bank ANZ Indonesia → 061",
         "cnn: Bank ANZ Indonesia → 061",
-        "rapyd: BANK ANZ → 622"
+        "rapyd: BANK ANZ → 622",
+        "ojk: PT BANK ANZ INDONESIA → 061"
       ]
     },
     "panin-dubai-syariah": {
       "bank_code": "517",
       "confirmed": true,
       "votes": {
-        "517": ["cnn", "detik", "fortune", "kontan", "rapyd"]
+        "517": ["cnn", "detik", "fortune", "kontan", "rapyd", "ojk"]
       },
       "matches": [
         "kontan: Bank Panin Dubai Syariah → 517",
@@ -83,14 +88,15 @@
         "fortune: Bank Panin Dubai Syariah → 517",
         "cnn: Bank Panin Dubai Syariah → 517",
         "cnn: Bank Panin Dubai Syariah → 517",
-        "rapyd: BANK PANIN DUBAI SYARIAH → 517"
+        "rapyd: BANK PANIN DUBAI SYARIAH → 517",
+        "ojk: PT BANK PANIN DUBAI SYARIAH Tbk → 517"
       ]
     },
     "artha-graha": {
       "bank_code": "037",
       "confirmed": true,
       "votes": {
-        "037": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd"]
+        "037": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Bank Artha Graha Internasional → 037",
@@ -99,14 +105,15 @@
         "fortune: Bank Artha Graha → 037",
         "fortune: Bank Artha Graha Internasional → 037",
         "cnn: Bank Artha Graha Internasional → 037",
-        "rapyd: BANK ARTHA GRAHA → 037"
+        "rapyd: BANK ARTHA GRAHA → 037",
+        "ojk: PT BANK ARTHA GRAHA INTERNASIONAL Tbk → 037"
       ]
     },
     "qnb-indonesia": {
       "bank_code": "167",
       "confirmed": true,
       "votes": {
-        "167": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd"]
+        "167": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Bank QNB Kesawan (Bank QNB Indonesia) → 167",
@@ -115,14 +122,15 @@
         "fortune: Bank QNB Kesawan (Bank QNB) → 167",
         "fortune: Bank QNB Indonesia → 167",
         "cnn: Bank QNB Indonesia → 167",
-        "rapyd: BANK QNB INDONESIA → 167"
+        "rapyd: BANK QNB INDONESIA → 167",
+        "ojk: PT BANK QNB INDONESIA Tbk → 167"
       ]
     },
     "bumi-arta": {
       "bank_code": "076",
       "confirmed": true,
       "votes": {
-        "076": ["cnn", "detik", "fortune", "kontan", "okezone"]
+        "076": ["cnn", "detik", "fortune", "kontan", "okezone", "ojk"]
       },
       "matches": [
         "okezone: Bank Bumi Arta → 076",
@@ -130,14 +138,15 @@
         "detik: Bank Bumi Arta → 076",
         "fortune: Bank Bumi Artha → 076",
         "fortune: Bank Bumi Arta → 076",
-        "cnn: Bank Bumi Arta → 076"
+        "cnn: Bank Bumi Arta → 076",
+        "ojk: PT BANK BUMI ARTA Tbk → 076"
       ]
     },
     "permata": {
       "bank_code": "013",
       "confirmed": true,
       "votes": {
-        "013": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd"]
+        "013": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: PERMATA BANK → 013",
@@ -146,14 +155,15 @@
         "fortune: Bank Permata → 013",
         "cnn: Bank Permata → 013",
         "metro: Permata Bank → 013",
-        "rapyd: BANK PERMATA → 013"
+        "rapyd: BANK PERMATA → 013",
+        "ojk: PT BANK PERMATA Tbk → 013"
       ]
     },
     "uob-indonesia": {
       "bank_code": "023",
       "confirmed": true,
       "votes": {
-        "023": ["cnn", "detik", "fortune", "kontan", "rapyd"]
+        "023": ["cnn", "detik", "fortune", "kontan", "rapyd", "ojk"]
       },
       "matches": [
         "kontan: Bank UOB Indonesia → 023",
@@ -161,14 +171,15 @@
         "fortune: Bank UOB Indonesia → 023",
         "fortune: Bank UOB Indonesia → 023",
         "cnn: Bank UoB Indonesia → 023",
-        "rapyd: BANK UOB INDONESIA → 023"
+        "rapyd: BANK UOB INDONESIA → 023",
+        "ojk: PT BANK UOB INDONESIA → 023"
       ]
     },
     "bca-digital": {
       "bank_code": "501",
       "confirmed": true,
       "votes": {
-        "501": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd"]
+        "501": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Bank Royal Indonesia → 501",
@@ -176,14 +187,15 @@
         "detik: Bank Royal Indonesia → 501",
         "fortune: Bank Royal Indonesia → 501",
         "cnn: Bank Digital BCA (BCA Digital) → 501",
-        "rapyd: BANK ROYAL INDONESIA → 501"
+        "rapyd: BANK ROYAL INDONESIA → 501",
+        "ojk: PT BANK DIGITAL BCA → 501"
       ]
     },
     "kb-bank": {
       "bank_code": "441",
       "confirmed": true,
       "votes": {
-        "441": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd"]
+        "441": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: BANK BUKOPIN → 441",
@@ -191,14 +203,15 @@
         "detik: Bank KB Bukopin → 441",
         "fortune: Bank Bukopin → 441",
         "cnn: Bank Bukopin → 441",
-        "rapyd: BANK BUKOPIN → 441"
+        "rapyd: BANK BUKOPIN → 441",
+        "ojk: PT BANK KB INDONESIA Tbk → 441"
       ]
     },
     "bank-capital": {
       "bank_code": "054",
       "confirmed": true,
       "votes": {
-        "054": ["detik", "fortune", "kontan", "okezone", "rapyd"]
+        "054": ["detik", "fortune", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Bank Capital Indonesia → 054",
@@ -206,14 +219,15 @@
         "detik: Bank Capital Indonesia → 054",
         "fortune: Bank Capital Indonesia → 054",
         "fortune: Bank Capital Indonesia → 054",
-        "rapyd: BANK CAPITAL → 054"
+        "rapyd: BANK CAPITAL → 054",
+        "ojk: PT BANK CAPITAL INDONESIA Tbk → 054"
       ]
     },
     "danamon": {
       "bank_code": "011",
       "confirmed": true,
       "votes": {
-        "011": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd"]
+        "011": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: BANK DANAMON → 011",
@@ -222,14 +236,15 @@
         "fortune: Bank Danamon → 011",
         "cnn: Bank Danamon → 011",
         "metro: Bank Danamon → 011",
-        "rapyd: BANK DANAMON → 011"
+        "rapyd: BANK DANAMON → 011",
+        "ojk: PT BANK DANAMON INDONESIA Tbk → 011"
       ]
     },
     "bank-dki": {
       "bank_code": "111",
       "confirmed": true,
       "votes": {
-        "111": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "viva"]
+        "111": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK DKI JAKARTA → 111",
@@ -239,42 +254,45 @@
         "cnn: Bank DKI Jakarta → 111",
         "viva: Bank DKI → 111",
         "metro: Bank DKI Jakarta → 111",
-        "rapyd: BANK DKI → 111"
+        "rapyd: BANK DKI → 111",
+        "ojk: PT BPD DKI → 111"
       ]
     },
     "bank-index": {
       "bank_code": "555",
       "confirmed": true,
       "votes": {
-        "555": ["cnn", "detik", "kontan", "okezone", "rapyd"]
+        "555": ["cnn", "detik", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Bank Index Selindo → 555",
         "kontan: Bank Index Selindo → 555",
         "detik: Bank Index Selindo → 555",
         "cnn: Bank Index Selindo → 555",
-        "rapyd: BANK INDEX → 555"
+        "rapyd: BANK INDEX → 555",
+        "ojk: PT BANK INDEX SELINDO → 555"
       ]
     },
     "bank-of-china": {
       "bank_code": "069",
       "confirmed": true,
       "votes": {
-        "069": ["detik", "fortune", "kontan", "okezone", "rapyd"]
+        "069": ["detik", "fortune", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Bank of China → 069",
         "kontan: Bank of China → 069",
         "detik: Bank of China → 069",
         "fortune: Bank of China → 069",
-        "rapyd: BANK OF CHINA → 069"
+        "rapyd: BANK OF CHINA → 069",
+        "ojk: BANK OF CHINA (HONG KONG) LIMITED → 069"
       ]
     },
     "bank-of-india-indonesia": {
       "bank_code": "146",
       "confirmed": true,
       "votes": {
-        "146": ["detik", "fortune", "kontan", "okezone", "rapyd"]
+        "146": ["detik", "fortune", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Bank Swadesi (Bank of India Indonesia) → 146",
@@ -282,14 +300,15 @@
         "detik: Bank Swadesi (Bank of India Indonesia) → 146",
         "fortune: Bank Swadesi → 146",
         "fortune: Bank of India Indonesia → 146",
-        "rapyd: BANK OF INDIA INDONESIA → 146"
+        "rapyd: BANK OF INDIA INDONESIA → 146",
+        "ojk: PT BANK OF INDIA INDONESIA Tbk → 146"
       ]
     },
     "mandiri": {
       "bank_code": "008",
       "confirmed": true,
       "votes": {
-        "008": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "viva"]
+        "008": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK MANDIRI → 008",
@@ -299,28 +318,30 @@
         "cnn: Bank Mandiri → 008",
         "viva: Bank Mandiri → 008",
         "metro: Bank Mandiri → 008",
-        "rapyd: BANK MANDIRI → 008"
+        "rapyd: BANK MANDIRI → 008",
+        "ojk: PT BANK MANDIRI (PERSERO) Tbk → 008"
       ]
     },
     "bank-mas": {
       "bank_code": "548",
       "confirmed": true,
       "votes": {
-        "548": ["cnn", "detik", "fortune", "okezone", "rapyd"]
+        "548": ["cnn", "detik", "fortune", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Bank Multi Arta Sentosa → 548",
         "detik: Bank Multi Arta Sentosa → 548",
         "fortune: Bank Multiarta Sentosa → 548",
         "cnn: Bank Multiarta Sentosa → 548",
-        "rapyd: MULTIARTA SENTOSA → 548"
+        "rapyd: MULTIARTA SENTOSA → 548",
+        "ojk: PT BANK MULTIARTA SENTOSA → 548"
       ]
     },
     "cimb-niaga": {
       "bank_code": "022",
       "confirmed": true,
       "votes": {
-        "022": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd"]
+        "022": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: BANK CIMB NIAGA → 022",
@@ -329,14 +350,15 @@
         "fortune: Bank CIMB Niaga → 022",
         "cnn: Bank CIMB Niaga → 022",
         "metro: Bank CIMB Niaga → 022",
-        "rapyd: CIMB NIAGA → 022"
+        "rapyd: CIMB NIAGA → 022",
+        "ojk: PT BANK CIMB NIAGA Tbk → 022"
       ]
     },
     "bni": {
       "bank_code": "009",
       "confirmed": true,
       "votes": {
-        "009": ["cnn", "detik", "kontan", "metro", "okezone", "rapyd", "viva"]
+        "009": ["cnn", "detik", "kontan", "metro", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK BNI (BANK NEGARA INDONESIA) → 009",
@@ -345,31 +367,34 @@
         "cnn: Bank BNI → 009",
         "viva: Bank BNI → 009",
         "metro: Bank BNI (Bank Negara Indonesia) → 009",
-        "rapyd: BANK NEGARA INDONESIA → 009"
+        "rapyd: BANK NEGARA INDONESIA → 009",
+        "ojk: PT BANK NEGARA INDONESIA (PERSERO) Tbk → 009"
       ]
     },
     "bnp-paribas": {
       "bank_code": "057",
       "confirmed": true,
       "votes": {
-        "057": ["detik", "fortune", "okezone"]
+        "057": ["detik", "fortune", "okezone", "ojk"]
       },
       "matches": [
         "okezone: Bank BNP Paribas Indonesia → 057",
         "detik: Bank BNP Paribas Indonesia → 057",
-        "fortune: Bank BNP Paribas Indonesia → 057"
+        "fortune: Bank BNP Paribas Indonesia → 057",
+        "ojk: PT BANK BNP PARIBAS INDONESIA → 057"
       ]
     },
     "bank-of-america": {
       "bank_code": "033",
       "confirmed": true,
       "votes": {
-        "033": ["detik", "fortune", "okezone"]
+        "033": ["detik", "fortune", "okezone", "ojk"]
       },
       "matches": [
         "okezone: Bank of America, N.A → 033",
         "detik: Bank of America, N.A → 033",
-        "fortune: Bank of America NA → 033"
+        "fortune: Bank of America NA → 033",
+        "ojk: BANK OF AMERICA, N.A → 033"
       ]
     },
     "mufg": {
@@ -377,33 +402,35 @@
       "confirmed": true,
       "votes": {
         "632": ["rapyd"],
-        "042": ["cnn", "detik", "fortune"]
+        "042": ["cnn", "detik", "fortune", "ojk"]
       },
       "matches": [
         "detik: The Bank of Tokyo Mitsubishi UFJ LTD → 042",
         "fortune: MUFG Bank → 042",
         "cnn: MUFG Bank → 042",
-        "rapyd: BANK OF TOKYO MITSUBISHI → 632"
+        "rapyd: BANK OF TOKYO MITSUBISHI → 632",
+        "ojk: MUFG BANK, LTD → 042"
       ]
     },
     "resona-perdania": {
       "bank_code": "047",
       "confirmed": true,
       "votes": {
-        "047": ["detik", "fortune", "okezone"]
+        "047": ["detik", "fortune", "okezone", "ojk"]
       },
       "matches": [
         "okezone: Bank Resona Perdania → 047",
         "detik: Bank Resona Perdania → 047",
         "fortune: Bank Pesona Perdania → 047",
-        "fortune: Bank Resona Perdania → 047"
+        "fortune: Bank Resona Perdania → 047",
+        "ojk: PT BANK RESONA PERDANIA → 047"
       ]
     },
     "bri": {
       "bank_code": "002",
       "confirmed": true,
       "votes": {
-        "002": ["cnn", "detik", "kontan", "metro", "okezone", "rapyd", "viva"]
+        "002": ["cnn", "detik", "kontan", "metro", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK BRI (BANK RAKYAT INDONESIA) → 002",
@@ -412,14 +439,15 @@
         "cnn: Bank BRI → 002",
         "viva: Bank BRI → 002",
         "metro: Bank BRI (Bank Rakyat Indonesia) → 002",
-        "rapyd: BANK RAKYAT INDONESIA → 002"
+        "rapyd: BANK RAKYAT INDONESIA → 002",
+        "ojk: PT BANK RAKYAT INDONESIA (PERSERO) Tbk → 002"
       ]
     },
     "woori-saudara": {
       "bank_code": "212",
       "confirmed": true,
       "votes": {
-        "212": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd"],
+        "212": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "ojk"],
         "068": ["fortune"]
       },
       "matches": [
@@ -431,7 +459,8 @@
         "fortune: Bank Woori Indonesia → 068",
         "fortune: Bank Woori Saudara Indonesia 1906 → 212",
         "cnn: Bank Woori Saudara → 212",
-        "rapyd: BANK WOORI SAUDARA → 212"
+        "rapyd: BANK WOORI SAUDARA → 212",
+        "ojk: PT BANK WOORI SAUDARA INDONESIA 1906 Tbk → 212"
       ]
     },
     "bsi": {
@@ -440,7 +469,7 @@
       "votes": {
         "422": ["metro"],
         "427": ["metro"],
-        "451": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd"]
+        "451": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: BANK SYARIAH MANDIRI (BSM) → 451",
@@ -451,14 +480,15 @@
         "metro: Bank Syariah Indonesia (BSI) → 451",
         "metro: Bank Syariah Indonesia (BSI) → 427",
         "metro: Bank Syariah Indonesia (BSI) → 422",
-        "rapyd: BANK SYARIAH INDONESIA → 451"
+        "rapyd: BANK SYARIAH INDONESIA → 451",
+        "ojk: PT BANK SYARIAH INDONESIA Tbk → 451"
       ]
     },
     "bank-sumsel-babel": {
       "bank_code": "120",
       "confirmed": true,
       "votes": {
-        "120": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva"]
+        "120": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK SUMSEL BABEL → 120",
@@ -467,14 +497,15 @@
         "fortune: Bank Sumber Babel → 120",
         "cnn: Bank Sumsel Babel (Sumatera Selatan Bangka Belitung) → 120",
         "viva: Bank Sumsel dan Babel → 120",
-        "rapyd: BANK SUMSEL BABEL → 120"
+        "rapyd: BANK SUMSEL BABEL → 120",
+        "ojk: PT BPD SUMATERA SELATAN DAN BANGKA BELITUNG → 120"
       ]
     },
     "bca-syariah": {
       "bank_code": "536",
       "confirmed": true,
       "votes": {
-        "536": ["cnn", "detik", "fortune", "kontan", "okezone"],
+        "536": ["cnn", "detik", "fortune", "kontan", "okezone", "ojk"],
         "606": ["rapyd"]
       },
       "matches": [
@@ -483,14 +514,15 @@
         "detik: Bank BCA Syariah → 536",
         "fortune: Bank BCA Syariah → 536",
         "cnn: Bank BCA Syariah → 536",
-        "rapyd: BANK BCA SYARIAH → 606"
+        "rapyd: BANK BCA SYARIAH → 606",
+        "ojk: PT BANK BCA SYARIAH → 536"
       ]
     },
     "btn": {
       "bank_code": "200",
       "confirmed": true,
       "votes": {
-        "200": ["cnn", "detik", "kontan", "metro", "okezone", "rapyd", "viva"]
+        "200": ["cnn", "detik", "kontan", "metro", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK TABUNGAN NEGARA (BANK BTN) → 200",
@@ -499,48 +531,52 @@
         "cnn: Bank BTN → 200",
         "viva: Bank BTN → 200",
         "metro: Bank BTN (Bank Tabungan Negara) → 200",
-        "rapyd: BANK TABUNGAN NEGARA → 200"
+        "rapyd: BANK TABUNGAN NEGARA → 200",
+        "ojk: PT BANK TABUNGAN NEGARA (PERSERO) Tbk → 200"
       ]
     },
     "mnc-bank": {
       "bank_code": "485",
       "confirmed": true,
       "votes": {
-        "485": ["cnn", "detik", "fortune", "okezone", "rapyd"]
+        "485": ["cnn", "detik", "fortune", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Bank MNC Internasional (Bank Bumiputera) → 485",
         "detik: Bank MNC Internasional (Bank Bumiputera) → 485",
         "fortune: Bank MNC Internasional → 485",
         "cnn: Bank MNC → 485",
-        "rapyd: MNC BANK → 485"
+        "rapyd: MNC BANK → 485",
+        "ojk: PT BANK MNC INTERNASIONAL Tbk → 485"
       ]
     },
     "krom-bank": {
       "bank_code": "459",
       "confirmed": true,
       "votes": {
-        "459": ["detik", "fortune", "okezone"]
+        "459": ["detik", "fortune", "okezone", "ojk"]
       },
       "matches": [
         "okezone: Bank Bisnis Internasional → 459",
         "detik: Bank Bisnis Internasional → 459",
         "fortune: Bank Bisnis Internasional → 459",
-        "fortune: Bank Bisnis Internasional → 459"
+        "fortune: Bank Bisnis Internasional → 459",
+        "ojk: PT KROM BANK INDONESIA Tbk → 459"
       ]
     },
     "mega-syariah": {
       "bank_code": "506",
       "confirmed": true,
       "votes": {
-        "506": ["cnn", "detik", "fortune", "kontan", "rapyd"]
+        "506": ["cnn", "detik", "fortune", "kontan", "rapyd", "ojk"]
       },
       "matches": [
         "kontan: Bank Mega Syariah → 506",
         "detik: Bank Mega Syariah → 506",
         "fortune: Bank Mega Syariah → 506",
         "cnn: Bank Mega Syariah → 506",
-        "rapyd: BANK SYARIAH MEGA → 506"
+        "rapyd: BANK SYARIAH MEGA → 506",
+        "ojk: PT BANK MEGA SYARIAH → 506"
       ]
     },
     "bca": {
@@ -548,7 +584,7 @@
       "confirmed": true,
       "votes": {
         "624": ["rapyd"],
-        "014": ["cnn", "detik", "kontan", "metro", "okezone"]
+        "014": ["cnn", "detik", "kontan", "metro", "okezone", "ojk"]
       },
       "matches": [
         "okezone: BANK BCA (BANK CENTRAL ASIA) → 014",
@@ -556,26 +592,28 @@
         "detik: Bank BCA (Bank Central Asia) → 014",
         "cnn: Bank BCA → 014",
         "metro: Bank BCA (Bank Central Asia) → 014",
-        "rapyd: BANK CENTRAL ASIA → 624"
+        "rapyd: BANK CENTRAL ASIA → 624",
+        "ojk: PT BANK CENTRAL ASIA Tbk → 014"
       ]
     },
     "jpmorgan": {
       "bank_code": "032",
       "confirmed": true,
       "votes": {
-        "032": ["detik", "fortune", "okezone"]
+        "032": ["detik", "fortune", "okezone", "ojk"]
       },
       "matches": [
         "okezone: JP. Morgan Chase Bank, N.A. → 032",
         "detik: JP. Morgan Chase Bank, N.A. → 032",
-        "fortune: JP Morgan Chase Bank, N.A → 032"
+        "fortune: JP Morgan Chase Bank, N.A → 032",
+        "ojk: JP MORGAN CHASE BANK, NA → 032"
       ]
     },
     "jtrust": {
       "bank_code": "095",
       "confirmed": true,
       "votes": {
-        "095": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd"]
+        "095": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Bank J Trust Indonesia → 095",
@@ -584,14 +622,15 @@
         "fortune: Bank Century/Bank J Trust Indonesia → 095",
         "fortune: Bank Mutiara/J Trust → 095",
         "cnn: J Trust Bank Indonesia → 095",
-        "rapyd: BANK JTRUST INDONESIA → 095"
+        "rapyd: BANK JTRUST INDONESIA → 095",
+        "ojk: PT BANK JTRUST INDONESIA Tbk → 095"
       ]
     },
     "citibank": {
       "bank_code": "031",
       "confirmed": true,
       "votes": {
-        "031": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd"]
+        "031": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: CITIBANK → 031",
@@ -603,7 +642,8 @@
         "fortune: Bank Citibank, N.A → 031",
         "cnn: Citibank → 031",
         "cnn: Citibank → 031",
-        "rapyd: CITIBANK (INDONESIA) → 031"
+        "rapyd: CITIBANK (INDONESIA) → 031",
+        "ojk: CITIBANK, N.A. → 031"
       ]
     },
     "ctbc-indonesia": {
@@ -611,20 +651,21 @@
       "confirmed": true,
       "votes": {
         "610": ["rapyd"],
-        "949": ["cnn", "detik", "fortune"]
+        "949": ["cnn", "detik", "fortune", "ojk"]
       },
       "matches": [
         "detik: Bank CTBC (China Trust) Indonesia → 949",
         "fortune: Bank CTBC Indonesia → 949",
         "cnn: Bank CTBC Indonesia (China Trust) → 949",
-        "rapyd: BANK CTBC INDONESIA → 610"
+        "rapyd: BANK CTBC INDONESIA → 610",
+        "ojk: PT BANK CTBC INDONESIA → 949"
       ]
     },
     "dbs-indonesia": {
       "bank_code": "046",
       "confirmed": true,
       "votes": {
-        "046": ["cnn", "detik", "fortune", "kontan", "rapyd"]
+        "046": ["cnn", "detik", "fortune", "kontan", "rapyd", "ojk"]
       },
       "matches": [
         "kontan: Bank DBS Indonesia → 046",
@@ -633,32 +674,36 @@
         "fortune: Bank DBS Indonesia → 046",
         "fortune: Digibank by DBS Indonesia → 046",
         "cnn: Bank DBS Indonesia → 046",
-        "rapyd: BANK DBS → 046"
+        "rapyd: BANK DBS → 046",
+        "ojk: PT BANK DBS INDONESIA → 046"
       ]
     },
     "deutsche-bank": {
-      "bank_code": null,
-      "confirmed": false,
-      "votes": {},
-      "matches": []
+      "bank_code": "067",
+      "confirmed": true,
+      "votes": {
+        "067": ["ojk"]
+      },
+      "matches": ["ojk: DEUTSCHE BANK AG → 067"]
     },
     "superbank": {
       "bank_code": "562",
       "confirmed": true,
       "votes": {
-        "562": ["cnn", "detik", "fortune"]
+        "562": ["cnn", "detik", "fortune", "ojk"]
       },
       "matches": [
         "detik: Bank Fama Internasional → 562",
         "fortune: Bank Fama Internasional → 562",
-        "cnn: Bank Fama Internasional → 562"
+        "cnn: Bank Fama Internasional → 562",
+        "ojk: PT SUPER BANK INDONESIA → 562"
       ]
     },
     "bank-ganesha": {
       "bank_code": "161",
       "confirmed": true,
       "votes": {
-        "161": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd"]
+        "161": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Bank Ganesha → 161",
@@ -667,34 +712,38 @@
         "fortune: Bank Ganesha → 161",
         "fortune: Bank Ganesha → 161",
         "cnn: Bank Ganesha → 161",
-        "rapyd: BANK GANESHA → 161"
+        "rapyd: BANK GANESHA → 161",
+        "ojk: PT BANK GANESHA Tbk → 161"
       ]
     },
     "hibank": {
-      "bank_code": null,
-      "confirmed": false,
-      "votes": {},
-      "matches": []
+      "bank_code": "553",
+      "confirmed": true,
+      "votes": {
+        "553": ["ojk"]
+      },
+      "matches": ["ojk: PT BANK HIBANK INDONESIA → 553"]
     },
     "keb-hana": {
       "bank_code": "484",
       "confirmed": true,
       "votes": {
-        "484": ["cnn", "detik", "kontan", "okezone", "rapyd"]
+        "484": ["cnn", "detik", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Bank Hana (Eks. Bank Bintang Manunggal) → 484",
         "kontan: Bank Hana → 484",
         "detik: Bank Hana (Eks. Bank Bintang Manunggal) → 484",
         "cnn: Bank Hana (Keb Hana Bank) → 484",
-        "rapyd: BANK KEB HANA → 484"
+        "rapyd: BANK KEB HANA → 484",
+        "ojk: PT BANK KEB HANA INDONESIA → 484"
       ]
     },
     "hsbc-indonesia": {
       "bank_code": "087",
       "confirmed": true,
       "votes": {
-        "087": ["cnn", "detik", "fortune", "kontan", "rapyd"],
+        "087": ["cnn", "detik", "fortune", "kontan", "rapyd", "ojk"],
         "041": ["fortune"]
       },
       "matches": [
@@ -703,28 +752,30 @@
         "fortune: Bank HSBC → 041",
         "fortune: Bank HSBC Indonesia → 087",
         "cnn: Bank HSBC Indonesia → 087",
-        "rapyd: BANK HSBC INDONESIA → 087"
+        "rapyd: BANK HSBC INDONESIA → 087",
+        "ojk: PT BANK HSBC INDONESIA → 087"
       ]
     },
     "bank-ina": {
       "bank_code": "513",
       "confirmed": true,
       "votes": {
-        "513": ["detik", "fortune", "kontan", "okezone", "rapyd"]
+        "513": ["detik", "fortune", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Bank Ina Perdana → 513",
         "kontan: Bank Ina Perdana → 513",
         "detik: Bank Ina Perdana → 513",
         "fortune: Bank Ina Perdana → 513",
-        "rapyd: BANK INA PERDANA → 513"
+        "rapyd: BANK INA PERDANA → 513",
+        "ojk: PT BANK INA PERDANA Tbk → 513"
       ]
     },
     "maybank-indonesia": {
       "bank_code": "016",
       "confirmed": true,
       "votes": {
-        "016": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd"]
+        "016": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: BANK BII MAYBANK → 016",
@@ -732,14 +783,15 @@
         "detik: Bank BII Maybank → 016",
         "fortune: Bank BII Maybank → 016",
         "cnn: Bank Maybank (Bii) → 016",
-        "rapyd: BANK MAYBANK INDONESIA → 016"
+        "rapyd: BANK MAYBANK INDONESIA → 016",
+        "ojk: PT BANK MAYBANK INDONESIA Tbk → 016"
       ]
     },
     "ibk-indonesia": {
       "bank_code": "945",
       "confirmed": true,
       "votes": {
-        "945": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd"]
+        "945": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Bank IBK Indonesia → 945",
@@ -748,14 +800,15 @@
         "detik: Bank IBK Indonesia → 945",
         "fortune: Bank IBK Indonesia → 945",
         "cnn: IBK Bank Indonesia → 945",
-        "rapyd: BANK AGRIS → 945"
+        "rapyd: BANK AGRIS → 945",
+        "ojk: PT BANK IBK INDONESIA Tbk → 945"
       ]
     },
     "icbc-indonesia": {
       "bank_code": "164",
       "confirmed": true,
       "votes": {
-        "164": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd"]
+        "164": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Bank ICBC Indonesia (Halim Indonesia Bank) → 164",
@@ -763,35 +816,38 @@
         "detik: Bank ICBC Indonesia (Halim Indonesia Bank) → 164",
         "fortune: Bank ICBC Indonesia → 164",
         "cnn: Bank ICBC Indonesia (Halim Indonesia Bank) → 164",
-        "rapyd: ICBC INDONESIA → 164"
+        "rapyd: ICBC INDONESIA → 164",
+        "ojk: PT BANK ICBC INDONESIA → 164"
       ]
     },
     "bank-jago": {
       "bank_code": "542",
       "confirmed": true,
       "votes": {
-        "542": ["cnn", "detik", "fortune", "kontan", "rapyd"]
+        "542": ["cnn", "detik", "fortune", "kontan", "rapyd", "ojk"]
       },
       "matches": [
         "kontan: Bank Artos Indonesia → 542",
         "detik: Bank Jago (Eks Bank Artos Indonesia) → 542",
         "fortune: Bank Artos Indonesia → 542",
         "cnn: Bank Artos Indonesia → 542",
-        "rapyd: BANK ARTOS INDONESIA → 542"
+        "rapyd: BANK ARTOS INDONESIA → 542",
+        "ojk: PT BANK JAGO TBK → 542"
       ]
     },
     "bank-saqu": {
       "bank_code": "472",
       "confirmed": true,
       "votes": {
-        "472": ["detik", "fortune", "okezone"],
+        "472": ["detik", "fortune", "okezone", "ojk"],
         "601": ["rapyd"]
       },
       "matches": [
         "okezone: Bank Jasa Jakarta → 472",
         "detik: Bank Jasa Jakarta → 472",
         "fortune: Bank Jasa Jakarta → 472",
-        "rapyd: BANK JASA JAKARTA → 601"
+        "rapyd: BANK JASA JAKARTA → 601",
+        "ojk: PT BANK SAQU INDONESIA → 472"
       ]
     },
     "bank-oke": {
@@ -799,33 +855,35 @@
       "confirmed": true,
       "votes": {
         "466": ["fortune"],
-        "526": ["detik", "kontan", "okezone"]
+        "526": ["detik", "kontan", "okezone", "ojk"]
       },
       "matches": [
         "okezone: Bank Oke Indonesia (Liman International Bank) → 526",
         "kontan: Bank OKE → 526",
         "detik: Bank Oke Indonesia (Liman International Bank) → 526",
-        "fortune: Bank Oke Indonesia → 466"
+        "fortune: Bank Oke Indonesia → 466",
+        "ojk: PT BANK OKE INDONESIA Tbk → 526"
       ]
     },
     "bank-amar": {
       "bank_code": "531",
       "confirmed": true,
       "votes": {
-        "531": ["cnn", "detik", "fortune", "okezone"]
+        "531": ["cnn", "detik", "fortune", "okezone", "ojk"]
       },
       "matches": [
         "okezone: Anglomas Internasional Bank → 531",
         "detik: Anglomas Internasional Bank → 531",
         "fortune: Bank Amar Indonesia → 531",
-        "cnn: Anglomas Internasional Bank → 531"
+        "cnn: Anglomas Internasional Bank → 531",
+        "ojk: PT BANK AMAR INDONESIA → 531"
       ]
     },
     "bank-maspion": {
       "bank_code": "157",
       "confirmed": true,
       "votes": {
-        "157": ["cnn", "detik", "fortune", "kontan", "okezone"],
+        "157": ["cnn", "detik", "fortune", "kontan", "okezone", "ojk"],
         "603": ["rapyd"]
       },
       "matches": [
@@ -835,14 +893,15 @@
         "fortune: Bank Maspion → 157",
         "fortune: Bank Maspion → 157",
         "cnn: Bank Maspion Indonesia → 157",
-        "rapyd: BANK MASPION → 603"
+        "rapyd: BANK MASPION → 603",
+        "ojk: PT BANK KASIKORN INDONESIA Tbk → 157"
       ]
     },
     "bank-mayapada": {
       "bank_code": "097",
       "confirmed": true,
       "votes": {
-        "097": ["cnn", "detik", "fortune", "kontan", "rapyd"]
+        "097": ["cnn", "detik", "fortune", "kontan", "rapyd", "ojk"]
       },
       "matches": [
         "kontan: Bank Mayapada → 097",
@@ -850,22 +909,26 @@
         "fortune: Bank Mayapada → 097",
         "fortune: Bank Mayapada → 097",
         "cnn: Bank Mayapada → 097",
-        "rapyd: BANK MAYAPADA → 097"
+        "rapyd: BANK MAYAPADA → 097",
+        "ojk: PT BANK MAYAPADA INTERNATIONAL Tbk → 097"
       ]
     },
     "ccb-indonesia": {
-      "bank_code": null,
-      "confirmed": false,
+      "bank_code": "036",
+      "confirmed": true,
       "votes": {
-        "036": ["fortune"]
+        "036": ["fortune", "ojk"]
       },
-      "matches": ["fortune: China Construction Bank Indonesia → 036"]
+      "matches": [
+        "fortune: China Construction Bank Indonesia → 036",
+        "ojk: PT BANK CHINA CONSTRUCTION BANK INDONESIA Tbk → 036"
+      ]
     },
     "bank-mestika": {
       "bank_code": "151",
       "confirmed": true,
       "votes": {
-        "151": ["detik", "fortune", "kontan", "okezone", "rapyd"]
+        "151": ["detik", "fortune", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Bank Mestika Dharma → 151",
@@ -873,28 +936,30 @@
         "detik: Bank Mestika Dharma → 151",
         "fortune: Bank Mestika → 151",
         "fortune: Bank Mestika → 151",
-        "rapyd: BANK MESTIKA → 151"
+        "rapyd: BANK MESTIKA → 151",
+        "ojk: PT BANK MESTIKA DHARMA Tbk → 151"
       ]
     },
     "shinhan-indonesia": {
       "bank_code": "152",
       "confirmed": true,
       "votes": {
-        "152": ["detik", "fortune", "okezone", "rapyd"]
+        "152": ["detik", "fortune", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Bank SHINHAN Indonesia (Bank Metro Express) → 152",
         "detik: Bank SHINHAN Indonesia (Bank Metro Express) → 152",
         "fortune: Bank Metro Express → 152",
         "fortune: Shinhan Bank → 152",
-        "rapyd: BANK SHINHAN → 152"
+        "rapyd: BANK SHINHAN → 152",
+        "ojk: PT BANK SHINHAN INDONESIA → 152"
       ]
     },
     "bank-mega": {
       "bank_code": "426",
       "confirmed": true,
       "votes": {
-        "426": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd"]
+        "426": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: BANK MEGA → 426",
@@ -903,28 +968,30 @@
         "fortune: Bank Mega → 426",
         "cnn: Bank Mega → 426",
         "metro: Bank Mega → 426",
-        "rapyd: BANK MEGA → 426"
+        "rapyd: BANK MEGA → 426",
+        "ojk: PT BANK MEGA Tbk → 426"
       ]
     },
     "mizuho-indonesia": {
       "bank_code": "048",
       "confirmed": true,
       "votes": {
-        "048": ["cnn", "detik", "fortune", "okezone"]
+        "048": ["cnn", "detik", "fortune", "okezone", "ojk"]
       },
       "matches": [
         "okezone: Bank Mizuho Indonesia → 048",
         "detik: Bank Mizuho Indonesia → 048",
         "fortune: Bank Mizuho Indonesia → 048",
         "fortune: Bank Mizuho Indonesia → 048",
-        "cnn: Bank Mizuho Indonesia → 048"
+        "cnn: Bank Mizuho Indonesia → 048",
+        "ojk: PT BANK MIZUHO INDONESIA → 048"
       ]
     },
     "muamalat": {
       "bank_code": "147",
       "confirmed": true,
       "votes": {
-        "147": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd"]
+        "147": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: BANK MUAMALAT → 147",
@@ -932,25 +999,29 @@
         "detik: Bank Muamalat → 147",
         "fortune: Bank Muamalat → 147",
         "cnn: Bank Muamalat → 147",
-        "rapyd: BANK MUAMALAT → 147"
+        "rapyd: BANK MUAMALAT → 147",
+        "ojk: PT BANK MUAMALAT INDONESIA Tbk → 147"
       ]
     },
     "nano-syariah": {
-      "bank_code": null,
-      "confirmed": false,
-      "votes": {},
-      "matches": []
+      "bank_code": "253",
+      "confirmed": true,
+      "votes": {
+        "253": ["ojk"]
+      },
+      "matches": ["ojk: PT BANK NANO SYARIAH → 253"]
     },
     "aladin-syariah": {
       "bank_code": "947",
       "confirmed": true,
       "votes": {
-        "947": ["cnn", "detik", "rapyd"]
+        "947": ["cnn", "detik", "rapyd", "ojk"]
       },
       "matches": [
         "detik: Bank Aladin Syariah (Eks Bank Maybank Indocorp) → 947",
         "cnn: Bank Maybank Indocorp → 947",
-        "rapyd: MAYBANK SYARIAH INDONESIA → 947"
+        "rapyd: MAYBANK SYARIAH INDONESIA → 947",
+        "ojk: PT BANK ALADIN SYARIAH Tbk → 947"
       ]
     },
     "ocbc-nisp": {
@@ -958,7 +1029,7 @@
       "confirmed": true,
       "votes": {
         "948": ["fortune"],
-        "028": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd"]
+        "028": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: BANK OCBC NISP → 028",
@@ -967,28 +1038,30 @@
         "fortune: Bank OCBC NISP → 028",
         "fortune: Bank OCBC NISP → 948",
         "cnn: Bank OCBC NISP → 028",
-        "rapyd: BANK OCBC NISP → 028"
+        "rapyd: BANK OCBC NISP → 028",
+        "ojk: PT BANK OCBC NISP Tbk → 028"
       ]
     },
     "nobu": {
       "bank_code": "503",
       "confirmed": true,
       "votes": {
-        "503": ["cnn", "detik", "kontan", "okezone", "rapyd"]
+        "503": ["cnn", "detik", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Bank National Nobu (Bank Alfindo) → 503",
         "kontan: Bank National Nobu → 503",
         "detik: Bank National Nobu (Bank Alfindo) → 503",
         "cnn: Bank National Nobu → 503",
-        "rapyd: BANK NATIONAL NOBU → 503"
+        "rapyd: BANK NATIONAL NOBU → 503",
+        "ojk: PT BANK NATIONALNOBU Tbk → 503"
       ]
     },
     "bank-banten": {
       "bank_code": "137",
       "confirmed": true,
       "votes": {
-        "137": ["cnn", "detik", "fortune", "okezone", "rapyd", "viva"]
+        "137": ["cnn", "detik", "fortune", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK BPD BANTEN → 137",
@@ -996,14 +1069,15 @@
         "fortune: Bank BPD Banten → 137",
         "cnn: Bank Banten → 137",
         "viva: Bank Banten → 137",
-        "rapyd: Bank Banten → 137"
+        "rapyd: Bank Banten → 137",
+        "ojk: PT BPD BANTEN Tbk → 137"
       ]
     },
     "bank-bengkulu": {
       "bank_code": "133",
       "confirmed": true,
       "votes": {
-        "133": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva"]
+        "133": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK BENGKULU → 133",
@@ -1012,14 +1086,15 @@
         "fortune: Bank Bengkulu → 133",
         "cnn: Bank Bengkulu → 133",
         "viva: Bank Bengkulu → 133",
-        "rapyd: BANK BENGKULU → 133"
+        "rapyd: BANK BENGKULU → 133",
+        "ojk: PT BPD BENGKULU → 133"
       ]
     },
     "bank-papua": {
       "bank_code": "132",
       "confirmed": true,
       "votes": {
-        "132": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "viva"]
+        "132": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK PAPUA → 132",
@@ -1029,14 +1104,15 @@
         "cnn: Bank Papua → 132",
         "viva: Bank Papua → 132",
         "metro: Bank Papua → 132",
-        "rapyd: BANK PAPUA → 132"
+        "rapyd: BANK PAPUA → 132",
+        "ojk: PT BPD PAPUA → 132"
       ]
     },
     "bjb": {
       "bank_code": "110",
       "confirmed": true,
       "votes": {
-        "110": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "viva"]
+        "110": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK JABAR → 110",
@@ -1046,14 +1122,15 @@
         "cnn: Bank Jabar bjb → 110",
         "viva: Bank BJB → 110",
         "metro: Bank BJB (Jabar & Banten) → 110",
-        "rapyd: BANK JABAR → 110"
+        "rapyd: BANK JABAR → 110",
+        "ojk: PT BPD JAWA BARAT DAN BANTEN Tbk → 110"
       ]
     },
     "bank-jateng": {
       "bank_code": "113",
       "confirmed": true,
       "votes": {
-        "113": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "viva"]
+        "113": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK JATENG (JAWA TENGAH) → 113",
@@ -1063,14 +1140,15 @@
         "cnn: Bank Jateng → 113",
         "viva: Bank Jateng → 113",
         "metro: Bank Jateng → 113",
-        "rapyd: BANK JATENG → 113"
+        "rapyd: BANK JATENG → 113",
+        "ojk: PT BPD JAWA TENGAH → 113"
       ]
     },
     "bank-jambi": {
       "bank_code": "115",
       "confirmed": true,
       "votes": {
-        "115": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva"]
+        "115": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BPD JAMBI → 115",
@@ -1079,14 +1157,15 @@
         "fortune: BPD Jambi → 115",
         "cnn: Bank Jambi → 115",
         "viva: Bank Jambi → 115",
-        "rapyd: BANK JAMBI → 115"
+        "rapyd: BANK JAMBI → 115",
+        "ojk: PT BPD JAMBI → 115"
       ]
     },
     "bank-jatim": {
       "bank_code": "114",
       "confirmed": true,
       "votes": {
-        "114": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "viva"]
+        "114": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK JATIM (JAWA BARAT) → 114",
@@ -1096,14 +1175,15 @@
         "cnn: Bank Jatim → 114",
         "viva: Bank Jatim → 114",
         "metro: Bank Jatim → 114",
-        "rapyd: BANK JATIM → 114"
+        "rapyd: BANK JATIM → 114",
+        "ojk: PT BPD JAWA TIMUR Tbk → 114"
       ]
     },
     "bank-kalbar": {
       "bank_code": "123",
       "confirmed": true,
       "votes": {
-        "123": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva"]
+        "123": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK KALBAR (BANK KALIMANTAN BARAT) → 123",
@@ -1112,14 +1192,15 @@
         "fortune: Bank Kalbar (Kalimantan Barat) → 123",
         "cnn: Bank Kalbar → 123",
         "viva: Bank Kalbar → 123",
-        "rapyd: BANK KALBAR → 123"
+        "rapyd: BANK KALBAR → 123",
+        "ojk: PT BPD KALIMANTAN BARAT → 123"
       ]
     },
     "bank-kalteng": {
       "bank_code": "125",
       "confirmed": true,
       "votes": {
-        "125": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva"]
+        "125": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK KALTENG (BANK KALIMANTAN TENGAH) → 125",
@@ -1128,14 +1209,15 @@
         "fortune: Bank Kalteng (Kalimantan Tengah) → 125",
         "cnn: Bank Kalteng → 125",
         "viva: Bank Kalteng → 125",
-        "rapyd: BANK KALTENG → 125"
+        "rapyd: BANK KALTENG → 125",
+        "ojk: PT BPD KALIMANTAN TENGAH → 125"
       ]
     },
     "bank-kalsel": {
       "bank_code": "122",
       "confirmed": true,
       "votes": {
-        "122": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "viva"]
+        "122": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK KALSEL (BANK KALIMANTAN SELATAN) → 122",
@@ -1145,14 +1227,15 @@
         "cnn: Bank Kalsel → 122",
         "viva: Bank kalsel → 122",
         "metro: Bank Kalsel → 122",
-        "rapyd: BANK KALSEL → 122"
+        "rapyd: BANK KALSEL → 122",
+        "ojk: PT BPD KALIMANTAN SELATAN → 122"
       ]
     },
     "bank-kaltimtara": {
       "bank_code": "124",
       "confirmed": true,
       "votes": {
-        "124": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva"]
+        "124": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK KALTIMTARA (BANK KALIMANTAN TIMUR DAN UTARA) → 124",
@@ -1161,14 +1244,15 @@
         "fortune: Bank Kaltimtara (Kalimantan Timur dan Utara) → 124",
         "cnn: Bank Kaltimtara (Bank Kalimantan Timur dan Utara) → 124",
         "viva: Bank Kaltim → 124",
-        "rapyd: BANK KALTIM → 124"
+        "rapyd: BANK KALTIM → 124",
+        "ojk: PT BPD KALIMANTAN TIMUR DAN KALIMANTAN UTARA → 124"
       ]
     },
     "bank-lampung": {
       "bank_code": "121",
       "confirmed": true,
       "votes": {
-        "121": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva"]
+        "121": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK LAMPUNG → 121",
@@ -1177,14 +1261,15 @@
         "fortune: Bank Lampung → 121",
         "cnn: Bank Lampung → 121",
         "viva: Bank Lampung → 121",
-        "rapyd: BANK LAMPUNG → 121"
+        "rapyd: BANK LAMPUNG → 121",
+        "ojk: PT BPD LAMPUNG → 121"
       ]
     },
     "bank-maluku-malut": {
       "bank_code": "131",
       "confirmed": true,
       "votes": {
-        "131": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva"]
+        "131": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK MALUKU MALUT → 131",
@@ -1193,14 +1278,15 @@
         "fortune: Bank Maluku Malut → 131",
         "cnn: Bank Maluku → 131",
         "viva: Bank Maluku → 131",
-        "rapyd: BANK MALUKU → 131"
+        "rapyd: BANK MALUKU → 131",
+        "ojk: PT BPD MALUKU DAN MALUKU UTARA → 131"
       ]
     },
     "bank-ntb-syariah": {
       "bank_code": "128",
       "confirmed": true,
       "votes": {
-        "128": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva"]
+        "128": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK NTB → 128",
@@ -1212,14 +1298,15 @@
         "cnn: Bank NTB → 128",
         "cnn: Bank NTB Syariah → 128",
         "viva: Bank Ntb → 128",
-        "rapyd: BANK NTB → 128"
+        "rapyd: BANK NTB → 128",
+        "ojk: PT BANK NTB SYARIAH → 128"
       ]
     },
     "bank-ntt": {
       "bank_code": "130",
       "confirmed": true,
       "votes": {
-        "130": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva"]
+        "130": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK NTT → 130",
@@ -1228,14 +1315,15 @@
         "fortune: Bank NTT → 130",
         "cnn: Bank NTT → 130",
         "viva: Bank Ntt → 130",
-        "rapyd: BANK NTT → 130"
+        "rapyd: BANK NTT → 130",
+        "ojk: PT BPD NUSA TENGGARA TIMUR → 130"
       ]
     },
     "bank-riau-kepri-syariah": {
       "bank_code": "119",
       "confirmed": true,
       "votes": {
-        "119": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva"]
+        "119": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK RIAU KEPRI → 119",
@@ -1244,14 +1332,15 @@
         "fortune: Bank Riau Kepri → 119",
         "cnn: Bank Riau Kepri → 119",
         "viva: Bank Kepri → 119",
-        "rapyd: BANK RIAU KEPRI → 119"
+        "rapyd: BANK RIAU KEPRI → 119",
+        "ojk: PT BPD RIAU KEPRI SYARIAH → 119"
       ]
     },
     "bank-nagari": {
       "bank_code": "118",
       "confirmed": true,
       "votes": {
-        "118": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "viva"]
+        "118": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK NAGARI (BANK SUMBAR) → 118",
@@ -1261,14 +1350,15 @@
         "cnn: Bank Nagari (Bank Sumbar) → 118",
         "viva: Bank Sumbar → 118",
         "metro: Bank Nagari (Sumbar) → 118",
-        "rapyd: BANK NAGARI → 118"
+        "rapyd: BANK NAGARI → 118",
+        "ojk: PT BANK NAGARI → 118"
       ]
     },
     "bank-sumut": {
       "bank_code": "117",
       "confirmed": true,
       "votes": {
-        "117": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "viva"]
+        "117": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK SUMUT → 117",
@@ -1278,14 +1368,15 @@
         "cnn: Bank Sumut → 117",
         "viva: Bank Sumut → 117",
         "metro: Bank Sumut → 117",
-        "rapyd: BANK SUMUT → 117"
+        "rapyd: BANK SUMUT → 117",
+        "ojk: PT BPD SUMATERA UTARA → 117"
       ]
     },
     "bank-sulteng": {
       "bank_code": "134",
       "confirmed": true,
       "votes": {
-        "134": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva"]
+        "134": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK SULTENG (BANK SULAWESI TENGAH) → 134",
@@ -1294,14 +1385,15 @@
         "fortune: Bank Sulteng (Sulawesi Tengah) → 134",
         "cnn: Bank Sulteng → 134",
         "viva: Bank Sulteng → 134",
-        "rapyd: BANK SULTENG → 134"
+        "rapyd: BANK SULTENG → 134",
+        "ojk: PT BPD SULAWESI TENGAH → 134"
       ]
     },
     "bank-sultra": {
       "bank_code": "135",
       "confirmed": true,
       "votes": {
-        "135": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva"]
+        "135": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK SULTRA → 135",
@@ -1310,14 +1402,15 @@
         "fortune: Bank Sultra (Sulawesi Utara) → 135",
         "cnn: Bank Sultra → 135",
         "viva: Bank Sultra → 135",
-        "rapyd: BANK SULTRA → 135"
+        "rapyd: BANK SULTRA → 135",
+        "ojk: PT BPD SULAWESI TENGGARA → 135"
       ]
     },
     "bank-sulselbar": {
       "bank_code": "126",
       "confirmed": true,
       "votes": {
-        "126": ["cnn", "detik", "fortune", "kontan", "okezone", "viva"]
+        "126": ["cnn", "detik", "fortune", "kontan", "okezone", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK SULSELBAR (BANK SULAWESI SELATAN DAN BARAT) → 126",
@@ -1325,14 +1418,15 @@
         "detik: Bank SULSELBAR (Bank Sulawesi Selatan dan Barat) → 126",
         "fortune: Bank Sulselbar (Sulawesi Selatan dan Barat) → 126",
         "cnn: Bank Sulselbar (Bank Sulawesi Selatan dan Barat) → 126",
-        "viva: Bank Sulsel → 126"
+        "viva: Bank Sulsel → 126",
+        "ojk: PT BPD SULAWESI SELATAN DAN SULAWESI BARAT → 126"
       ]
     },
     "bank-sulutgo": {
       "bank_code": "127",
       "confirmed": true,
       "votes": {
-        "127": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva"]
+        "127": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BANK SULUTGO (BANK SULAWESI UTARA DAN GORONTALO) → 127",
@@ -1341,14 +1435,15 @@
         "fortune: Bank Sulutgo (Sulawesi Utara dan Gorontalo) → 127",
         "cnn: Bank Sulutgo (Bank Sulawesi Utara dan Gorontalo) → 127",
         "viva: Bank Sulut → 127",
-        "rapyd: BANK SULUT → 127"
+        "rapyd: BANK SULUT → 127",
+        "ojk: PT BPD SULAWESI UTARA DAN GORONTALO → 127"
       ]
     },
     "bpd-diy": {
       "bank_code": "112",
       "confirmed": true,
       "votes": {
-        "112": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "viva"]
+        "112": ["cnn", "detik", "fortune", "kontan", "metro", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BPD DIY (YOGYAKARTA) → 112",
@@ -1358,14 +1453,15 @@
         "cnn: BPD DIY → 112",
         "viva: Bank BPD D.I.Y → 112",
         "metro: BPD DIY (Yogyakarta) → 112",
-        "rapyd: BANK DIY → 112"
+        "rapyd: BANK DIY → 112",
+        "ojk: PT BPD DAERAH ISTIMEWA YOGYAKARTA → 112"
       ]
     },
     "panin": {
       "bank_code": "019",
       "confirmed": true,
       "votes": {
-        "019": ["cnn", "detik", "fortune", "kontan", "rapyd"]
+        "019": ["cnn", "detik", "fortune", "kontan", "rapyd", "ojk"]
       },
       "matches": [
         "kontan: Bank Panin → 019",
@@ -1373,56 +1469,60 @@
         "fortune: Bank Panin → 019",
         "fortune: Bank Panin → 019",
         "cnn: Bank Panin → 019",
-        "rapyd: BANK PANIN → 019"
+        "rapyd: BANK PANIN → 019",
+        "ojk: PT BANK PAN INDONESIA Tbk → 019"
       ]
     },
     "btpn-syariah": {
       "bank_code": "547",
       "confirmed": true,
       "votes": {
-        "547": ["cnn", "detik", "kontan", "okezone", "rapyd"]
+        "547": ["cnn", "detik", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: BANK BTPN SYARIAH → 547",
         "kontan: Bank BTPN Syariah → 547",
         "detik: Bank BTPN Syariah → 547",
         "cnn: Bank BTPN Syariah → 547",
-        "rapyd: BTPN SYARIAH → 547"
+        "rapyd: BTPN SYARIAH → 547",
+        "ojk: PT BANK BTPN SYARIAH Tbk → 547"
       ]
     },
     "bank-sampoerna": {
       "bank_code": "523",
       "confirmed": true,
       "votes": {
-        "523": ["cnn", "detik", "fortune", "okezone", "rapyd"]
+        "523": ["cnn", "detik", "fortune", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Bank Sahabat Sampoerna (Bank Dipo International) → 523",
         "detik: Bank Sahabat Sampoerna (Bank Dipo International) → 523",
         "fortune: Bank Sahabat Sampoerna → 523",
         "cnn: Bank Sahabat Sampeorna (Bank Dipo International) → 523",
-        "rapyd: BANK SAHABAT SAMPOERNA → 523"
+        "rapyd: BANK SAHABAT SAMPOERNA → 523",
+        "ojk: PT BANK SAHABAT SAMPOERNA → 523"
       ]
     },
     "sbi-indonesia": {
       "bank_code": "498",
       "confirmed": true,
       "votes": {
-        "498": ["detik", "fortune", "okezone"],
+        "498": ["detik", "fortune", "okezone", "ojk"],
         "600": ["rapyd"]
       },
       "matches": [
         "okezone: Bank SBI Indonesia (Bank Indomonex) → 498",
         "detik: Bank SBI Indonesia (Bank Indomonex) → 498",
         "fortune: Bank SBI Indonesia → 498",
-        "rapyd: BANK SBI INDONESIA → 600"
+        "rapyd: BANK SBI INDONESIA → 600",
+        "ojk: PT BANK SBI INDONESIA → 498"
       ]
     },
     "bank-sinarmas": {
       "bank_code": "153",
       "confirmed": true,
       "votes": {
-        "153": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd"]
+        "153": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: BANK SINARMAS → 153",
@@ -1430,14 +1530,15 @@
         "detik: Bank Sinar Mas → 153",
         "fortune: Bank Sinarmas → 153",
         "cnn: Bank Sinarmas → 153",
-        "rapyd: BANK SINARMAS → 153"
+        "rapyd: BANK SINARMAS → 153",
+        "ojk: PT BANK SINARMAS Tbk → 153"
       ]
     },
     "standard-chartered": {
       "bank_code": "050",
       "confirmed": true,
       "votes": {
-        "050": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd"]
+        "050": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Standard Chartered Bank → 050",
@@ -1445,14 +1546,15 @@
         "detik: Standard Chartered Bank → 050",
         "fortune: Bank Standard Chartered → 050",
         "cnn: Standard Chartered Bank → 050",
-        "rapyd: STANDARD CHARTERED BANK → 050"
+        "rapyd: STANDARD CHARTERED BANK → 050",
+        "ojk: STANDARD CHARTERED BANK → 050"
       ]
     },
     "kb-bank-syariah": {
       "bank_code": "521",
       "confirmed": true,
       "votes": {
-        "521": ["cnn", "detik", "fortune", "kontan", "okezone"],
+        "521": ["cnn", "detik", "fortune", "kontan", "okezone", "ojk"],
         "630": ["rapyd"]
       },
       "matches": [
@@ -1461,42 +1563,45 @@
         "detik: Bank KB Bukopin Syariah → 521",
         "fortune: Bank Syariah Bukopin → 521",
         "cnn: Bank Bukopin Syariah → 521",
-        "rapyd: BANK SYARIAH BUKOPIN → 630"
+        "rapyd: BANK SYARIAH BUKOPIN → 630",
+        "ojk: PT BANK KB BUKOPIN SYARIAH → 521"
       ]
     },
     "mandiri-taspen": {
       "bank_code": "564",
       "confirmed": true,
       "votes": {
-        "564": ["cnn", "detik", "fortune", "kontan", "rapyd"]
+        "564": ["cnn", "detik", "fortune", "kontan", "rapyd", "ojk"]
       },
       "matches": [
         "kontan: Bank Mandiri Taspen Pos → 564",
         "detik: Bank Mandiri Taspen Pos (Bank Sinar Harapan Bali) → 564",
         "fortune: Bank Mandiri Taspen → 564",
         "cnn: Bank Mandiri Taspen Pos → 564",
-        "rapyd: BANK MANTAP → 564"
+        "rapyd: BANK MANTAP → 564",
+        "ojk: PT BANK MANDIRI TASPEN → 564"
       ]
     },
     "seabank": {
       "bank_code": "535",
       "confirmed": true,
       "votes": {
-        "535": ["cnn", "detik", "fortune", "kontan", "rapyd"]
+        "535": ["cnn", "detik", "fortune", "kontan", "rapyd", "ojk"]
       },
       "matches": [
         "kontan: Bank Kesejahteraan Ekonomi → 535",
         "detik: SeaBank (Eks Bank Kesejahteraan Ekonomi) → 535",
         "fortune: Bank Kesejahteraan Ekonomi → 535",
         "cnn: Bank Kesejahteraan Ekonomi → 535",
-        "rapyd: BANK KESEJAHTERAAN EKONOMI → 535"
+        "rapyd: BANK KESEJAHTERAAN EKONOMI → 535",
+        "ojk: PT BANK SEABANK INDONESIA → 535"
       ]
     },
     "smbc-indonesia": {
       "bank_code": "213",
       "confirmed": true,
       "votes": {
-        "213": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd"]
+        "213": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: BANK BTPN (BANK TABUNGAN PENSIUNAN NASIONAL) → 213",
@@ -1504,14 +1609,15 @@
         "detik: Bank BTPN (Bank Tabungan Pensiunan Nasional) → 213",
         "fortune: Bank BTPN → 213",
         "cnn: Bank BTPN → 213",
-        "rapyd: BANK BTPN → 213"
+        "rapyd: BANK BTPN → 213",
+        "ojk: PT BANK SMBC INDONESIA, Tbk → 213"
       ]
     },
     "bank-syariah-nasional": {
       "bank_code": "405",
       "confirmed": true,
       "votes": {
-        "405": ["cnn", "detik", "fortune", "okezone", "rapyd"]
+        "405": ["cnn", "detik", "fortune", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Bank Swaguna → 405",
@@ -1519,14 +1625,15 @@
         "fortune: Bank Swaguna → 405",
         "fortune: Bank Victoria Syariah → 405",
         "cnn: Bank Victoria Syariah → 405",
-        "rapyd: BANK VICTORIA SYARIAH → 405"
+        "rapyd: BANK VICTORIA SYARIAH → 405",
+        "ojk: PT BANK SYARIAH NASIONAL → 405"
       ]
     },
     "bank-aceh-syariah": {
       "bank_code": "116",
       "confirmed": true,
       "votes": {
-        "116": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva"]
+        "116": ["cnn", "detik", "fortune", "kontan", "okezone", "rapyd", "viva", "ojk"]
       },
       "matches": [
         "okezone: BPD ACEH → 116",
@@ -1539,7 +1646,8 @@
         "cnn: Bank Aceh → 116",
         "cnn: Bank Aceh Syariah → 116",
         "viva: Bank Aceh → 116",
-        "rapyd: BANK ACEH → 116"
+        "rapyd: BANK ACEH → 116",
+        "ojk: PT BANK ACEH SYARIAH → 116"
       ]
     },
     "bank-jago-syariah": {
@@ -1580,13 +1688,14 @@
       "bank_code": "425",
       "confirmed": true,
       "votes": {
-        "425": ["cnn", "detik", "fortune", "rapyd"]
+        "425": ["cnn", "detik", "fortune", "rapyd", "ojk"]
       },
       "matches": [
         "detik: Bank BJB Syariah → 425",
         "fortune: Bank BJB Syariah → 425",
         "cnn: Bank Jabar bjb Syariah → 425",
-        "rapyd: BANK JABAR SYARIAH → 425"
+        "rapyd: BANK JABAR SYARIAH → 425",
+        "ojk: PT BANK JABAR BANTEN SYARIAH → 425"
       ]
     },
     "bank-jateng-syariah": {
@@ -1679,21 +1788,22 @@
       "bank_code": "566",
       "confirmed": true,
       "votes": {
-        "566": ["cnn", "detik", "okezone"],
+        "566": ["cnn", "detik", "okezone", "ojk"],
         "607": ["rapyd"]
       },
       "matches": [
         "okezone: Bank Victoria International → 566",
         "detik: Bank Victoria International → 566",
         "cnn: Bank Victoria International → 566",
-        "rapyd: BANK VICTORIA INTERNATIONAL → 607"
+        "rapyd: BANK VICTORIA INTERNATIONAL → 607",
+        "ojk: PT BANK VICTORIA INTERNATIONAL Tbk → 566"
       ]
     },
     "bank-neo-commerce": {
       "bank_code": "490",
       "confirmed": true,
       "votes": {
-        "490": ["detik", "fortune", "kontan", "okezone", "rapyd"]
+        "490": ["detik", "fortune", "kontan", "okezone", "rapyd", "ojk"]
       },
       "matches": [
         "okezone: Bank Yudha Bhakti → 490",
@@ -1701,7 +1811,8 @@
         "detik: Bank Neo Commerce (Akulaku) → 490",
         "detik: Bank Yudha Bhakti → 490",
         "fortune: Bank Yudha Bhakti → 490",
-        "rapyd: BANK YUDHA BHAKTI → 490"
+        "rapyd: BANK YUDHA BHAKTI → 490",
+        "ojk: PT BANK NEO COMMERCE Tbk → 490"
       ]
     },
     "jenius": {

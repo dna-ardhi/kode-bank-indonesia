@@ -8,8 +8,8 @@ description: Where names, BICs and bank codes come from, including the limits of
 | [BI-FAST participant list](https://www.bi.go.id/id/fungsi-utama/sistem-pembayaran/ritel/infrastruktur/Documents/List-Peserta-BI-FAST.pdf) (Bank Indonesia, PDF) | Names, BICs, `bi_fast` |
 | [SKNBI participant list](https://www.bi.go.id/id/fungsi-utama/sistem-pembayaran/ritel/infrastruktur/Documents/List-Peserta-SKNBI.pdf) (Bank Indonesia, PDF) | `sknbi` membership, by BIC only |
 | [BI licensed payment providers](https://www.bi.go.id/id/layanan/informasi-perizinan/sistem-pembayaran/default.aspx) | E-wallet operators (checked by hand) |
-| [OJK banking directory](https://ojk.go.id/id/kanal/perbankan/data-dan-statistik/direktori-perbankan-indonesia) | Reference (checked by hand) |
-| Published bank code lists | `bank_code` |
+| [OJK head-office list, Bank Umum dan Syariah](https://ojk.go.id/id/kanal/perbankan/data-dan-statistik/Pages/Daftar-Alamat-Kantor-Pusat-Bank-Umum-Dan-Syariah.aspx) (xlsx) | `bank_code` ("Sandi Bank") |
+| Published bank code lists | `bank_code` where OJK has no entry, and a cross-check |
 
 ## Why SKNBI is used for BICs only
 
@@ -17,12 +17,12 @@ The current SKNBI PDF edition (as of 24 September 2026) has a name column that *
 
 ## About bank codes
 
-There is no official, machine-readable dataset of 3-digit bank codes (sandi bank). So `bank_code` is decided like this:
+`bank_code` is decided like this:
 
-1. We collect the code from eight published lists: Indonesian financial news sites and a payment provider's docs.
-2. The chosen code is the one **most** publishers report, with at least **two** agreeing and no tie.
-3. A code counts as **confirmed** only if no rival code has two or more publishers.
-4. Records whose code was reached through a former name or a BIC prefix stay `verified: false`.
+1. The **OJK** head-office list (Bank Umum dan Syariah) gives the 3-digit "Sandi Bank". It is the primary source.
+2. For records OJK doesn't list (sharia units, brands), we use the code **most** of eight published lists report (Indonesian financial news sites and a payment provider's docs), with at least **two** agreeing and no tie.
+3. If OJK and a news majority disagree, the code is **not** confirmed and the sync report flags it for a human.
+4. Records linked to a code list only through a former name or a BIC prefix stay `verified: false`.
 
 Every vote, with the source URLs and the matched lines, is recorded in [`sources/bank-codes.json`](https://github.com/dna-ardhi/kode-bank-indonesia/blob/main/sources/bank-codes.json). Many of those news lists copy each other, so treat agreement as **evidence**, not **proof**.
 
@@ -30,7 +30,7 @@ Every vote, with the source URLs and the matched lines, is recorded in [`sources
 
 Some participants (Bank Indonesia itself, KSEI, and others) aren't relevant to a bank picker. They're listed with reasons in [`sources/ignored-bics.json`](https://github.com/dna-ardhi/kode-bank-indonesia/blob/main/sources/ignored-bics.json).
 
-## Two sources that are checked by hand
+## Two source quirks
 
 - **BI's payment provider register** starts resetting connections after a few scripted requests, so we don't automate it.
-- **OJK** uses a firewall that rejects non-browser clients. We don't try to get around it.
+- **OJK** has rejected non-browser clients before. A plain request with our honest user agent works today. If it stops working, the sync fails loudly and we don't try to get around the block.

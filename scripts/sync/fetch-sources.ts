@@ -2,7 +2,9 @@ import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
-export type Source = { key: string; url: string; file: string };
+export type Kind = "pdf" | "xlsx";
+/** `link` set: `url` is a page, and the file is the first href on it matching `link`. */
+export type Source = { key: string; url: string; file: string; kind: Kind; link?: RegExp };
 export type Hashes = Record<string, { sha256: string; updated_at: string }>;
 export type FetchResult = {
   key: string;
@@ -18,8 +20,16 @@ const BI = "https://www.bi.go.id/id/fungsi-utama/sistem-pembayaran/ritel/infrast
  * OJK's site rejects non-browser clients and we don't work around that.
  */
 export const SOURCES: Source[] = [
-  { key: "bi-fast", url: `${BI}/List-Peserta-BI-FAST.pdf`, file: "bi-fast.pdf" },
-  { key: "sknbi", url: `${BI}/List-Peserta-SKNBI.pdf`, file: "sknbi.pdf" },
+  { key: "bi-fast", url: `${BI}/List-Peserta-BI-FAST.pdf`, file: "bi-fast.pdf", kind: "pdf" },
+  { key: "sknbi", url: `${BI}/List-Peserta-SKNBI.pdf`, file: "sknbi.pdf", kind: "pdf" },
+  {
+    key: "ojk-bank-umum",
+    url: "https://ojk.go.id/id/kanal/perbankan/data-dan-statistik/Pages/Daftar-Alamat-Kantor-Pusat-Bank-Umum-Dan-Syariah.aspx",
+    file: "ojk-bank-umum.xlsx",
+    kind: "xlsx",
+    // The Indonesian edition ("Daftar Alamat …"); the English one starts with "List of".
+    link: /href="([^"]*Daftar[^"]*Bank[^"]*Umum[^"]*\.xlsx)"/i,
+  },
 ];
 
 const USER_AGENT = "kode-bank-indonesia-sync/0.1";
@@ -31,6 +41,21 @@ export function assertPdf(body: Uint8Array): void {
   if (magic !== "%PDF-") throw new Error(`expected a PDF, got ${JSON.stringify(magic)}…`);
 }
 
+/** Same for xlsx, which is a zip ("PK\x03\x04"). */
+export function assertXlsx(body: Uint8Array): void {
+  if (!(body[0] === 0x50 && body[1] === 0x4b && body[2] === 3 && body[3] === 4))
+    throw new Error(
+      `expected an xlsx, got ${JSON.stringify(new TextDecoder().decode(body.subarray(0, 5)))}…`,
+    );
+}
+
+/** Finds the file link on a listing page; throws if the page layout changed. */
+export function findLink(html: string, pageUrl: string, link: RegExp): string {
+  const href = link.exec(html)?.[1];
+  if (!href) throw new Error("file link not found on the page (layout changed or request blocked)");
+  return new URL(href.replace(/&amp;/g, "&"), pageUrl).href.replace(/ /g, "%20");
+}
+
 export const sha256 = (body: Uint8Array) => createHash("sha256").update(body).digest("hex");
 
 export function compare(prev: Hashes, key: string, hash: string): FetchResult["status"] {
@@ -39,7 +64,7 @@ export function compare(prev: Hashes, key: string, hash: string): FetchResult["s
 }
 
 // Note: bi.go.id hangs on HEAD requests, so always GET.
-async function download(url: string, attempts = 3): Promise<Uint8Array> {
+async function download(url: string, kind: Kind | "html", attempts = 3): Promise<Uint8Array> {
   for (let i = 1; ; i++) {
     try {
       const res = await fetch(url, {
@@ -48,7 +73,8 @@ async function download(url: string, attempts = 3): Promise<Uint8Array> {
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const body = new Uint8Array(await res.arrayBuffer());
-      assertPdf(body);
+      if (kind === "pdf") assertPdf(body);
+      if (kind === "xlsx") assertXlsx(body);
       return body;
     } catch (err) {
       if (i >= attempts) throw err;
@@ -67,9 +93,12 @@ export async function fetchSources({ write = false } = {}): Promise<FetchResult[
   const today = new Date().toISOString().slice(0, 10);
 
   const results = await Promise.all(
-    SOURCES.map(async ({ key, url, file }): Promise<FetchResult> => {
+    SOURCES.map(async ({ key, url, file, kind, link }): Promise<FetchResult> => {
       try {
-        const body = await download(url);
+        const fileUrl = link
+          ? findLink(new TextDecoder().decode(await download(url, "html")), url, link)
+          : url;
+        const body = await download(fileUrl, kind);
         writeFileSync(new URL(file, rawDir), body);
         const hash = sha256(body);
         const status = compare(prev, key, hash);

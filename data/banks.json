@@ -18,9 +18,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-raya",
@@ -41,9 +41,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "allo-bank",
@@ -64,9 +64,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "anz-indonesia",
@@ -87,9 +87,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "panin-dubai-syariah",
@@ -110,9 +110,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "artha-graha",
@@ -133,9 +133,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "qnb-indonesia",
@@ -156,9 +156,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bumi-arta",
@@ -179,9 +179,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "permata",
@@ -202,9 +202,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "uob-indonesia",
@@ -225,9 +225,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bca-digital",
@@ -248,9 +248,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "kb-bank",
@@ -271,9 +271,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-capital",
@@ -294,9 +294,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "danamon",
@@ -317,9 +317,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-dki",
@@ -340,9 +340,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-index",
@@ -363,9 +363,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-of-china",
@@ -386,9 +386,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-of-india-indonesia",
@@ -409,9 +409,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "mandiri",
@@ -432,9 +432,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-mas",
@@ -455,9 +455,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "cimb-niaga",
@@ -478,9 +478,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bni",
@@ -501,9 +501,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bnp-paribas",
@@ -524,9 +524,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-of-america",
@@ -547,9 +547,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "mufg",
@@ -570,9 +570,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "resona-perdania",
@@ -593,9 +593,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bri",
@@ -616,9 +616,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "woori-saudara",
@@ -639,9 +639,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bsi",
@@ -662,9 +662,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-sumsel-babel",
@@ -685,9 +685,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bca-syariah",
@@ -708,9 +708,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "btn",
@@ -731,9 +731,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "mnc-bank",
@@ -754,9 +754,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "krom-bank",
@@ -777,9 +777,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
-    "verified": false,
-    "updated_at": "2026-11-20"
+    "sources": ["bi-fast", "sknbi", "ojk"],
+    "verified": true,
+    "updated_at": "2026-11-21"
   },
   {
     "id": "mega-syariah",
@@ -800,9 +800,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bca",
@@ -823,9 +823,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "jpmorgan",
@@ -846,9 +846,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "jtrust",
@@ -869,9 +869,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "citibank",
@@ -892,9 +892,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "ctbc-indonesia",
@@ -915,9 +915,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "dbs-indonesia",
@@ -938,9 +938,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "deutsche-bank",
@@ -950,7 +950,7 @@
     "display_name": "Deutsche Bank",
     "aliases": [],
     "parent_id": null,
-    "bank_code": null,
+    "bank_code": "067",
     "bic": "DEUTIDJA",
     "bi_fast": true,
     "sknbi": true,
@@ -961,9 +961,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
-    "verified": false,
-    "updated_at": "2026-11-20"
+    "sources": ["bi-fast", "sknbi", "ojk"],
+    "verified": true,
+    "updated_at": "2026-11-21"
   },
   {
     "id": "superbank",
@@ -984,9 +984,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
-    "verified": false,
-    "updated_at": "2026-11-20"
+    "sources": ["bi-fast", "sknbi", "ojk"],
+    "verified": true,
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-ganesha",
@@ -1007,9 +1007,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "hibank",
@@ -1019,7 +1019,7 @@
     "display_name": "hibank",
     "aliases": [],
     "parent_id": null,
-    "bank_code": null,
+    "bank_code": "553",
     "bic": "HBNIIDJA",
     "bi_fast": true,
     "sknbi": true,
@@ -1030,9 +1030,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
-    "verified": false,
-    "updated_at": "2026-11-20"
+    "sources": ["bi-fast", "sknbi", "ojk"],
+    "verified": true,
+    "updated_at": "2026-11-21"
   },
   {
     "id": "keb-hana",
@@ -1053,9 +1053,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "hsbc-indonesia",
@@ -1076,9 +1076,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-ina",
@@ -1099,9 +1099,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "maybank-indonesia",
@@ -1122,9 +1122,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "ibk-indonesia",
@@ -1145,9 +1145,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "icbc-indonesia",
@@ -1168,9 +1168,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-jago",
@@ -1191,9 +1191,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-saqu",
@@ -1214,9 +1214,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
-    "verified": false,
-    "updated_at": "2026-11-20"
+    "sources": ["bi-fast", "sknbi", "ojk"],
+    "verified": true,
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-oke",
@@ -1237,9 +1237,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-amar",
@@ -1260,9 +1260,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
-    "verified": false,
-    "updated_at": "2026-11-20"
+    "sources": ["bi-fast", "sknbi", "ojk"],
+    "verified": true,
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-maspion",
@@ -1283,9 +1283,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-mayapada",
@@ -1306,9 +1306,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "ccb-indonesia",
@@ -1318,7 +1318,7 @@
     "display_name": "CCB Indonesia",
     "aliases": ["Bank China Construction Bank Indonesia"],
     "parent_id": null,
-    "bank_code": null,
+    "bank_code": "036",
     "bic": "MCORIDJA",
     "bi_fast": true,
     "sknbi": true,
@@ -1329,9 +1329,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
-    "verified": false,
-    "updated_at": "2026-11-20"
+    "sources": ["bi-fast", "sknbi", "ojk"],
+    "verified": true,
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-mestika",
@@ -1352,9 +1352,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "shinhan-indonesia",
@@ -1375,9 +1375,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-mega",
@@ -1398,9 +1398,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "mizuho-indonesia",
@@ -1421,9 +1421,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "muamalat",
@@ -1444,9 +1444,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "nano-syariah",
@@ -1456,7 +1456,7 @@
     "display_name": "Bank Nano Syariah",
     "aliases": [],
     "parent_id": null,
-    "bank_code": null,
+    "bank_code": "253",
     "bic": "NANOIDJ1",
     "bi_fast": true,
     "sknbi": true,
@@ -1467,9 +1467,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
-    "verified": false,
-    "updated_at": "2026-11-20"
+    "sources": ["bi-fast", "sknbi", "ojk"],
+    "verified": true,
+    "updated_at": "2026-11-21"
   },
   {
     "id": "aladin-syariah",
@@ -1490,9 +1490,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "ocbc-nisp",
@@ -1513,9 +1513,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "nobu",
@@ -1536,9 +1536,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-banten",
@@ -1559,9 +1559,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-bengkulu",
@@ -1582,9 +1582,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-papua",
@@ -1605,9 +1605,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bjb",
@@ -1628,9 +1628,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-jateng",
@@ -1651,9 +1651,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-jambi",
@@ -1674,9 +1674,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-jatim",
@@ -1697,9 +1697,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-kalbar",
@@ -1720,9 +1720,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-kalteng",
@@ -1743,9 +1743,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-kalsel",
@@ -1767,9 +1767,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
-    "verified": false,
-    "updated_at": "2026-11-20"
+    "sources": ["bi-fast", "sknbi", "ojk"],
+    "verified": true,
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-kaltimtara",
@@ -1790,9 +1790,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-lampung",
@@ -1813,9 +1813,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-maluku-malut",
@@ -1836,9 +1836,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-ntb-syariah",
@@ -1859,9 +1859,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-ntt",
@@ -1882,9 +1882,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-riau-kepri-syariah",
@@ -1905,9 +1905,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-nagari",
@@ -1928,9 +1928,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-sumut",
@@ -1951,9 +1951,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-sulteng",
@@ -1974,9 +1974,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-sultra",
@@ -1997,9 +1997,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-sulselbar",
@@ -2020,9 +2020,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-sulutgo",
@@ -2043,9 +2043,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bpd-diy",
@@ -2066,9 +2066,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "panin",
@@ -2089,9 +2089,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "btpn-syariah",
@@ -2112,9 +2112,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-sampoerna",
@@ -2135,9 +2135,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "sbi-indonesia",
@@ -2158,9 +2158,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-sinarmas",
@@ -2181,9 +2181,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "standard-chartered",
@@ -2204,9 +2204,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "kb-bank-syariah",
@@ -2227,9 +2227,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "mandiri-taspen",
@@ -2250,9 +2250,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "seabank",
@@ -2273,9 +2273,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "smbc-indonesia",
@@ -2296,9 +2296,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-syariah-nasional",
@@ -2319,9 +2319,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
-    "verified": false,
-    "updated_at": "2026-11-20"
+    "sources": ["bi-fast", "sknbi", "ojk"],
+    "verified": true,
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-aceh-syariah",
@@ -2342,9 +2342,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-jago-syariah",
@@ -2480,9 +2480,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-jateng-syariah",
@@ -2802,9 +2802,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "bank-neo-commerce",
@@ -2825,9 +2825,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast", "sknbi"],
+    "sources": ["bi-fast", "sknbi", "ojk"],
     "verified": true,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "jenius",

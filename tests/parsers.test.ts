@@ -1,7 +1,9 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { parseIndonesianDate } from "../scripts/lib/pdf-table.ts";
+import { parseAspiQris } from "../scripts/sync/parse-aspi-qris.ts";
 import { parseBifast } from "../scripts/sync/parse-bifast.ts";
+import { parseOjkBanks } from "../scripts/sync/parse-ojk.ts";
 import { parseSknbi } from "../scripts/sync/parse-sknbi.ts";
 
 const fixture = (f: string) => readFileSync(new URL(`fixtures/${f}`, import.meta.url));
@@ -75,4 +77,44 @@ describe("parseIndonesianDate", () => {
     ["31 Des. 2026", "2026-12-31"],
   ])("%s -> %s", (input, iso) => expect(parseIndonesianDate(input)).toBe(iso));
   it("throws on unknown formats", () => expect(() => parseIndonesianDate("2026-09-24")).toThrow());
+});
+
+describe("parseAspiQris (fetched 2026-11-21; fixture holds only the h2/h3 headings)", () => {
+  const { banks, nonBanks } = parseAspiQris(readFileSync("tests/fixtures/aspi-qris-2026-11-21.html", "utf8"));
+  it("returns every operator", () => {
+    expect(banks).toHaveLength(49);
+    expect(nonBanks).toHaveLength(37);
+  });
+  it("pairs operator and app names", () => {
+    expect(nonBanks.find((e) => e.operator === "PT Dompet Anak Bangsa")?.apps).toEqual(["GoPay"]);
+    expect(banks.find((e) => e.operator.includes("Central Asia"))?.apps).toEqual([
+      "myBCA",
+      "BCA mobile",
+      "Sakuku",
+    ]);
+  });
+  it("leaves switching companies without apps", () => {
+    const bare = nonBanks.filter((e) => e.apps.length === 0).map((e) => e.operator);
+    expect(bare).toEqual([
+      "PT Alto Network",
+      "PT Artajasa Pembayaran Elektronis",
+      "PT Jalin Pembayaran Nusantara",
+      "PT Rintis Sejahtera",
+    ]);
+  });
+  it("rejects a changed layout", () => {
+    expect(() => parseAspiQris("<h2>x</h2>")).toThrow();
+  });
+});
+
+describe("parseOjkBanks (Juni 2026)", () => {
+  const banks = parseOjkBanks(fixture("ojk-bank-umum-2026-06.xlsx"));
+  it("returns every bank, skipping group titles and footnotes", () => expect(banks).toHaveLength(105));
+  it("reads Sandi Bank and strips footnote markers", () => {
+    expect(banks[0]).toEqual({ code: "002", name: "PT BANK RAKYAT INDONESIA (PERSERO) Tbk" });
+    expect(banks.find((b) => b.code === "553")?.name).toBe("PT BANK HIBANK INDONESIA");
+  });
+  it("rejects input that is not an OJK workbook", () => {
+    expect(() => parseOjkBanks(new Uint8Array([1, 2, 3]))).toThrow();
+  });
 });

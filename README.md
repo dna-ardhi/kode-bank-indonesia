@@ -129,12 +129,12 @@ treat their `bank_code` as certain. Always unverified:
 | [BI-FAST participant list](https://www.bi.go.id/id/fungsi-utama/sistem-pembayaran/ritel/infrastruktur/Documents/List-Peserta-BI-FAST.pdf) (Bank Indonesia, PDF) | Names, BICs, `bi_fast` |
 | [SKNBI participant list](https://www.bi.go.id/id/fungsi-utama/sistem-pembayaran/ritel/infrastruktur/Documents/List-Peserta-SKNBI.pdf) (Bank Indonesia, PDF) | `sknbi` membership by BIC only. The current edition's name column doesn't line up with its BICs, so its names aren't used. |
 | [BI licensed payment providers](https://www.bi.go.id/id/layanan/informasi-perizinan/sistem-pembayaran/default.aspx) | E-wallet operators (checked by hand) |
-| [OJK banking directory](https://ojk.go.id/id/kanal/perbankan/data-dan-statistik/direktori-perbankan-indonesia) | Reference (checked by hand) |
-| Published bank code lists | `bank_code` |
+| [OJK head-office list, Bank Umum dan Syariah](https://ojk.go.id/id/kanal/perbankan/data-dan-statistik/Pages/Daftar-Alamat-Kantor-Pusat-Bank-Umum-Dan-Syariah.aspx) (xlsx) | `bank_code` ("Sandi Bank") |
+| Published bank code lists | `bank_code` where OJK has no entry, and a cross-check |
 
-There is no official machine-readable list of 3-digit bank codes. Each `bank_code` is the code that
-most of eight published lists (Indonesian financial news sites and a payment provider's docs)
-report for that bank, with at least two agreeing. Every vote, with the source URLs and the matched
+`bank_code` is the "Sandi Bank" in OJK's head-office list. For records OJK doesn't list (sharia
+units, brands), it is the code that most of eight published lists (Indonesian financial news sites
+and a payment provider's docs) report, with at least two agreeing. Every vote, with the source URLs and the matched
 lines, is recorded in [`sources/bank-codes.json`](sources/bank-codes.json).
 
 Participants deliberately left out (Bank Indonesia itself, KSEI, and others) are listed with reasons

@@ -54,13 +54,15 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
 - Published `/v1` paths and fields are stable. Breaking changes go to `/v2`.
 - Product brands (Jenius, TMRW, …) are their own records with `parent_id`. They may share the
   parent's `bank_code` and keep `bic: null`.
-- Bank codes have no single official dataset. `bank_code` is the code most publishers in
-  `sources/bank-codes.json` report (at least 2, no tie). It counts as confirmed only when no rival
-  code has 2 or more publishers. Many of those news lists copy each other, so treat agreement as
-  evidence, not proof.
+- `bank_code` comes from OJK's "Sandi Bank" column (`ojk` in `sources/bank-codes.json`, the
+  Bank Umum dan Syariah workbook), which is the primary source. Where OJK has no entry (sharia
+  units, brands, e-wallets), it is the code most news publishers in that file report (at least 2,
+  no tie), confirmed only when no rival code has 2 or more publishers. Those news lists copy each
+  other, so treat agreement as evidence, not proof. When OJK and a news majority disagree, OJK
+  wins on paper but the code is not confirmed: the sync report flags it for a human.
 - `verified: true` means: name and BIC come from the BI-FAST list, the bank code is confirmed as
-  above, and no field relies on our own knowledge. Records linked to the code lists only through
-  a former name or a BIC prefix (Superbank, Krom, Saqu, Amar, Bank Syariah Nasional, Bank Kalsel),
+  above (listed by OJK under the same current legal name, or the news rule), and no field relies
+  on our own knowledge. Records linked to a code list only through a former name or a BIC prefix,
   brands, and e-wallets whose operator isn't named by its BIC all stay `verified: false`.
   `display_name`, `aliases` and `category` are editorial and not covered by the flag.
 - `name` is the BI-FAST name verbatim (e.g. `PT. BANK CENTRAL ASIA Tbk.`), so the sync diff can
@@ -75,8 +77,9 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
 
 - bi.go.id hangs on HEAD requests: always GET. The fetcher identifies itself honestly
   (`kode-bank-indonesia-sync/…`); do not spoof a browser.
-- OJK's site rejects non-browser clients. It is a reference source checked by hand. Do not try to
-  get around its firewall.
+- OJK's site has rejected non-browser clients before. A plain GET with our honest user agent works
+  today and `fetch-sources.ts` uses it. If OJK blocks us, the sync fails loudly: do not try to get
+  around its firewall, and fall back to saving the file by hand into `tests/fixtures/`.
 - BI's licensed payment provider register (`bi-pjp`):
   https://www.bi.go.id/id/layanan/informasi-perizinan/sistem-pembayaran/default.aspx. It is an
   ASP.NET list with an "Unduh" export and a product-name search. The server starts resetting
