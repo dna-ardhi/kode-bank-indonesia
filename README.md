@@ -144,14 +144,19 @@ in [`sources/ignored-bics.json`](sources/ignored-bics.json).
 ## How it stays current
 
 1. Every Monday at 02:00 UTC, the [sync workflow](.github/workflows/sync.yml) downloads the BI-FAST
-   and SKNBI PDFs and compares their SHA-256 hashes with
+   and SKNBI PDFs, OJK's bank list and ASPI's QRIS page, and compares their SHA-256 hashes with
    [`sources/hashes.json`](sources/hashes.json).
-2. If a file changed, it parses it and compares it with `data/`. It opens a pull request with the
-   proposed changes and a report of added, removed and renamed participants. Every touched record
-   is set to `verified: false`, and nothing is deleted or deactivated automatically.
-3. A maintainer reviews the PR, fills in what can't be automated (category, display name, bank
-   code evidence), and merges it.
-4. Merging to `main` redeploys GitHub Pages.
+2. If a source changed, it parses it and compares it with `data/`. It opens a pull request with the
+   proposed changes and a report. Every touched record is set to `verified: false`, and nothing is
+   deleted or deactivated automatically. A patch version bump is included when `data/` changed.
+3. Two low-risk changes are applied by the sync itself: an OJK code for a bank that had none, and
+   ASPI app names as aliases of a matched record. If a run contains **only** those (or nothing but a
+   hash change), the PR merges itself once CI passes. This needs a `SYNC_TOKEN` secret, because PRs
+   opened with the default token don't run CI.
+4. Anything else (new, removed or renamed participants, an OJK code that disagrees with ours, an OJK
+   bank we don't have) waits for a maintainer, who fills in what can't be automated (category,
+   display name, bank code evidence) and merges it.
+5. Merging to `main` redeploys GitHub Pages.
 
 If the download or the parser fails, for example because Bank Indonesia changed the PDF layout,
 the workflow opens an issue labelled `sync-failure` instead of a PR.

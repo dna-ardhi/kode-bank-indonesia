@@ -18,8 +18,15 @@ export type Change =
   | { kind: "ojk-fill"; id: string; code: string; ojkName: string }
   | { kind: "ojk-conflict"; id: string; ours: string; code: string; ojkName: string }
   | { kind: "ojk-new"; code: string; ojkName: string }
-  | { kind: "qris-apps"; id: string; apps: string[] }
+  | { kind: "qris-apps"; id: string; apps: string[]; applied: boolean }
   | { kind: "qris-new"; operator: string; apps: string[] };
+
+export type Evidence = {
+  records: Record<
+    string,
+    { bank_code: string | null; confirmed: boolean; votes: Record<string, string[]>; matches: string[] }
+  >;
+};
 
 export type DiffInput = {
   bifast: ParticipantList;
@@ -32,6 +39,8 @@ export type DiffInput = {
   ojk?: OjkBank[];
   /** ASPI QRIS directory. Report only: app names for review, and e-wallet operators not in the data. */
   qris?: QrisList;
+  /** sources/bank-codes.json; when given, applied OJK codes are recorded in the returned copy. */
+  evidence?: Evidence;
   today: string;
 };
 
@@ -50,10 +59,16 @@ const withSource = (sources: string[], key: string, on: boolean) =>
  * verified: false. It never deletes or deactivates a record: leaving BI-FAST isn't proof of a
  * closure, so a human decides on status and merged_into. SKNBI is used for membership only (its
  * names are unreliable, see parse-sknbi.ts).
+ *
+ * Two kinds of change are applied automatically because they are low risk: an OJK "Sandi Bank" for a
+ * bank that has no bank_code yet, and ASPI app names as aliases of an already matched record (not
+ * one that has brand records of its own, e.g. Jenius under SMBC). `safe` is true when nothing else
+ * changed (e-wallet candidates from ASPI are only listed), so CI may merge without a human.
  */
 export function diffSources(input: DiffInput) {
   const banks: Institution[] = structuredClone(input.banks);
   const ewallets: Institution[] = structuredClone(input.ewallets);
+  const evidence = input.evidence ? structuredClone(input.evidence) : undefined;
   const existing = [...banks, ...ewallets];
   const { ignored, today } = input;
   const changes: Change[] = [];
@@ -155,7 +170,22 @@ export function diffSources(input: DiffInput) {
         code: o.code,
         ojkName: o.name,
       });
-    else changes.push({ kind: "ojk-fill", id: named[0].id, code: o.code, ojkName: o.name });
+    else {
+      const r = named[0];
+      r.bank_code = o.code;
+      r.sources = withSource(r.sources, "ojk", true);
+      touch(r);
+      if (evidence) {
+        evidence.records[r.id] ??= { bank_code: null, confirmed: false, votes: {}, matches: [] };
+        const e = evidence.records[r.id];
+        e.bank_code = o.code;
+        e.confirmed = true;
+        e.votes[o.code] ??= [];
+        e.votes[o.code].push("ojk");
+        e.matches.push(`ojk: ${o.name} → ${o.code}`);
+      }
+      changes.push({ kind: "ojk-fill", id: r.id, code: o.code, ojkName: o.name });
+    }
   }
 
   // ASPI QRIS: operator -> app names. Report only, a human decides what becomes an alias or a record.
@@ -169,8 +199,16 @@ export function diffSources(input: DiffInput) {
       const rs = named(operator);
       const known = new Set(rs.flatMap((r) => [r.display_name, ...r.aliases]).map((n) => n.toLowerCase()));
       const fresh = apps.filter((a) => !known.has(a.toLowerCase()));
-      if (rs.length === 1 && fresh.length) changes.push({ kind: "qris-apps", id: rs[0].id, apps: fresh });
-      else if (rs.length === 0 && apps.length && input.qris.nonBanks.some((e) => e.operator === operator))
+      if (rs.length === 1 && fresh.length) {
+        const r = rs[0];
+        const hasBrands = all.some((x) => x.parent_id === r.id && x.category !== "sharia-unit");
+        if (!hasBrands) {
+          r.aliases.push(...fresh);
+          r.sources = withSource(r.sources, "aspi-qris", true);
+          r.updated_at = today; // aliases are editorial: verified stays as it is
+        }
+        changes.push({ kind: "qris-apps", id: r.id, apps: fresh, applied: !hasBrands });
+      } else if (rs.length === 0 && apps.length && input.qris.nonBanks.some((e) => e.operator === operator))
         changes.push({ kind: "qris-new", operator, apps });
     }
   }
@@ -186,7 +224,10 @@ export function diffSources(input: DiffInput) {
     }
   }
 
-  return { banks, ewallets, changes, report: report(input, changes) };
+  // Informational, never blocking: qris-new (unlisted operators stay unlisted until someone checks the BI
+  // register) and qris-apps that were not applied (the record has brand records of its own).
+  const safe = changes.every((c) => c.kind === "ojk-fill" || c.kind === "qris-new" || c.kind === "qris-apps");
+  return { banks, ewallets, evidence, changes, safe, report: report(input, changes) };
 }
 
 function report({ bifast, sknbi }: DiffInput, changes: Change[]) {
@@ -232,7 +273,7 @@ function report({ bifast, sknbi }: DiffInput, changes: Change[]) {
   );
 
   section(
-    "OJK proposes a bank code",
+    "OJK bank code applied (the bank had none)",
     "| id | Sandi Bank | OJK name |",
     of("ojk-fill").map((c) => `| ${code(c.id)} | ${code(c.code)} | ${c.ojkName} |`),
   );
@@ -248,9 +289,12 @@ function report({ bifast, sknbi }: DiffInput, changes: Change[]) {
   );
 
   section(
-    "ASPI QRIS: app names not yet in the data",
-    "| id | App names |",
-    of("qris-apps").map((c) => `| ${code(c.id)} | ${c.apps.join(", ")} |`),
+    "ASPI QRIS: app names",
+    "| id | App names | Added as aliases |",
+    of("qris-apps").map(
+      (c) =>
+        `| ${code(c.id)} | ${c.apps.join(", ")} | ${c.applied ? "yes" : "no: has brand records, add by hand"} |`,
+    ),
   );
   section(
     "ASPI QRIS: e-wallet operators not in the data",
@@ -265,8 +309,8 @@ function report({ bifast, sknbi }: DiffInput, changes: Change[]) {
       "### Review checklist",
       "",
       "- [ ] New records: set `id`, `category`, `display_name`, `aliases`, and `bank_code` (with evidence in `sources/bank-codes.json`). Move e-wallet operators to `ewallets.json` or list them in `sources/ignored-bics.json`.",
-      "- [ ] OJK sections: apply a proposed `bank_code` only after checking the name really is the same bank; for a conflict, decide which is right and update `sources/bank-codes.json`.",
-      "- [ ] ASPI QRIS sections: add app names to `aliases` only for the same operator; before adding an e-wallet, check its licence on the BI register by hand and that it can receive bank transfers.",
+      "- [ ] OJK sections: a code applied to a bank that had none was matched by name, so check it is the same bank; for a conflict, decide which is right and update `sources/bank-codes.json`.",
+      "- [ ] ASPI QRIS sections: app names were added as aliases only to records whose name matches the operator; before adding an e-wallet, check its licence on the BI register by hand and that it can receive bank transfers.",
       "- [ ] Removed participants: check whether the bank closed, merged or rebranded, and set `status` / `merged_into` if so. Records are never deleted.",
       "- [ ] Renames: update `display_name` / `aliases` if the brand changed.",
       "- [ ] Set `verified: true` again only for records that meet the rule in AGENTS.md.",
@@ -291,6 +335,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     banks: json("data/banks.json"),
     ewallets: json("data/ewallets.json"),
     ignored: json("sources/ignored-bics.json"),
+    evidence: json("sources/bank-codes.json"),
     ojk: existsSync(new URL("sources/raw/ojk-bank-umum.xlsx", root))
       ? parseOjkBanks(read("sources/raw/ojk-bank-umum.xlsx"))
       : undefined,
@@ -306,7 +351,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     for (const f of ["banks", "ewallets"] as const) {
       writeFileSync(new URL(`data/${f}.json`, root), `${JSON.stringify(result[f], null, 2)}\n`);
     }
+    writeFileSync(new URL("sources/bank-codes.json", root), `${JSON.stringify(result.evidence, null, 2)}\n`);
   }
+  const safeOut = arg("--safe-out");
+  if (safeOut) writeFileSync(safeOut, `${result.safe ? "safe" : "review"}\n`);
   const out = arg("--report");
   if (out) writeFileSync(out, result.report);
   else console.log(result.report);

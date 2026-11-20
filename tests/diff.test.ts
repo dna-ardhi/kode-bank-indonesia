@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import banksJson from "../data/banks.json" with { type: "json" };
 import ewalletsJson from "../data/ewallets.json" with { type: "json" };
 import type { ParticipantList } from "../scripts/lib/pdf-table.ts";
-import { diffSources } from "../scripts/sync/diff.ts";
+import { diffSources, type Evidence } from "../scripts/sync/diff.ts";
 import { parseAspiQris } from "../scripts/sync/parse-aspi-qris.ts";
 import { parseBifast } from "../scripts/sync/parse-bifast.ts";
 import { parseOjkBanks } from "../scripts/sync/parse-ojk.ts";
@@ -100,15 +100,35 @@ describe("diffSources", () => {
 });
 
 describe("diffSources with OJK", () => {
-  const run = (list = ojk) => diffSources({ bifast, sknbi, banks, ewallets, ignored, ojk: list, today });
+  const run = (list = ojk, over: { banks?: Institution[]; evidence?: Evidence } = {}) =>
+    diffSources({ bifast, sknbi, banks, ewallets, ignored, ojk: list, today, ...over });
 
   it("finds no OJK changes: every OJK code is already in the data", () => {
     const r = run();
     expect(r.changes).toEqual([]);
     expect(r.banks).toEqual(banks);
+    expect(r.safe).toBe(true);
   });
 
-  it("reports a conflict without rewriting the code", () => {
+  it("applies the code for a bank that has none, and records the evidence", () => {
+    const stripped = banks.map((b) => (b.id === "hibank" ? { ...b, bank_code: null } : b));
+    const evidence = { records: { hibank: { bank_code: null, confirmed: false, votes: {}, matches: [] } } };
+    const r = run(ojk, { banks: stripped, evidence });
+    expect(r.changes).toEqual([
+      { kind: "ojk-fill", id: "hibank", code: "553", ojkName: "PT BANK HIBANK INDONESIA" },
+    ]);
+    expect(find(r.banks, "hibank")).toMatchObject({ bank_code: "553", verified: false, updated_at: today });
+    expect(find(r.banks, "hibank")?.sources).toContain("ojk");
+    expect(r.evidence?.records.hibank).toMatchObject({
+      bank_code: "553",
+      confirmed: true,
+      votes: { "553": ["ojk"] },
+    });
+    expect(r.safe).toBe(true);
+    expect(validate(r.banks, r.ewallets)).toEqual([]);
+  });
+
+  it("reports a conflict without rewriting the code, and needs review", () => {
     const bca = ojk.map((o) => (o.code === "014" ? { ...o, code: "999" } : o));
     const r = run(bca);
     expect(r.changes).toEqual([
@@ -116,53 +136,67 @@ describe("diffSources with OJK", () => {
     ]);
     expect(find(r.banks, "bca")?.bank_code).toBe("014");
     expect(r.report).toContain("OJK disagrees with our bank code (1)");
+    expect(r.safe).toBe(false);
   });
 
-  it("reports an OJK bank the data has never heard of", () => {
+  it("reports an OJK bank the data has never heard of, and needs review", () => {
     const r = run([...ojk, { code: "888", name: "PT BANK BARU" }]);
     expect(r.changes).toEqual([{ kind: "ojk-new", code: "888", ojkName: "PT BANK BARU" }]);
+    expect(r.safe).toBe(false);
   });
 });
 
 describe("diffSources with ASPI QRIS", () => {
   const run = (q = qris) => diffSources({ bifast, sknbi, banks, ewallets, ignored, qris: q, today });
-  const kinds = (q = qris) => run(q).changes;
+  const changes = (q = qris) => run(q).changes;
+  const bcaApps = (apps: string[]) =>
+    qris.banks.map((e) => (e.operator === "PT Bank Central Asia, Tbk" ? { ...e, apps } : e));
 
-  it("reports app names and new operators but changes no data", () => {
+  it("applies nothing to the current data and stays safe", () => {
     const r = run();
     expect(r.banks).toEqual(banks);
     expect(r.ewallets).toEqual(ewallets);
-    expect(r.changes.every((c) => c.kind === "qris-apps" || c.kind === "qris-new")).toBe(true);
+    expect(r.changes.filter((c) => c.kind === "qris-apps" && c.applied)).toEqual([]);
+    expect(r.safe).toBe(true);
   });
 
   it("matches the e-wallets we already have, so they are not reported as new", () => {
-    const operators = kinds().flatMap((c) => (c.kind === "qris-new" ? [c.operator] : []));
-    for (const o of ["PT Dompet Anak Bangsa", "PT Visionet Internasional", "PT Espay Debit Indonesia Koe"])
+    const operators = changes().flatMap((c) => (c.kind === "qris-new" ? [c.operator] : []));
+    for (const o of [
+      "PT Dompet Anak Bangsa",
+      "PT Visionet Internasional",
+      "PT Espay Debit Indonesia Koe",
+      "PT Astra Digital Arta",
+    ])
       expect(operators).not.toContain(o);
     expect(operators).toContain("PT Capital Net Indonesia");
   });
 
   it("skips switching companies, which have no app name", () => {
-    const operators = kinds().flatMap((c) => (c.kind === "qris-new" ? [c.operator] : []));
+    const operators = changes().flatMap((c) => (c.kind === "qris-new" ? [c.operator] : []));
     expect(operators).not.toContain("PT Alto Network");
   });
 
-  it("proposes only the app names we don't have yet", () => {
-    const bca = qris.banks.map((e) =>
-      e.operator === "PT Bank Central Asia, Tbk" ? { ...e, apps: [...e.apps, "BCA Baru"] } : e,
+  it("adds only the app names we don't have yet as aliases", () => {
+    const r = run({ ...qris, banks: bcaApps(["myBCA", "BCA Baru"]) });
+    expect(r.changes).toContainEqual({ kind: "qris-apps", id: "bca", apps: ["BCA Baru"], applied: true });
+    expect(find(r.banks, "bca")?.aliases).toContain("BCA Baru");
+    expect(find(r.banks, "bca")).toMatchObject({ verified: true, updated_at: today });
+    expect(r.safe).toBe(true);
+  });
+
+  it("does not touch a record that has brand records of its own", () => {
+    const smbc = qris.banks.map((e) =>
+      e.operator === "PT Bank BTPN Tbk" ? { ...e, apps: ["Jenius QR", "BTPN Baru"] } : e,
     );
-    expect(kinds({ ...qris, banks: bca })).toContainEqual({
+    const r = run({ ...qris, banks: smbc });
+    expect(r.changes).toContainEqual({
       kind: "qris-apps",
-      id: "bca",
-      apps: ["BCA Baru"],
+      id: "smbc-indonesia",
+      apps: ["Jenius QR", "BTPN Baru"],
+      applied: false,
     });
-    const gopay = qris.nonBanks.map((e) =>
-      e.operator === "PT Dompet Anak Bangsa" ? { ...e, apps: ["GoPay", "GoPay Later"] } : e,
-    );
-    expect(kinds({ ...qris, nonBanks: gopay })).toContainEqual({
-      kind: "qris-apps",
-      id: "gopay",
-      apps: ["GoPay Later"],
-    });
+    expect(find(r.banks, "smbc-indonesia")?.aliases).not.toContain("BTPN Baru");
+    expect(r.safe).toBe(true); // listed for a human glance, not blocking
   });
 });

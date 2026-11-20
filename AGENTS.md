@@ -38,7 +38,9 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
   (gitignored), so the site serves `/v1/*` at the same URLs as before. Output is `docs/dist/`, not
   `dist/`. See "Docs" below.
 - `.github/workflows/`: `ci.yml` (PRs and main, Node 22 + 24), `deploy-pages.yml` (main → Pages),
-  `sync.yml` (Mondays 02:00 UTC: PR on source changes, issue labelled `sync-failure` on failure),
+  `sync.yml` (Mondays 02:00 UTC: PR on source changes, with a patch version bump when `data/` changed; a run whose
+  changes are all "safe" (see `diffSources`) auto-merges when the `SYNC_TOKEN` secret is set; issue labelled
+  `sync-failure` on failure),
 - `scripts/lib/pdf-table.ts`: shared strict parser for BI participant tables.
 - `sources/hashes.json`: last-seen hash per source. `sources/raw/` is gitignored.
 - `sources/bank-codes.json`: evidence for every `bank_code` (publisher URLs, matched lines, votes).
@@ -128,7 +130,7 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
 
 ## Releases
 
-- Data-only changes are a patch release, new optional fields or endpoints are minor, and breaking
+- The sync PR bumps the patch version itself when `data/` changed. Data-only changes are a patch release, new optional fields or endpoints are minor, and breaking
   changes are major plus a new `/vN` path.
 - The `version` in `package.json` is the dataset version: `scripts/build.ts` writes it into every API
   response. Bump it in a `chore(release): <x.y.z>` commit. Merging to `main` deploys; there is no tag

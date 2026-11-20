@@ -17,6 +17,8 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    env:
+      SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
     steps:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v6
@@ -39,13 +41,18 @@ jobs:
           fi
 
       - name: Parse and diff against data/
+        id: diff
         if: steps.hashes.outputs.changed == 'true'
         run: |
-          pnpm sync:diff --write --report "$RUNNER_TEMP/sync-report.md"
-          pnpm exec biome format --write data
+          pnpm sync:diff --write --report "$RUNNER_TEMP/sync-report.md" --safe-out "$RUNNER_TEMP/sync-safe"
+          pnpm exec biome format --write data sources/bank-codes.json sources/hashes.json
           pnpm validate
+          echo "safe=$([ "$(cat "$RUNNER_TEMP/sync-safe")" = safe ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          # Data-only changes are a patch release (see AGENTS.md); a hash-only change is not.
+          if ! git diff --quiet -- data; then npm version patch --no-git-tag-version >/dev/null; fi
 
       - name: Open pull request
+        id: pr
         if: steps.hashes.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v8
         with:
@@ -59,6 +66,16 @@ jobs:
           add-paths: |
             data/*.json
             sources/hashes.json
+            sources/bank-codes.json
+            package.json
+
+      # Only PRs whose changes are all low risk (see diffSources in scripts/sync/diff.ts) merge themselves, and only
+      # with SYNC_TOKEN: PRs opened with the default token get no CI, so required checks could never pass.
+      - name: Auto-merge a safe PR once CI passes
+        if: steps.diff.outputs.safe == 'true' && steps.pr.outputs.pull-request-number && env.SYNC_TOKEN != ''
+        env:
+          GH_TOKEN: ${{ env.SYNC_TOKEN }}
+        run: gh pr merge "${{ steps.pr.outputs.pull-request-number }}" --auto --squash
 
       - name: Open an issue on failure
         if: failure()
@@ -73,5 +90,5 @@ jobs:
           else
             gh issue create --label sync-failure --title "Official source sync failed" --body "The source sync failed: $RUN_URL
 
-          Likely causes: bi.go.id blocked the runner or was down (the fetch step failed), or a BI PDF changed layout (the diff step failed with a parser error). For a layout change, add the new PDF to tests/fixtures/, update the parser and its row-count tests, then rerun this workflow."
+          Likely causes: bi.go.id, ojk.go.id or aspi-indonesia.or.id blocked the runner or was down (the fetch step failed), or a source changed layout (the diff step failed with a parser error). For a layout change, add the new file to tests/fixtures/, update the parser and its tests, then rerun this workflow. Do not try to get around a block."
           fi
