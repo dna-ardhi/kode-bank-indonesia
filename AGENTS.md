@@ -9,11 +9,12 @@ synced on a schedule and changes arrive as PRs for review.
 ```sh
 pnpm install
 pnpm validate        # schema + cross-record checks on data/*.json
-pnpm test            # vitest
+pnpm test            # builds dist/, then vitest (the package tests import dist/v1/all.json)
 pnpm lint            # biome check (lint + format check)
 pnpm format          # biome format --write
 pnpm typecheck       # tsc --noEmit
 pnpm build           # data/ -> dist/ (static API; refuses invalid data, wipes dist/ first)
+pnpm build:lib       # compile the npm package src/ -> lib/
 pnpm sync:fetch      # download official sources to sources/raw/ and report hash changes (--write to record)
 ```
 
@@ -24,6 +25,11 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
 - `data/banks.json`, `data/ewallets.json`: source of truth, arrays of records.
 - `schema/institution.schema.json`: one record shape for both files.
 - `scripts/build.ts`: writes `dist/v1/*` (minified, sorted by lowercase `display_name`, then `id`) and `dist/index.html`. `/v1` paths are pinned by `tests/build.test.ts`.
+- `src/index.ts`: the npm package, compiled by `tsc -p tsconfig.build.json` into `lib/`
+  (gitignored; `pnpm build:lib`, run by `prepack`). It imports `dist/v1/all.json`, so build `dist/`
+  first. `src/data.d.ts` lets the build config skip the JSON so tsc doesn't copy it into `lib/`; the
+  tarball ships the data once, in `dist/`. `tests/types.test.ts` fails when the types drift from
+  the schema.
 - `scripts/validate.ts`: schema plus checks the schema can't express (unique id/bic/bank_code, references).
 - `scripts/sync/`: `fetch-sources.ts` (download + SHA-256), `parse-*.ts` (PDF participant lists).
 - `scripts/lib/pdf-table.ts`: shared strict parser for BI participant tables.
@@ -78,7 +84,8 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
 
 ## Code conventions
 
-- Node ≥ 22.18 runs `.ts` directly (native type stripping): erasable syntax only (no enums,
+- Development needs Node ≥ 22.18 (`.nvmrc`); the published package needs Node ≥ 20.10
+  (`engines`). Node ≥ 22.18 runs `.ts` directly (native type stripping): erasable syntax only (no enums,
   namespaces, or parameter properties), and relative imports include the `.ts` extension.
 - Scripts are importable modules with a CLI guard (`process.argv[1] === fileURLToPath(import.meta.url)`)
   so their logic can be unit-tested.
@@ -86,6 +93,7 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
 
 ## Working agreements
 
+- `package.json` stays `"private": true` until the publish workflow is approved.
 - Never push, publish to npm, create GitHub repos, or add secrets without asking first.
 - `PLAN.md` holds local planning notes, is gitignored, and must never be committed.
 - Conventional Commits (`type(scope): subject`, imperative, lowercase, ≤ 72 chars), one logical
