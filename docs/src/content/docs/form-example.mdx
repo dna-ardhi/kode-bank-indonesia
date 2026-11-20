@@ -1,0 +1,32 @@
+---
+title: Contoh form
+description: Demo interaktif form pilih bank dan nomor rekening, lengkap dengan kode yang bisa disalin.
+---
+
+import FormDemo from "@/components/FormDemo.astro";
+
+Ini contoh form yang umum: user memilih bank atau e-wallet, lalu mengisi nomor rekening dan nama pemilik. Coba ketik `mandiri`, lalu pilih hasilnya. Coba juga `jenius` untuk melihat peringatan record yang belum `verified`.
+
+<FormDemo lang="id" />
+
+## Kodenya
+
+Pencarian pakai `search()` dari paket npm. Yang ditampilkan ke user hanya institusi `active`, dan peringatan muncul kalau record belum `verified`:
+
+```ts
+import { search } from "kode-bank-indonesia";
+
+const hasil = search(input.value)
+  .filter((r) => r.status === "active")
+  .slice(0, 8);
+
+function pilih(bank) {
+  kodeBank.textContent = bank.bank_code ?? "belum ada";
+  labelRekening.textContent = bank.account_number.label; // "Nomor rekening" atau nomor ponsel
+  peringatan.hidden = bank.verified; // tampilkan catatan kalau belum verified
+}
+```
+
+:::caution
+Nama pemilik rekening di form ini **hanya diteruskan apa adanya**. Memastikan nama cocok dengan nomor rekening butuh API *account inquiry* berbayar. Lihat [FAQ](../faq/).
+:::

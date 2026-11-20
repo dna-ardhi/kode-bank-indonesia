@@ -1,0 +1,13 @@
+---
+title: Browse the data
+description: Search and filter every Indonesian bank and e-wallet right in your browser.
+---
+
+import DataBrowser from "@/components/DataBrowser.astro";
+import { stats } from "@/stats.ts";
+
+All {stats.total} institutions are below. Type a name, bank code or BIC (for example `mandiri`, `014` or `CENAIDJA`), then filter by type or category. Click a name to see that record's raw JSON.
+
+The **Verified** column shows whether a record is confirmed. Read [what it means](../../reference/verified/) before using its code.
+
+<DataBrowser lang="en" />

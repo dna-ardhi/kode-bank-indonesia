@@ -1,0 +1,32 @@
+---
+title: Form example
+description: An interactive bank picker and account number form demo, with copyable code.
+---
+
+import FormDemo from "@/components/FormDemo.astro";
+
+This is a typical form: the user picks a bank or e-wallet, then enters an account number and holder name. Try typing `mandiri` and pick a result. Try `jenius` too, to see the warning for a record that isn't `verified`.
+
+<FormDemo lang="en" />
+
+## The code
+
+The search uses `search()` from the npm package. Only `active` institutions are shown to the user, and a warning appears when a record isn't `verified`:
+
+```ts
+import { search } from "kode-bank-indonesia";
+
+const results = search(input.value)
+  .filter((r) => r.status === "active")
+  .slice(0, 8);
+
+function pick(bank) {
+  bankCode.textContent = bank.bank_code ?? "none yet";
+  accountLabel.textContent = bank.account_number.label; // "Nomor rekening" or a phone number
+  warning.hidden = bank.verified; // show a note when it isn't verified
+}
+```
+
+:::caution
+The holder name in this form is **just passed along as typed**. Confirming that a name matches an account number needs a paid *account inquiry* API. See the [FAQ](../faq/).
+:::

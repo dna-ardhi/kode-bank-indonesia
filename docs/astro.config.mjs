@@ -21,7 +21,7 @@ export default defineConfig({
         {
           label: "Mulai",
           translations: { en: "Get started" },
-          items: ["quick-start"],
+          items: ["quick-start", "form-example"],
         },
         {
           label: "Referensi",
@@ -30,7 +30,7 @@ export default defineConfig({
         },
         {
           label: "Data",
-          items: ["data/sources", "data/updates"],
+          items: ["data/browse", "data/sources", "data/updates"],
         },
         {
           label: "Proyek",

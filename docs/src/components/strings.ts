@@ -1,0 +1,103 @@
+export type Lang = "id" | "en";
+
+const categories = {
+  id: {
+    commercial: "Bank umum",
+    sharia: "Bank syariah",
+    "sharia-unit": "Unit usaha syariah",
+    regional: "Bank daerah (BPD)",
+    foreign: "Bank asing",
+    digital: "Bank digital",
+    ewallet: "E-wallet",
+  },
+  en: {
+    commercial: "Commercial bank",
+    sharia: "Sharia bank",
+    "sharia-unit": "Sharia unit",
+    regional: "Regional bank (BPD)",
+    foreign: "Foreign bank",
+    digital: "Digital bank",
+    ewallet: "E-wallet",
+  },
+} as const;
+
+export const strings = {
+  id: {
+    categories: categories.id,
+    browser: {
+      search: "Cari",
+      placeholder: "mis. mandiri, 014, CENAIDJA",
+      type: "Jenis",
+      all: "Semua",
+      bank: "Bank",
+      ewallet: "E-wallet",
+      category: "Kategori",
+      verifiedOnly: "Hanya yang verified",
+      count: "Menampilkan {n} dari {total} institusi",
+      empty: "Nggak ada yang cocok. Coba kata kunci lain.",
+      name: "Nama",
+      code: "Kode bank",
+      bic: "BIC",
+      biFast: "BI-FAST",
+      sknbi: "SKNBI",
+      verified: "Verified",
+      yes: "Ya",
+      no: "Belum",
+      inactive: "nonaktif",
+      noCode: "belum ada",
+    },
+    form: {
+      pick: "Bank atau e-wallet",
+      placeholder: "Ketik nama, mis. mandiri",
+      hint: "Ketik untuk mencari. Hanya institusi aktif yang ditampilkan.",
+      none: "Nggak ada yang cocok.",
+      code: "Kode bank",
+      noCode: "belum ada",
+      holder: "Nama pemilik rekening",
+      unverified:
+        "Kode bank untuk institusi ini belum terverifikasi. Tampilkan, tapi jangan jadikan satu-satunya sumber kebenaran.",
+      nameNote:
+        "Daftar ini nggak bisa mengecek apakah nama cocok dengan nomor rekening. Untuk itu kamu butuh API account inquiry berbayar.",
+      payload: "Yang bisa kamu kirim ke backend",
+    },
+  },
+  en: {
+    categories: categories.en,
+    browser: {
+      search: "Search",
+      placeholder: "e.g. mandiri, 014, CENAIDJA",
+      type: "Type",
+      all: "All",
+      bank: "Banks",
+      ewallet: "E-wallets",
+      category: "Category",
+      verifiedOnly: "Verified only",
+      count: "Showing {n} of {total} institutions",
+      empty: "Nothing matches. Try another keyword.",
+      name: "Name",
+      code: "Bank code",
+      bic: "BIC",
+      biFast: "BI-FAST",
+      sknbi: "SKNBI",
+      verified: "Verified",
+      yes: "Yes",
+      no: "Not yet",
+      inactive: "inactive",
+      noCode: "none yet",
+    },
+    form: {
+      pick: "Bank or e-wallet",
+      placeholder: "Type a name, e.g. mandiri",
+      hint: "Type to search. Only active institutions are shown.",
+      none: "No matches.",
+      code: "Bank code",
+      noCode: "none yet",
+      holder: "Account holder name",
+      unverified:
+        "This institution's bank code isn't verified. Show it, but don't treat it as the single source of truth.",
+      nameNote:
+        "This list can't check whether a name matches an account number. That needs a paid account inquiry API.",
+      payload: "What you could send to your backend",
+    },
+  },
+} as const;

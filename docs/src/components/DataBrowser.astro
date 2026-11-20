@@ -1,0 +1,177 @@
+---
+import { strings, type Lang } from "./strings.ts";
+
+const { lang = "id" } = Astro.props as { lang?: Lang };
+const t = strings[lang].browser;
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<div class="kbi-browser" data-lang={lang} data-base={base} data-t={JSON.stringify(strings[lang])}>
+  <div class="controls">
+    <label>
+      <span>{t.search}</span>
+      <input type="search" class="q" placeholder={t.placeholder} autocomplete="off" />
+    </label>
+    <label>
+      <span>{t.type}</span>
+      <select class="type">
+        <option value="">{t.all}</option>
+        <option value="bank">{t.bank}</option>
+        <option value="ewallet">{t.ewallet}</option>
+      </select>
+    </label>
+    <label>
+      <span>{t.category}</span>
+      <select class="category"><option value="">{t.all}</option></select>
+    </label>
+    <label class="check"><input type="checkbox" class="verified" /> <span>{t.verifiedOnly}</span></label>
+  </div>
+  <p class="count" aria-live="polite"></p>
+  <div class="wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">{t.name}</th>
+          <th scope="col">{t.code}</th>
+          <th scope="col">{t.bic}</th>
+          <th scope="col">{t.biFast}</th>
+          <th scope="col">{t.sknbi}</th>
+          <th scope="col">{t.verified}</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <p class="empty" hidden>{t.empty}</p>
+</div>
+
+<script>
+  import { all, search } from "../../../src/index.ts";
+
+  const root = document.querySelector<HTMLElement>(".kbi-browser");
+  if (root) {
+    const dict = JSON.parse(root.dataset.t ?? "{}");
+    const t = dict.browser;
+    const base = root.dataset.base ?? "";
+    const $ = <T extends HTMLElement>(sel: string) => root.querySelector(sel) as T;
+    const q = $<HTMLInputElement>(".q");
+    const type = $<HTMLSelectElement>(".type");
+    const category = $<HTMLSelectElement>(".category");
+    const verified = $<HTMLInputElement>(".verified");
+    const tbody = $<HTMLElement>("tbody");
+    const count = $<HTMLElement>(".count");
+    const empty = $<HTMLElement>(".empty");
+
+    for (const c of [...new Set(all.map((r) => r.category))]) {
+      const o = document.createElement("option");
+      o.value = c;
+      o.textContent = dict.categories[c] ?? c;
+      category.append(o);
+    }
+
+    const cell = (text: string, cls = "") => {
+      const td = document.createElement("td");
+      td.textContent = text;
+      if (cls) td.className = cls;
+      return td;
+    };
+
+    const render = () => {
+      const rows = search(q.value).filter(
+        (r) =>
+          (!type.value || r.type === type.value) &&
+          (!category.value || r.category === category.value) &&
+          (!verified.checked || r.verified),
+      );
+      tbody.replaceChildren(
+        ...rows.map((r) => {
+          const tr = document.createElement("tr");
+          const name = document.createElement("td");
+          const a = document.createElement("a");
+          a.href = `${base}/v1/by-id/${r.id}.json`;
+          a.textContent = r.display_name;
+          name.append(a);
+          const sub = document.createElement("small");
+          sub.textContent = ` ${dict.categories[r.category] ?? r.category}${r.status === "inactive" ? ` · ${t.inactive}` : ""}`;
+          name.append(sub);
+          tr.append(
+            name,
+            cell(r.bank_code ?? t.noCode, r.bank_code ? "mono" : "muted"),
+            cell(r.bic ?? "–", "mono"),
+            cell(r.bi_fast ? "✓" : "–"),
+            cell(r.sknbi ? "✓" : "–"),
+            cell(r.verified ? t.yes : t.no, r.verified ? "ok" : "muted"),
+          );
+          return tr;
+        }),
+      );
+      count.textContent = t.count.replace("{n}", String(rows.length)).replace("{total}", String(all.length));
+      empty.hidden = rows.length > 0;
+    };
+
+    for (const el of [q, type, category, verified]) el.addEventListener("input", render);
+    render();
+  }
+</script>
+
+<style>
+  .controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 0.75rem;
+    align-items: end;
+    margin-block: 1rem;
+  }
+  label {
+    display: grid;
+    gap: 0.25rem;
+    font-size: var(--sl-text-sm);
+  }
+  label.check {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    padding-block: 0.5rem;
+  }
+  input[type="search"],
+  select {
+    padding: 0.5rem 0.6rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.4rem;
+    background: var(--sl-color-bg-nav);
+    color: var(--sl-color-text);
+    font: inherit;
+  }
+  .count {
+    color: var(--sl-color-gray-3);
+    font-size: var(--sl-text-sm);
+    margin-block: 0.5rem;
+  }
+  .wrap {
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--sl-text-sm);
+  }
+  .kbi-browser :global(td),
+  th {
+    padding: 0.5rem 0.6rem;
+    border-top: 1px solid var(--sl-color-gray-5);
+    text-align: start;
+    vertical-align: top;
+  }
+  .kbi-browser :global(td.mono) {
+    font-family: var(--sl-font-mono);
+  }
+  .kbi-browser :global(td.muted) {
+    color: var(--sl-color-gray-3);
+  }
+  .kbi-browser :global(td.ok) {
+    color: var(--sl-color-green-high);
+  }
+  .kbi-browser :global(small) {
+    color: var(--sl-color-gray-3);
+  }
+</style>

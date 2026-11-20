@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["**", "!**/*.md", "!**/*.mdx", "!**/*.astro", "!docs/src/content"]
+    "includes": ["**", "!**/*.md", "!**/*.mdx", "!**/*.astro", "!docs/src/content", "!docs/public"]
   },
   "formatter": {
     "enabled": true,

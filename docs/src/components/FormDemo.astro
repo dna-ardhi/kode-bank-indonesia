@@ -1,0 +1,190 @@
+---
+import { strings, type Lang } from "./strings.ts";
+
+const { lang = "id" } = Astro.props as { lang?: Lang };
+const t = strings[lang].form;
+---
+
+<div class="kbi-form" data-t={JSON.stringify(strings[lang].form)}>
+  <label for="kbi-pick">{t.pick}</label>
+  <input id="kbi-pick" class="pick" type="text" placeholder={t.placeholder} autocomplete="off" aria-describedby="kbi-hint" />
+  <p id="kbi-hint" class="hint">{t.hint}</p>
+  <ul class="results" role="listbox" aria-label={t.pick} hidden></ul>
+
+  <div class="chosen" hidden>
+    <p class="summary"></p>
+    <p class="warn" role="note" hidden>{t.unverified}</p>
+
+    <label for="kbi-acc" class="acc-label"></label>
+    <input id="kbi-acc" class="acc" type="text" autocomplete="off" />
+
+    <label for="kbi-holder">{t.holder}</label>
+    <input id="kbi-holder" class="holder" type="text" autocomplete="off" />
+    <p class="hint">{t.nameNote}</p>
+
+    <p class="payload-title">{t.payload}</p>
+    <pre class="payload"><code></code></pre>
+  </div>
+</div>
+
+<script>
+  import { search } from "../../../src/index.ts";
+  import type { Institution } from "../../../src/index.ts";
+
+  const root = document.querySelector<HTMLElement>(".kbi-form");
+  if (root) {
+    const t = JSON.parse(root.dataset.t ?? "{}");
+    const $ = <T extends HTMLElement>(sel: string) => root.querySelector(sel) as T;
+    const pick = $<HTMLInputElement>(".pick");
+    const results = $<HTMLUListElement>(".results");
+    const chosen = $<HTMLElement>(".chosen");
+    const summary = $<HTMLElement>(".summary");
+    const warn = $<HTMLElement>(".warn");
+    const accLabel = $<HTMLElement>(".acc-label");
+    const acc = $<HTMLInputElement>(".acc");
+    const holder = $<HTMLInputElement>(".holder");
+    const payload = $<HTMLElement>(".payload code");
+    let selected: Institution | undefined;
+
+    const showPayload = () => {
+      if (!selected) return;
+      payload.textContent = JSON.stringify(
+        {
+          institution_id: selected.id,
+          bank_code: selected.bank_code,
+          account_number: acc.value,
+          holder_name: holder.value,
+        },
+        null,
+        2,
+      );
+    };
+
+    const choose = (r: Institution) => {
+      selected = r;
+      pick.value = r.display_name;
+      results.hidden = true;
+      chosen.hidden = false;
+      summary.textContent = `${t.code}: ${r.bank_code ?? t.noCode}${r.bic ? ` · BIC ${r.bic}` : ""}`;
+      warn.hidden = r.verified;
+      accLabel.textContent = r.account_number.label;
+      acc.inputMode = r.account_number.kind === "phone" ? "tel" : "numeric";
+      showPayload();
+    };
+
+    pick.addEventListener("input", () => {
+      selected = undefined;
+      chosen.hidden = true;
+      const q = pick.value.trim();
+      if (!q) {
+        results.hidden = true;
+        return;
+      }
+      const rows = search(q)
+        .filter((r) => r.status === "active")
+        .slice(0, 8);
+      results.replaceChildren(
+        ...rows.map((r) => {
+          const li = document.createElement("li");
+          const b = document.createElement("button");
+          b.type = "button";
+          b.textContent = r.display_name;
+          b.addEventListener("click", () => choose(r));
+          li.append(b);
+          return li;
+        }),
+      );
+      if (rows.length === 0) {
+        const li = document.createElement("li");
+        li.className = "none";
+        li.textContent = t.none;
+        results.replaceChildren(li);
+      }
+      results.hidden = false;
+    });
+    acc.addEventListener("input", showPayload);
+    holder.addEventListener("input", showPayload);
+  }
+</script>
+
+<style>
+  .kbi-form {
+    display: grid;
+    gap: 0.5rem;
+    max-width: 32rem;
+    margin-block: 1rem;
+  }
+  label {
+    font-weight: 600;
+    font-size: var(--sl-text-sm);
+    margin-top: 0.5rem;
+  }
+  input {
+    padding: 0.55rem 0.65rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.4rem;
+    background: var(--sl-color-bg-nav);
+    color: var(--sl-color-text);
+    font: inherit;
+  }
+  .hint {
+    margin: 0;
+    color: var(--sl-color-gray-3);
+    font-size: var(--sl-text-xs);
+  }
+  .results {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.4rem;
+    overflow: hidden;
+  }
+  .results :global(button) {
+    width: 100%;
+    padding: 0.55rem 0.65rem;
+    text-align: start;
+    background: transparent;
+    border: 0;
+    color: var(--sl-color-text);
+    font: inherit;
+    cursor: pointer;
+  }
+  .results :global(button:hover),
+  .results :global(button:focus-visible) {
+    background: var(--sl-color-gray-6);
+  }
+  .results :global(.none) {
+    padding: 0.55rem 0.65rem;
+    color: var(--sl-color-gray-3);
+  }
+  .chosen {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .summary {
+    margin: 0;
+    font-family: var(--sl-font-mono);
+    font-size: var(--sl-text-sm);
+  }
+  .warn {
+    margin: 0;
+    padding: 0.6rem 0.75rem;
+    border-inline-start: 3px solid var(--sl-color-orange);
+    background: var(--sl-color-orange-low);
+    font-size: var(--sl-text-sm);
+  }
+  .payload-title {
+    margin: 0.75rem 0 0;
+    font-weight: 600;
+    font-size: var(--sl-text-sm);
+  }
+  .payload {
+    margin: 0;
+    padding: 0.75rem;
+    overflow-x: auto;
+    border-radius: 0.4rem;
+    background: var(--sl-color-gray-6);
+    font-size: var(--sl-text-xs);
+  }
+</style>

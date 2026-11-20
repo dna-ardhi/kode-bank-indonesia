@@ -1,0 +1,13 @@
+---
+title: Jelajahi data
+description: Cari dan saring semua bank dan e-wallet Indonesia langsung di browser.
+---
+
+import DataBrowser from "@/components/DataBrowser.astro";
+import { stats } from "@/stats.ts";
+
+Semua {stats.total} institusi ada di bawah. Ketik nama, kode bank, atau BIC (misalnya `mandiri`, `014`, atau `CENAIDJA`), lalu saring menurut jenis atau kategori. Klik nama untuk melihat JSON mentah record itu.
+
+Kolom **Verified** menunjukkan apakah record sudah terkonfirmasi. Baca [artinya](../../reference/verified/) sebelum memakai kodenya.
+
+<DataBrowser lang="id" />
