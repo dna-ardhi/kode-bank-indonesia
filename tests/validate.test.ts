@@ -75,6 +75,15 @@ describe("validate", () => {
     expect(e).toEqual(['duplicate bic "CENAIDJA" on "bca" and "bca-2"']);
   });
 
+  it("treats sknbi_bic as part of the BIC namespace", () => {
+    expect(errs([bank({ sknbi_bic: "CENAIDBB" })])).toEqual([]);
+    const clash = bank({ id: "other", bank_code: "999", bic: null, sknbi_bic: "CENAIDJA" });
+    expect(errs([bank(), clash])).toEqual(['duplicate bic "CENAIDJA" on "bca" and "other"']);
+    expect(errs([bank({ sknbi: false, sknbi_bic: "CENAIDBB" })])).toEqual([
+      '"bca": sknbi_bic is set, so sknbi must be true',
+    ]);
+  });
+
   it("rejects duplicate bank_code among active non-brands", () => {
     const e = errs([bank(), bank({ id: "other", bic: null })]);
     expect(e).toEqual(['duplicate bank_code "014" on "bca" and "other"']);

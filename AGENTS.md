@@ -26,6 +26,8 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
 - `scripts/sync/`: `fetch-sources.ts` (download + SHA-256), `parse-*.ts` (PDF participant lists).
 - `scripts/lib/pdf-table.ts`: shared strict parser for BI participant tables.
 - `sources/hashes.json`: last-seen hash per source. `sources/raw/` is gitignored.
+- `sources/bank-codes.json`: evidence for every `bank_code` (publisher URLs, matched lines, votes).
+- `sources/ignored-bics.json`: BI participants deliberately not published as banks, with reasons.
 - `tests/fixtures/`: official files, named `<source>-<edition date>.pdf`.
 
 ## Data rules (non-negotiable)
@@ -37,8 +39,22 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
 - Published `/v1` paths and fields are stable. Breaking changes go to `/v2`.
 - Product brands (Jenius, TMRW, …) are their own records with `parent_id`. They may share the
   parent's `bank_code` and keep `bic: null`.
-- Bank codes have no single official dataset: require two independent reputable sources, otherwise
-  `verified: false`.
+- Bank codes have no single official dataset. `bank_code` is the code most publishers in
+  `sources/bank-codes.json` report (at least 2, no tie). It counts as confirmed only when no rival
+  code has 2 or more publishers. Many of those news lists copy each other, so treat agreement as
+  evidence, not proof.
+- `verified: true` means: name and BIC come from the BI-FAST list, the bank code is confirmed as
+  above, and no field relies on our own knowledge. Records linked to the code lists only through
+  a former name or a BIC prefix (Superbank, Krom, Saqu, Amar, Bank Syariah Nasional, Bank Kalsel),
+  brands, and e-wallets whose operator isn't named by its BIC all stay `verified: false`.
+  `display_name`, `aliases` and `category` are editorial and not covered by the flag.
+- `name` is the BI-FAST name verbatim (e.g. `PT. BANK CENTRAL ASIA Tbk.`), so the sync diff can
+  detect renames by exact comparison.
+- `bic` is the BI-FAST BIC. `sknbi_bic` is set only when SKNBI uses a different BIC for the same
+  bank. Both share one namespace in the validator.
+- Sharia business units (UUS) are `sharia-unit` records with their own BIC and `parent_id`. Their
+  `bank_code` comes from evidence only and is not inherited, because e.g. Bank DKI Syariah is
+  listed with its own code.
 
 ## Source quirks
 
@@ -46,6 +62,11 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
   (`kode-bank-indonesia-sync/…`); do not spoof a browser.
 - OJK's site rejects non-browser clients. It is a reference source checked by hand. Do not try to
   get around its firewall.
+- BI's licensed payment provider register (`bi-pjp`):
+  https://www.bi.go.id/id/layanan/informasi-perizinan/sistem-pembayaran/default.aspx. It is an
+  ASP.NET list with an "Unduh" export and a product-name search. The server starts resetting
+  connections after a few scripted form posts, so check e-wallet operators by hand and don't
+  automate it.
 - **SKNBI PDF (edition 24 Sept 2026) is defective:** the Nama column (and probably the ✓ columns) is
   the BI-FAST name list pasted in order, so names don't match the BIC on the same row. Use SKNBI only
   as a list of member BICs. A test in `tests/parsers.test.ts` pins this. When it fails on a new

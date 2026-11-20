@@ -54,6 +54,11 @@
       "type": ["string", "null"],
       "pattern": "^[A-Z0-9]{8}([A-Z0-9]{3})?$"
     },
+    "sknbi_bic": {
+      "description": "Only when the SKNBI list uses a different BIC than `bic` (the BI-FAST one).",
+      "type": "string",
+      "pattern": "^[A-Z0-9]{8}([A-Z0-9]{3})?$"
+    },
     "bi_fast": { "type": "boolean" },
     "sknbi": { "type": "boolean" },
     "account_number": {

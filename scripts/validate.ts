@@ -57,7 +57,17 @@ export function validate(banks: unknown, ewallets: unknown): string[] {
       else seen.set(v, r.id);
     }
   };
-  dupes("bic", () => true);
+  // bic and sknbi_bic share one namespace: a BIC identifies exactly one record.
+  const bics = new Map<unknown, unknown>();
+  for (const r of all) {
+    for (const v of [r.bic, r.sknbi_bic]) {
+      if (v === null || v === undefined) continue;
+      if (bics.has(v)) errors.push(`duplicate bic "${v}" on "${bics.get(v)}" and "${r.id}"`);
+      else bics.set(v, r.id);
+    }
+    if (r.sknbi_bic !== undefined && r.sknbi !== true)
+      errors.push(`"${r.id}": sknbi_bic is set, so sknbi must be true`);
+  }
   // Brands (parent_id set) may share their parent's code; inactive records keep historical codes.
   dupes("bank_code", (r) => r.status === "active" && r.parent_id === null);
 

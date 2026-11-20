@@ -1,1 +1,117 @@
-[]
+[
+  {
+    "id": "dana",
+    "type": "ewallet",
+    "category": "ewallet",
+    "name": "PT. ESPAY DEBIT INDONESIA KOE",
+    "display_name": "DANA",
+    "aliases": [],
+    "parent_id": null,
+    "bank_code": null,
+    "bic": "DANAIDJ1",
+    "bi_fast": true,
+    "sknbi": false,
+    "account_number": {
+      "kind": "phone",
+      "label": "Nomor HP"
+    },
+    "logo": null,
+    "status": "active",
+    "merged_into": null,
+    "sources": ["bi-fast"],
+    "verified": true,
+    "updated_at": "2026-11-20"
+  },
+  {
+    "id": "shopeepay",
+    "type": "ewallet",
+    "category": "ewallet",
+    "name": "PT AIRPAY INTERNATIONAL",
+    "display_name": "ShopeePay",
+    "aliases": ["Shopee"],
+    "parent_id": null,
+    "bank_code": null,
+    "bic": "APIDIDJ1",
+    "bi_fast": true,
+    "sknbi": false,
+    "account_number": {
+      "kind": "phone",
+      "label": "Nomor HP"
+    },
+    "logo": null,
+    "status": "active",
+    "merged_into": null,
+    "sources": ["bi-fast"],
+    "verified": false,
+    "updated_at": "2026-11-20"
+  },
+  {
+    "id": "gopay",
+    "type": "ewallet",
+    "category": "ewallet",
+    "name": "PT Dompet Anak Bangsa",
+    "display_name": "GoPay",
+    "aliases": ["Gojek"],
+    "parent_id": null,
+    "bank_code": null,
+    "bic": null,
+    "bi_fast": false,
+    "sknbi": false,
+    "account_number": {
+      "kind": "phone",
+      "label": "Nomor HP"
+    },
+    "logo": null,
+    "status": "active",
+    "merged_into": null,
+    "sources": [],
+    "verified": false,
+    "updated_at": "2026-11-20"
+  },
+  {
+    "id": "ovo",
+    "type": "ewallet",
+    "category": "ewallet",
+    "name": "PT Visionet Internasional",
+    "display_name": "OVO",
+    "aliases": [],
+    "parent_id": null,
+    "bank_code": null,
+    "bic": null,
+    "bi_fast": false,
+    "sknbi": false,
+    "account_number": {
+      "kind": "phone",
+      "label": "Nomor HP"
+    },
+    "logo": null,
+    "status": "active",
+    "merged_into": null,
+    "sources": [],
+    "verified": false,
+    "updated_at": "2026-11-20"
+  },
+  {
+    "id": "linkaja",
+    "type": "ewallet",
+    "category": "ewallet",
+    "name": "PT Fintek Karya Nusantara",
+    "display_name": "LinkAja",
+    "aliases": ["T-Cash"],
+    "parent_id": null,
+    "bank_code": "911",
+    "bic": null,
+    "bi_fast": false,
+    "sknbi": false,
+    "account_number": {
+      "kind": "phone",
+      "label": "Nomor HP"
+    },
+    "logo": null,
+    "status": "active",
+    "merged_into": null,
+    "sources": [],
+    "verified": false,
+    "updated_at": "2026-11-20"
+  }
+]

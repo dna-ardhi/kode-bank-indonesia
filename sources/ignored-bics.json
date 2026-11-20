@@ -1,0 +1,8 @@
+{
+  "INDOIDJA": "Bank Indonesia (central bank), not a customer bank",
+  "KSEIIDJ1": "PT KSEI (securities depository), not a bank",
+  "APIDIDJ1": "ShopeePay operator, published in ewallets.json",
+  "DANAIDJ1": "DANA operator, published in ewallets.json",
+  "LFIBIDJ1": "SKNBI-only BIC; SKNBI names are unusable, identity unconfirmed",
+  "PDKSIDBB": "SKNBI BIC of Bank Kalsel (sknbi_bic on bank-kalsel)"
+}
