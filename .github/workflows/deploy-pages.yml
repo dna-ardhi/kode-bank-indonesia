@@ -26,10 +26,13 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm test # validates data, builds dist/, runs the suite
+      - run: pnpm docs:build # docs site + a copy of dist/v1 -> docs/dist
+      - name: Check that the API is part of the site
+        run: test -f docs/dist/v1/all.json && test -f docs/dist/v1/by-id/bca.json && test -f docs/dist/index.html
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
         with:
-          path: dist
+          path: docs/dist
 
   deploy:
     needs: build

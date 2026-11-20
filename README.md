@@ -1,5 +1,7 @@
 # kode-bank-indonesia
 
+Docs: [Bahasa Indonesia](https://dna-ardhi.github.io/kode-bank-indonesia/) · [English](https://dna-ardhi.github.io/kode-bank-indonesia/en/)
+
 Every bank and e-wallet in Indonesia, with 3-digit bank codes (sandi bank) and BICs, as a free
 static JSON API and a typed npm package. Built for forms where a user picks a bank or e-wallet and
 enters an account number and holder name.
@@ -222,6 +224,7 @@ Repository layout and conventions for contributors (and coding agents) are in
 | `pnpm build:lib` | Compiles the npm package to `lib/` |
 | `pnpm sync:fetch` | Downloads the official PDFs and reports hash changes |
 | `pnpm sync:diff` | Compares the downloaded PDFs with `data/` |
+| `pnpm docs:dev` / `pnpm docs:build` | Runs / builds the docs site (needs Node ≥ 22.23.4) |
 
 ## License
 

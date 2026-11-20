@@ -17,6 +17,8 @@ pnpm build           # data/ -> dist/ (static API; refuses invalid data, wipes d
 pnpm build:lib       # compile the npm package src/ -> lib/
 pnpm sync:fetch      # download official sources to sources/raw/ and report hash changes (--write to record)
 pnpm sync:diff       # parse sources/raw/ PDFs, diff against data/ (--write to apply, --report <file>)
+pnpm docs:dev        # docs site (Astro Starlight) dev server; builds dist/ and copies dist/v1 into docs/public/v1 first
+pnpm docs:build      # docs site -> docs/dist (the Pages artifact: docs + /v1 API)
 ```
 
 Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before considering a change done.
@@ -34,6 +36,10 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
 - `scripts/validate.ts`: schema plus checks the schema can't express (unique id/bic/bank_code, references).
 - `scripts/sync/`: `fetch-sources.ts` (download + SHA-256), `parse-*.ts` (PDF participant lists),
   `diff.ts` (proposes record changes, all `verified: false`; never deletes or deactivates).
+- `docs/`: the documentation site (Astro Starlight), deployed to GitHub Pages together with the API.
+  Needs Node ≥ 22.23.4. `scripts/docs.ts` builds `dist/` and copies `dist/v1` into `docs/public/v1`
+  (gitignored), so the site serves `/v1/*` at the same URLs as before. Output is `docs/dist/`, not
+  `dist/`, which ships in the npm package. See "Docs" below.
 - `.github/workflows/`: `ci.yml` (PRs and main, Node 22 + 24), `deploy-pages.yml` (main → Pages),
   `sync.yml` (Mondays 02:00 UTC: PR on source changes, issue labelled `sync-failure` on failure),
   `publish-npm.yml` (`v*` tag → npm with provenance; tag must equal the package.json version).
@@ -95,6 +101,21 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
 - Scripts are importable modules with a CLI guard (`process.argv[1] === fileURLToPath(import.meta.url)`)
   so their logic can be unit-tested.
 - Biome handles lint and format. Markdown is excluded from Biome.
+
+## Docs
+
+- Content is in `docs/src/content/docs/`. Bahasa Indonesia is the default language and lives at the
+  root; English is under `en/` with **identical relative paths**. Every page change lands in both
+  languages. A page may not use the slug `v1` (it would shadow the API) and `en` is the locale.
+- Indonesian tone: friendly, semi-formal, "kamu", technical terms stay in English. English pages are
+  parallel text with the same facts, not literal translations.
+- Facts mirror the README, schema and data. Counts come from `docs/src/stats.ts` (built from the
+  package data), never typed by hand.
+- Interactive pages (`data/browse`, `form-example`) use `docs/src/components/`, which import the real
+  `search()` from `src/index.ts`. UI strings for both languages are in `components/strings.ts`.
+- Links in Markdown are relative (e.g. `../reference/schema/`), because the site is served under the
+  `/kode-bank-indonesia` base path.
+- Biome skips `.md`, `.mdx`, `.astro` and `docs/public`; `pnpm docs:build` is the check for those.
 
 ## Releases
 
