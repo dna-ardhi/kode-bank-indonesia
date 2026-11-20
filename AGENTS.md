@@ -93,6 +93,10 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
 - Parsers must fail loudly on layout changes (row-count tests, strict line checks). Never relax a
   check just to make a new PDF parse; investigate the layout change first.
 
+## Design
+
+- Before building or changing UI, read `DESIGN.md`.
+
 ## Code conventions
 
 - Development needs Node ≥ 22.18 (`.nvmrc`); the published package needs Node ≥ 20.10

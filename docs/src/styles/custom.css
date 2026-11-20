@@ -30,3 +30,12 @@
   --sl-color-accent: #9a6200;
   --sl-color-accent-high: #5c3b00;
 }
+
+/* Quieter sidebar: Starlight fills the active page solid; use a tint with an accent rule instead. */
+.sidebar-content a[aria-current="page"],
+.sidebar-content a[aria-current="page"]:hover,
+.sidebar-content a[aria-current="page"]:focus {
+  background-color: var(--sl-color-accent-low);
+  box-shadow: inset 2px 0 0 var(--sl-color-text-accent);
+  color: var(--sl-color-accent-high);
+}
