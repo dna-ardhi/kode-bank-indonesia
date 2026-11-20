@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Institution",
+  "description": "A bank, bank product brand, or e-wallet in Indonesia.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "type",
+    "category",
+    "name",
+    "display_name",
+    "aliases",
+    "parent_id",
+    "bank_code",
+    "bic",
+    "bi_fast",
+    "sknbi",
+    "account_number",
+    "logo",
+    "status",
+    "merged_into",
+    "sources",
+    "verified",
+    "updated_at"
+  ],
+  "properties": {
+    "id": {
+      "description": "Stable kebab-case slug. Never reused or renamed once published.",
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "type": { "enum": ["bank", "ewallet"] },
+    "category": {
+      "enum": ["commercial", "sharia", "sharia-unit", "regional", "foreign", "digital", "ewallet"]
+    },
+    "name": { "description": "Legal name.", "type": "string", "minLength": 1 },
+    "display_name": { "type": "string", "minLength": 1 },
+    "aliases": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "parent_id": {
+      "description": "For product brands that route through a parent bank's code.",
+      "type": ["string", "null"]
+    },
+    "bank_code": {
+      "description": "3-digit sandi bank, leading zeros kept. null if not verified.",
+      "type": ["string", "null"],
+      "pattern": "^\\d{3}$"
+    },
+    "bic": {
+      "type": ["string", "null"],
+      "pattern": "^[A-Z0-9]{8}([A-Z0-9]{3})?$"
+    },
+    "bi_fast": { "type": "boolean" },
+    "sknbi": { "type": "boolean" },
+    "account_number": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "label"],
+      "properties": {
+        "kind": { "enum": ["account", "phone"] },
+        "label": { "type": "string", "minLength": 1 },
+        "min_length": { "type": "integer", "minimum": 1 },
+        "max_length": { "type": "integer", "minimum": 1 },
+        "pattern": { "type": "string", "minLength": 1 }
+      }
+    },
+    "logo": { "type": ["string", "null"] },
+    "status": { "enum": ["active", "inactive"] },
+    "merged_into": { "type": ["string", "null"] },
+    "sources": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+      "uniqueItems": true
+    },
+    "verified": {
+      "description": "false if any field is not confirmed against an official source.",
+      "type": "boolean"
+    },
+    "updated_at": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" }
+  },
+  "if": { "properties": { "type": { "const": "ewallet" } } },
+  "then": { "properties": { "category": { "const": "ewallet" } } },
+  "else": { "properties": { "category": { "not": { "const": "ewallet" } } } }
+}
