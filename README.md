@@ -26,6 +26,19 @@ Lists are sorted by `display_name` (case-insensitive, then `id`).
 
 `/v1` paths, fields and ids are stable. Breaking changes will go to `/v2`, next to `/v1`.
 
+### Limits
+
+The API is static files on GitHub Pages, so GitHub's limits apply:
+
+- No rate limit of our own, but Pages has a soft bandwidth limit (about 100 GB/month) and may
+  throttle (`429`) busy sites. It isn't meant as a backend for high-traffic or commercial services.
+  For real traffic, fetch `all.json` once and serve your own copy.
+- No SLA. Keep a saved copy of `all.json` as a fallback.
+- Responses are cached for 10 minutes (`Cache-Control: max-age=600`, with `ETag`), so a new
+  deploy can take about 10 minutes to show up. CORS is open (`*`).
+- `GET`/`HEAD` only, no query strings or server-side filtering. An unknown
+  `/v1/by-id/{id}.json` returns an HTML `404`, not JSON: check `res.ok`.
+
 ## Usage
 
 ### Fetch with a fallback
