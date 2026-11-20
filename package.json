@@ -47,12 +47,16 @@
     "build": "node scripts/build.ts",
     "prepack": "node scripts/build.ts && tsc -p tsconfig.build.json",
     "build:lib": "tsc -p tsconfig.build.json",
-    "sync:diff": "node scripts/sync/diff.ts"
+    "sync:diff": "node scripts/sync/diff.ts",
+    "docs:dev": "node scripts/docs.ts dev",
+    "docs:build": "node scripts/docs.ts build"
   },
   "devDependencies": {
+    "@astrojs/starlight": "0.43.1",
     "@biomejs/biome": "^2.6.8",
     "@types/node": "^26.6.6",
     "ajv": "^8.20.0",
+    "astro": "7.4.13",
     "pdfjs-dist": "^6.5.438",
     "typescript": "^7.0.2",
     "vitest": "^5.1.1"

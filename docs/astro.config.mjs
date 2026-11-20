@@ -1,0 +1,22 @@
+import starlight from "@astrojs/starlight";
+import { defineConfig } from "astro/config";
+
+const repo = "https://github.com/dna-ardhi/kode-bank-indonesia";
+
+export default defineConfig({
+  site: "https://dna-ardhi.github.io",
+  base: "/kode-bank-indonesia",
+  integrations: [
+    starlight({
+      title: "kode-bank-indonesia",
+      description: "Kode bank, BIC, dan e-wallet Indonesia sebagai static JSON API dan paket npm.",
+      defaultLocale: "root",
+      locales: {
+        root: { label: "Bahasa Indonesia", lang: "id" },
+        en: { label: "English", lang: "en" },
+      },
+      social: [{ icon: "github", label: "GitHub", href: repo }],
+      editLink: { baseUrl: `${repo}/edit/main/docs/src/content/docs/` },
+    }),
+  ],
+});
