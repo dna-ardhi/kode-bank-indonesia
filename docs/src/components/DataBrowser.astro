@@ -77,7 +77,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
     };
 
     const render = () => {
-      const rows = search(q.value).filter(
+      const text = q.value.trim();
+      // Punctuation- or emoji-only input normalizes to "" in search(), which returns everything.
+      const hits = text && !/[\p{L}\p{N}]/u.test(text) ? [] : search(q.value);
+      const rows = hits.filter(
         (r) =>
           (!type.value || r.type === type.value) &&
           (!category.value || r.category === category.value) &&
@@ -117,7 +120,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 <style>
   .controls {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(11rem, 100%), 1fr));
     gap: 0.75rem;
     align-items: end;
     margin-block: 1rem;
@@ -125,6 +128,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
   label {
     display: grid;
     gap: 0.25rem;
+    min-width: 0;
     font-size: var(--sl-text-sm);
   }
   label.check {
@@ -135,6 +139,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
   }
   input[type="search"],
   select {
+    width: 100%;
+    min-width: 0;
     padding: 0.5rem 0.6rem;
     border: 1px solid var(--sl-color-gray-5);
     border-radius: 0.4rem;

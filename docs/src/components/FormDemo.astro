@@ -9,7 +9,7 @@ const t = strings[lang].form;
   <label for="kbi-pick">{t.pick}</label>
   <input id="kbi-pick" class="pick" type="text" placeholder={t.placeholder} autocomplete="off" aria-describedby="kbi-hint" />
   <p id="kbi-hint" class="hint">{t.hint}</p>
-  <ul class="results" role="listbox" aria-label={t.pick} hidden></ul>
+  <ul class="results" aria-label={t.pick} hidden></ul>
 
   <div class="chosen" hidden>
     <p class="summary"></p>
@@ -67,7 +67,7 @@ const t = strings[lang].form;
       chosen.hidden = false;
       summary.textContent = `${t.code}: ${r.bank_code ?? t.noCode}${r.bic ? ` · BIC ${r.bic}` : ""}`;
       warn.hidden = r.verified;
-      accLabel.textContent = r.account_number.label;
+      accLabel.textContent = t[r.account_number.kind] ?? r.account_number.label;
       acc.inputMode = r.account_number.kind === "phone" ? "tel" : "numeric";
       showPayload();
     };
@@ -75,14 +75,14 @@ const t = strings[lang].form;
     pick.addEventListener("input", () => {
       selected = undefined;
       chosen.hidden = true;
+      payload.textContent = "";
       const q = pick.value.trim();
       if (!q) {
         results.hidden = true;
         return;
       }
-      const rows = search(q)
-        .filter((r) => r.status === "active")
-        .slice(0, 8);
+      // A query of only punctuation or emoji normalizes to "" inside search(), which returns everything.
+      const rows = (/[\p{L}\p{N}]/u.test(q) ? search(q) : []).filter((r) => r.status === "active").slice(0, 8);
       results.replaceChildren(
         ...rows.map((r) => {
           const li = document.createElement("li");
@@ -110,6 +110,7 @@ const t = strings[lang].form;
 <style>
   .kbi-form {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 0.5rem;
     max-width: 32rem;
     margin-block: 1rem;
@@ -161,6 +162,10 @@ const t = strings[lang].form;
   .chosen {
     display: grid;
     gap: 0.5rem;
+  }
+  /* display: grid above would otherwise override the hidden attribute. */
+  .chosen[hidden] {
+    display: none;
   }
   .summary {
     margin: 0;

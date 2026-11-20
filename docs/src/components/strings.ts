@@ -59,6 +59,8 @@ export const strings = {
       nameNote:
         "Daftar ini nggak bisa mengecek apakah nama cocok dengan nomor rekening. Untuk itu kamu butuh API account inquiry berbayar.",
       payload: "Yang bisa kamu kirim ke backend",
+      account: "Nomor rekening",
+      phone: "Nomor HP",
     },
     home: {
       eyebrow: "// JSON statis · paket npm · MIT",
@@ -138,6 +140,8 @@ export const strings = {
       nameNote:
         "This list can't check whether a name matches an account number. That needs a paid account inquiry API.",
       payload: "What you could send to your backend",
+      account: "Account number",
+      phone: "Phone number",
     },
     home: {
       eyebrow: "// Static JSON · npm package · MIT",
