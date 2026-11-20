@@ -9,11 +9,12 @@ const ajv = new Ajv2020({ allErrors: true });
 const checkSchema = ajv.compile(schema);
 
 /** Returns a list of human-readable errors; empty means valid. */
-export function validate(banks: unknown, ewallets: unknown): string[] {
+export function validate(banks: unknown, ewallets: unknown, bprs: unknown = []): string[] {
   const errors: string[] = [];
   const files: [string, string, unknown][] = [
     ["banks.json", "bank", banks],
     ["ewallets.json", "ewallet", ewallets],
+    ["bprs.json", "bank", bprs],
   ];
   const all: Rec[] = [];
 
@@ -52,7 +53,7 @@ export function validate(banks: unknown, ewallets: unknown): string[] {
     const seen = new Map<unknown, unknown>();
     for (const r of all) {
       const v = r[field];
-      if (v === null || !pick(r)) continue;
+      if (v === null || v === undefined || !pick(r)) continue;
       if (seen.has(v)) errors.push(`duplicate ${field} "${v}" on "${seen.get(v)}" and "${r.id}"`);
       else seen.set(v, r.id);
     }
@@ -70,6 +71,7 @@ export function validate(banks: unknown, ewallets: unknown): string[] {
   }
   // Brands (parent_id set) may share their parent's code; inactive records keep historical codes.
   dupes("bank_code", (r) => r.status === "active" && r.parent_id === null);
+  dupes("ojk_code", () => true);
 
   for (const r of all) {
     for (const field of ["parent_id", "merged_into"]) {
@@ -87,10 +89,11 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const read = (f: string) => JSON.parse(readFileSync(new URL(`../data/${f}`, import.meta.url), "utf8"));
   const banks = read("banks.json");
   const ewallets = read("ewallets.json");
-  const errors = validate(banks, ewallets);
+  const bprs = read("bprs.json");
+  const errors = validate(banks, ewallets, bprs);
   if (errors.length) {
     console.error(`✗ ${errors.length} error(s):\n${errors.map((e) => `  - ${e}`).join("\n")}`);
     process.exit(1);
   }
-  console.log(`✓ ${banks.length} banks, ${ewallets.length} e-wallets valid`);
+  console.log(`✓ ${banks.length} banks, ${ewallets.length} e-wallets, ${bprs.length} BPR/BPRS valid`);
 }

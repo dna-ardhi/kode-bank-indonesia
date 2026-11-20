@@ -6,6 +6,7 @@ import { validate } from "../validate.ts";
 import { parseAspiQris, type QrisList } from "./parse-aspi-qris.ts";
 import { parseBifast } from "./parse-bifast.ts";
 import { normName, type OjkBank, parseOjkBanks } from "./parse-ojk.ts";
+import { type OjkBpr, parseOjkBpr } from "./parse-ojk-bpr.ts";
 import { parseSknbi } from "./parse-sknbi.ts";
 
 export type Change =
@@ -19,7 +20,10 @@ export type Change =
   | { kind: "ojk-conflict"; id: string; ours: string; code: string; ojkName: string }
   | { kind: "ojk-new"; code: string; ojkName: string }
   | { kind: "qris-apps"; id: string; apps: string[]; applied: boolean }
-  | { kind: "qris-new"; operator: string; apps: string[] };
+  | { kind: "qris-new"; operator: string; apps: string[] }
+  | { kind: "bpr-added"; id: string; code: string; name: string }
+  | { kind: "bpr-removed"; id: string; code: string; name: string }
+  | { kind: "bpr-renamed"; id: string; from: string; to: string };
 
 export type Evidence = {
   records: Record<
@@ -39,6 +43,9 @@ export type DiffInput = {
   ojk?: OjkBank[];
   /** ASPI QRIS directory. Report only: app names for review, and e-wallet operators not in the data. */
   qris?: QrisList;
+  /** data/bprs.json and OJK's BPR / BPRS lists. Additions and renames are applied (never safe); removals are reported. */
+  bprs?: Institution[];
+  ojkBpr?: { bpr: OjkBpr[]; bprs: OjkBpr[] };
   /** sources/bank-codes.json; when given, applied OJK codes are recorded in the returned copy. */
   evidence?: Evidence;
   today: string;
@@ -68,6 +75,7 @@ const withSource = (sources: string[], key: string, on: boolean) =>
 export function diffSources(input: DiffInput) {
   const banks: Institution[] = structuredClone(input.banks);
   const ewallets: Institution[] = structuredClone(input.ewallets);
+  const bprs: Institution[] = structuredClone(input.bprs ?? []);
   const evidence = input.evidence ? structuredClone(input.evidence) : undefined;
   const existing = [...banks, ...ewallets];
   const { ignored, today } = input;
@@ -213,6 +221,49 @@ export function diffSources(input: DiffInput) {
     }
   }
 
+  // BPR / BPRS: OJK sandi is the identity, so ids are `bpr-<sandi>` and never depend on a name.
+  for (const kind of ["bpr", "bprs"] as const) {
+    const list = input.ojkBpr?.[kind];
+    if (!list) continue;
+    const have = new Map(bprs.filter((r) => r.category === kind).map((r) => [r.ojk_code, r]));
+    for (const o of list) {
+      const r = have.get(o.code);
+      if (!r) {
+        const rec: Institution = {
+          id: `${kind}-${o.code}`,
+          type: "bank",
+          category: kind,
+          name: o.name,
+          display_name: o.name.replace(/^PT\.?\s+/i, ""),
+          aliases: [],
+          parent_id: null,
+          bank_code: null,
+          bic: null,
+          ojk_code: o.code,
+          bi_fast: false,
+          sknbi: false,
+          account_number: { kind: "account", label: "Nomor rekening" },
+          logo: null,
+          status: "active",
+          merged_into: null,
+          sources: ["ojk"],
+          verified: false,
+          updated_at: today,
+        };
+        bprs.push(rec);
+        changes.push({ kind: "bpr-added", id: rec.id, code: o.code, name: o.name });
+      } else if (r.name !== o.name) {
+        changes.push({ kind: "bpr-renamed", id: r.id, from: r.name, to: o.name });
+        r.name = o.name;
+        touch(r);
+      }
+    }
+    const listed = new Set(list.map((o) => o.code));
+    for (const r of have.values())
+      if (r.status === "active" && r.ojk_code && !listed.has(r.ojk_code))
+        changes.push({ kind: "bpr-removed", id: r.id, code: r.ojk_code, name: r.name });
+  }
+
   // Brands (no BIC of their own) carry their parent's network flags.
   const byId = new Map([...banks, ...ewallets].map((r) => [r.id, r]));
   for (const r of banks) {
@@ -227,7 +278,7 @@ export function diffSources(input: DiffInput) {
   // Informational, never blocking: qris-new (unlisted operators stay unlisted until someone checks the BI
   // register) and qris-apps that were not applied (the record has brand records of its own).
   const safe = changes.every((c) => c.kind === "ojk-fill" || c.kind === "qris-new" || c.kind === "qris-apps");
-  return { banks, ewallets, evidence, changes, safe, report: report(input, changes) };
+  return { banks, ewallets, bprs, evidence, changes, safe, report: report(input, changes) };
 }
 
 function report({ bifast, sknbi }: DiffInput, changes: Change[]) {
@@ -289,6 +340,21 @@ function report({ bifast, sknbi }: DiffInput, changes: Change[]) {
   );
 
   section(
+    "BPR / BPRS added (OJK)",
+    "| id | Sandi | Name |",
+    of("bpr-added").map((c) => `| ${code(c.id)} | ${code(c.code)} | ${c.name} |`),
+  );
+  section(
+    "BPR / BPRS renamed (OJK)",
+    "| id | Old name | New name |",
+    of("bpr-renamed").map((c) => `| ${code(c.id)} | ${c.from} | ${c.to} |`),
+  );
+  section(
+    "BPR / BPRS no longer in OJK's list",
+    "| id | Sandi | Name |",
+    of("bpr-removed").map((c) => `| ${code(c.id)} | ${code(c.code)} | ${c.name} |`),
+  );
+  section(
     "ASPI QRIS: app names",
     "| id | App names | Added as aliases |",
     of("qris-apps").map(
@@ -311,6 +377,7 @@ function report({ bifast, sknbi }: DiffInput, changes: Change[]) {
       "- [ ] New records: set `id`, `category`, `display_name`, `aliases`, and `bank_code` (with evidence in `sources/bank-codes.json`). Move e-wallet operators to `ewallets.json` or list them in `sources/ignored-bics.json`.",
       "- [ ] OJK sections: a code applied to a bank that had none was matched by name, so check it is the same bank; for a conflict, decide which is right and update `sources/bank-codes.json`.",
       "- [ ] ASPI QRIS sections: app names were added as aliases only to records whose name matches the operator; before adding an e-wallet, check its licence on the BI register by hand and that it can receive bank transfers.",
+      "- [ ] BPR / BPRS: an added bank is a permanent id; a bank missing from OJK's list may be closed or merged, so check before setting `status` / `merged_into`.",
       "- [ ] Removed participants: check whether the bank closed, merged or rebranded, and set `status` / `merged_into` if so. Records are never deleted.",
       "- [ ] Renames: update `display_name` / `aliases` if the brand changed.",
       "- [ ] Set `verified: true` again only for records that meet the rule in AGENTS.md.",
@@ -329,11 +396,22 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     return i > 0 ? process.argv[i + 1] : undefined;
   };
 
+  const ojkBpr = () => {
+    const f = (k: string) => new URL(`sources/raw/ojk-${k}.xlsx`, root);
+    return existsSync(f("bpr")) && existsSync(f("bprs"))
+      ? {
+          bpr: parseOjkBpr(read("sources/raw/ojk-bpr.xlsx")),
+          bprs: parseOjkBpr(read("sources/raw/ojk-bprs.xlsx")),
+        }
+      : undefined;
+  };
   const result = diffSources({
     bifast: await parseBifast(read("sources/raw/bi-fast.pdf")),
     sknbi: await parseSknbi(read("sources/raw/sknbi.pdf")),
     banks: json("data/banks.json"),
     ewallets: json("data/ewallets.json"),
+    bprs: json("data/bprs.json"),
+    ojkBpr: ojkBpr(),
     ignored: json("sources/ignored-bics.json"),
     evidence: json("sources/bank-codes.json"),
     ojk: existsSync(new URL("sources/raw/ojk-bank-umum.xlsx", root))
@@ -344,11 +422,11 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       : undefined,
     today: new Date().toISOString().slice(0, 10),
   });
-  const errors = validate(result.banks, result.ewallets);
+  const errors = validate(result.banks, result.ewallets, result.bprs);
   if (errors.length) throw new Error(`proposed data is invalid:\n${errors.join("\n")}`);
 
   if (process.argv.includes("--write")) {
-    for (const f of ["banks", "ewallets"] as const) {
+    for (const f of ["banks", "ewallets", "bprs"] as const) {
       writeFileSync(new URL(`data/${f}.json`, root), `${JSON.stringify(result[f], null, 2)}\n`);
     }
     writeFileSync(new URL("sources/bank-codes.json", root), `${JSON.stringify(result.evidence, null, 2)}\n`);

@@ -13,6 +13,12 @@ The dataset follows semver, and its version is the `version` field in every API 
 - **Minor:** new optional fields or endpoints.
 - **Major:** breaking changes, which also get a new `/vN` path.
 
+## 1.1.0 — 21 November 2026
+
+- New endpoint `/v1/bprs.json`: {stats.bprs} BPR and BPRS from OJK's lists. Not part of `all.json` or `banks.json`.
+- New optional field `ojk_code` (6-digit OJK sandi, not a transfer code) and categories `bpr` / `bprs`.
+- `bank_code` now comes from OJK's "Sandi Bank"; four banks that had no code now have one.
+
 ## 1.0.0 — 20 November 2026
 
 First release.

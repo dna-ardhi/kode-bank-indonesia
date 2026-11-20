@@ -41,6 +41,7 @@ Banks and e-wallets share one record shape. Here is BCA:
 | `bank_code` | 3-digit sandi bank as a string, leading zeros kept. `null` when no code could be confirmed. Brands use their parent's code. |
 | `bic` | BIC/SWIFT code from the BI-FAST list. `null` for brands and some e-wallets. |
 | `sknbi_bic` | Present only when the SKNBI list uses a different BIC than `bic` |
+| `ojk_code` | Present only on BPR/BPRS: the 6-digit OJK sandi. Not a transfer code; `bank_code` stays `null` for these. |
 | `bi_fast`, `sknbi` | Whether the institution is a BI-FAST / SKNBI participant (brands mirror their parent) |
 | `account_number` | `kind` (`account` or `phone`) and a form `label`. `min_length`, `max_length` and `pattern` appear only when confirmed; none are yet. |
 | `logo` | Reserved; always `null` for now |
@@ -59,6 +60,7 @@ Banks and e-wallets share one record shape. Here is BCA:
 | `regional` | Regional development banks (BPD) |
 | `foreign` | Branches of foreign banks |
 | `digital` | Digital banks |
+| `bpr`, `bprs` | Rural banks (BPR) and sharia rural banks (BPRS), only in `/v1/bprs.json` |
 | `ewallet` | E-wallets (only for `type: "ewallet"`) |
 
 The full definition is in [`schema/institution.schema.json`](https://github.com/dna-ardhi/kode-bank-indonesia/blob/main/schema/institution.schema.json) (JSON Schema 2020-12).

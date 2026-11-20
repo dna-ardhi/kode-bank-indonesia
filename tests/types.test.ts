@@ -18,6 +18,7 @@ const institutionKeys: Record<keyof Institution, true> = {
   bank_code: true,
   bic: true,
   sknbi_bic: true,
+  ojk_code: true,
   bi_fast: true,
   sknbi: true,
   account_number: true,
@@ -28,7 +29,7 @@ const institutionKeys: Record<keyof Institution, true> = {
   verified: true,
   updated_at: true,
 };
-const { sknbi_bic: _optional, ...requiredInstitution } = institutionKeys;
+const { sknbi_bic: _o1, ojk_code: _o2, ...requiredInstitution } = institutionKeys;
 const institutionRequired: Record<RequiredKeys<Institution>, true> = requiredInstitution;
 
 const accountKeys: Record<keyof AccountNumber, true> = {
@@ -50,6 +51,8 @@ const categories: Record<Category, true> = {
   regional: true,
   foreign: true,
   digital: true,
+  bpr: true,
+  bprs: true,
   ewallet: true,
 };
 

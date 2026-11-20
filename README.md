@@ -19,6 +19,7 @@ Base URL: `https://dna-ardhi.github.io/kode-bank-indonesia`
 | `/v1/all.json` | All records: `{ version, generated_at, count, data: [...] }` |
 | `/v1/banks.json` | Banks, bank brands and sharia units (same shape) |
 | `/v1/ewallets.json` | E-wallets (same shape) |
+| `/v1/bprs.json` | Rural banks (BPR and BPRS, from OJK). **Not** part of `all.json` or `banks.json`, so existing pickers don't change (same shape) |
 | `/v1/by-id/{id}.json` | One record, e.g. `/v1/by-id/bca.json` |
 | `/v1/meta.json` | Version, counts and hashes of the official source files |
 
@@ -90,13 +91,14 @@ export async function loadInstitutions() {
 |---|---|
 | `id` | Stable kebab-case slug. Never renamed or reused. |
 | `type` | `bank` or `ewallet` |
-| `category` | Banks: `commercial`, `sharia`, `sharia-unit` (a bank's sharia business unit, UUS), `regional` (BPD), `foreign` (branch of a foreign bank), `digital`. E-wallets: `ewallet`. |
+| `category` | Banks: `commercial`, `sharia`, `sharia-unit` (a bank's sharia business unit, UUS), `regional` (BPD), `foreign` (branch of a foreign bank), `digital`, `bpr`, `bprs` (rural banks, only in `/v1/bprs.json`). E-wallets: `ewallet`. |
 | `name` | Legal name exactly as Bank Indonesia's BI-FAST list writes it; for e-wallets, the operator's legal name |
 | `display_name`, `aliases` | What to show users, and other names to match in search |
 | `parent_id` | For brands (Jenius, TMRW, digibank, LINE Bank) and sharia units: the bank they belong to |
 | `bank_code` | 3-digit sandi bank as a string, leading zeros kept. `null` when no code could be confirmed. Brands use their parent's code. |
 | `bic` | BIC/SWIFT code from the BI-FAST list. `null` for brands and some e-wallets. |
 | `sknbi_bic` | Present only when the SKNBI list uses a different BIC than `bic` |
+| `ojk_code` | Present only on BPR/BPRS: the 6-digit OJK sandi. Not a transfer code; `bank_code` stays `null` for these. |
 | `bi_fast`, `sknbi` | Whether the institution is a BI-FAST / SKNBI participant (brands mirror their parent) |
 | `account_number` | `kind` (`account` or `phone`) and a form `label`. `min_length`, `max_length` and `pattern` appear only when confirmed; none are yet. |
 | `logo` | Reserved; always `null` for now |
@@ -130,6 +132,7 @@ treat their `bank_code` as certain. Always unverified:
 | [SKNBI participant list](https://www.bi.go.id/id/fungsi-utama/sistem-pembayaran/ritel/infrastruktur/Documents/List-Peserta-SKNBI.pdf) (Bank Indonesia, PDF) | `sknbi` membership by BIC only. The current edition's name column doesn't line up with its BICs, so its names aren't used. |
 | [BI licensed payment providers](https://www.bi.go.id/id/layanan/informasi-perizinan/sistem-pembayaran/default.aspx) | E-wallet operators (checked by hand) |
 | [OJK head-office list, Bank Umum dan Syariah](https://ojk.go.id/id/kanal/perbankan/data-dan-statistik/Pages/Daftar-Alamat-Kantor-Pusat-Bank-Umum-Dan-Syariah.aspx) (xlsx) | `bank_code` ("Sandi Bank") |
+| [OJK head-office lists, BPR and BPRS](https://ojk.go.id/id/kanal/perbankan/data-dan-statistik/Pages/Daftar-Alamat-Kantor-Pusat-BPR.aspx) (xlsx) | `/v1/bprs.json`: names and `ojk_code` |
 | [ASPI QRIS directory](https://aspi-indonesia.or.id/standar-dan-layanan/qris/) | Operator ↔ app name links, as review evidence for aliases and new e-wallets (no BICs or codes) |
 | Published bank code lists | `bank_code` where OJK has no entry, and a cross-check |
 

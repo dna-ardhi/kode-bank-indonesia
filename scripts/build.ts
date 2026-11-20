@@ -19,7 +19,8 @@ export const byDisplayName = (a: Rec, b: Rec) => {
 export function build(outDir: string, now = new Date()) {
   const banks: Rec[] = readJson("data/banks.json");
   const ewallets: Rec[] = readJson("data/ewallets.json");
-  const errors = validate(banks, ewallets);
+  const bprs: Rec[] = readJson("data/bprs.json");
+  const errors = validate(banks, ewallets, bprs);
   if (errors.length) throw new Error(`data/ is invalid:\n${errors.join("\n")}`);
 
   const version: string = readJson("package.json").version;
@@ -34,12 +35,16 @@ export function build(outDir: string, now = new Date()) {
   write("v1/all.json", envelope(all));
   write("v1/banks.json", envelope(all.filter((r) => r.type === "bank")));
   write("v1/ewallets.json", envelope(all.filter((r) => r.type === "ewallet")));
-  for (const r of all) write(`v1/by-id/${r.id}.json`, r);
+  // BPR/BPRS stay out of all.json and banks.json so existing pickers are unchanged.
+  const rural = [...bprs].sort(byDisplayName);
+  write("v1/bprs.json", envelope(rural));
+  for (const r of [...all, ...rural]) write(`v1/by-id/${r.id}.json`, r);
 
   const counts = {
     all: all.length,
     banks: banks.length,
     ewallets: ewallets.length,
+    bprs: bprs.length,
     verified: all.filter((r) => r.verified).length,
   };
   write("v1/meta.json", { version, generated_at, counts, sources: readJson("sources/hashes.json") });
@@ -54,6 +59,7 @@ function indexHtml(version: string, generatedAt: string, counts: Record<string, 
     ["v1/all.json", `All ${counts.all} institutions, sorted by display_name`],
     ["v1/banks.json", `${counts.banks} banks, bank brands and sharia units`],
     ["v1/ewallets.json", `${counts.ewallets} e-wallets`],
+    ["v1/bprs.json", `${counts.bprs} rural banks (BPR and BPRS), not included in the lists above`],
     ["v1/by-id/bca.json", "One record by id (replace <code>bca</code>)"],
     ["v1/meta.json", "Version, counts and hashes of the official source files"],
   ];

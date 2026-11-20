@@ -41,6 +41,7 @@ Bank dan e-wallet memakai bentuk record yang sama. Contohnya BCA:
 | `bank_code` | Sandi bank 3 digit sebagai string, nol di depan dipertahankan. `null` kalau belum ada kode yang bisa dikonfirmasi. Brand memakai kode induknya. |
 | `bic` | Kode BIC/SWIFT dari daftar BI-FAST. `null` untuk brand dan sebagian e-wallet. |
 | `sknbi_bic` | Hanya ada kalau daftar SKNBI memakai BIC yang berbeda dari `bic` |
+| `ojk_code` | Hanya ada di BPR/BPRS: sandi OJK 6 digit. Bukan kode transfer; `bank_code` tetap `null` untuk ini. |
 | `bi_fast`, `sknbi` | Apakah institusi itu peserta BI-FAST / SKNBI (brand mengikuti induknya) |
 | `account_number` | `kind` (`account` atau `phone`) dan `label` untuk form. `min_length`, `max_length`, dan `pattern` baru muncul kalau sudah terkonfirmasi; sekarang belum ada yang terisi. |
 | `logo` | Dicadangkan; saat ini selalu `null` |
@@ -59,6 +60,7 @@ Bank dan e-wallet memakai bentuk record yang sama. Contohnya BCA:
 | `regional` | Bank pembangunan daerah (BPD) |
 | `foreign` | Kantor cabang bank asing |
 | `digital` | Bank digital |
+| `bpr`, `bprs` | Bank perekonomian rakyat (BPR) dan BPR syariah (BPRS), hanya di `/v1/bprs.json` |
 | `ewallet` | E-wallet (khusus `type: "ewallet"`) |
 
 Definisi lengkapnya ada di [`schema/institution.schema.json`](https://github.com/dna-ardhi/kode-bank-indonesia/blob/main/schema/institution.schema.json) (JSON Schema 2020-12).

@@ -31,6 +31,15 @@ export const SOURCES: Source[] = [
     // The Indonesian edition ("Daftar Alamat …"); the English one starts with "List of".
     link: /href="([^"]*Daftar[^"]*Bank[^"]*Umum[^"]*\.xlsx)"/i,
   },
+  ...(["bpr", "bprs"] as const).map(
+    (k): Source => ({
+      key: `ojk-${k}`,
+      url: `https://ojk.go.id/id/kanal/perbankan/data-dan-statistik/Pages/Daftar-Alamat-Kantor-Pusat-${k.toUpperCase()}.aspx`,
+      file: `ojk-${k}.xlsx`,
+      kind: "xlsx",
+      link: /href="([^"]*Daftar[^"]*\.xlsx)"/i,
+    }),
+  ),
   // HTML with per-request noise (nonces, asset hashes): the hash covers the parsed pairs, see fetchSources.
   {
     key: "aspi-qris",

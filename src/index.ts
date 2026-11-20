@@ -10,6 +10,8 @@ export type Category =
   | "regional"
   | "foreign"
   | "digital"
+  | "bpr"
+  | "bprs"
   | "ewallet";
 export type Status = "active" | "inactive";
 
@@ -38,6 +40,8 @@ export interface Institution {
   bic: string | null;
   /** Only present when SKNBI uses a different BIC than `bic`. */
   sknbi_bic?: string;
+  /** 6-digit OJK sandi, only on BPR/BPRS records (not a transfer code). */
+  ojk_code?: string;
   bi_fast: boolean;
   sknbi: boolean;
   account_number: AccountNumber;

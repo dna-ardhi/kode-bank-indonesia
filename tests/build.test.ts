@@ -19,12 +19,14 @@ describe("build output", () => {
   const all = json("v1/all.json");
   const banks = json("v1/banks.json");
   const ewallets = json("v1/ewallets.json");
+  const bprs = json("v1/bprs.json");
 
   it("keeps the published /v1 paths stable", () => {
     expect(readdirSync(out).sort()).toEqual(["index.html", "v1"]);
     expect(readdirSync(join(out, "v1")).sort()).toEqual([
       "all.json",
       "banks.json",
+      "bprs.json",
       "by-id",
       "ewallets.json",
       "meta.json",
@@ -39,10 +41,20 @@ describe("build output", () => {
       expect(env.count).toBe(env.data.length);
     }
     expect(all.count).toBe(banks.count + ewallets.count);
+    expect(Object.keys(bprs)).toEqual(Object.keys(all));
   });
 
   it("produces data that still validates", () => {
-    expect(validate(banks.data, ewallets.data)).toEqual([]);
+    expect(validate(banks.data, ewallets.data, bprs.data)).toEqual([]);
+  });
+
+  it("keeps BPR/BPRS out of all.json and banks.json", () => {
+    expect(bprs.count).toBeGreaterThan(1000);
+    expect(bprs.data.every((r: { category: string }) => r.category === "bpr" || r.category === "bprs")).toBe(
+      true,
+    );
+    expect(all.data.some((r: { category: string }) => r.category === "bpr")).toBe(false);
+    expect(json("v1/meta.json").counts.bprs).toBe(bprs.count);
   });
 
   it("sorts by display_name, stably", () => {
@@ -50,8 +62,8 @@ describe("build output", () => {
     expect(banks.data).toEqual(all.data.filter((r: { type: string }) => r.type === "bank"));
   });
 
-  it("writes one by-id file per record", () => {
-    expect(readdirSync(join(out, "v1/by-id"))).toHaveLength(all.count);
+  it("writes one by-id file per record, BPR/BPRS included", () => {
+    expect(readdirSync(join(out, "v1/by-id"))).toHaveLength(all.count + bprs.count);
     expect(json("v1/by-id/bca.json")).toEqual(all.data.find((r: { id: string }) => r.id === "bca"));
   });
 
@@ -65,7 +77,7 @@ describe("build output", () => {
   });
 
   it("links every list endpoint from index.html", () => {
-    for (const p of ["v1/all.json", "v1/banks.json", "v1/ewallets.json", "v1/meta.json"]) {
+    for (const p of ["v1/all.json", "v1/banks.json", "v1/ewallets.json", "v1/bprs.json", "v1/meta.json"]) {
       expect(raw("index.html")).toContain(`href="${p}"`);
     }
   });

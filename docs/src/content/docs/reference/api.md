@@ -10,6 +10,7 @@ Base URL: `https://dna-ardhi.github.io/kode-bank-indonesia`
 | `/v1/all.json` | Semua record: `{ version, generated_at, count, data: [...] }` |
 | `/v1/banks.json` | Bank, brand bank, dan unit usaha syariah (format sama) |
 | `/v1/ewallets.json` | E-wallet (format sama) |
+| `/v1/bprs.json` | Bank rakyat (BPR dan BPRS, dari OJK). **Nggak** termasuk di `all.json` atau `banks.json`, jadi picker yang sudah ada nggak berubah (format sama) |
 | `/v1/by-id/{id}.json` | Satu record, misalnya `/v1/by-id/bca.json` |
 | `/v1/meta.json` | Versi, jumlah record, dan hash file sumber resmi |
 
@@ -32,7 +33,7 @@ Endpoint daftar membungkus data dalam *envelope*:
 - Daftar diurutkan menurut `display_name` (tanpa membedakan huruf besar-kecil), lalu `id`.
 - `/v1/by-id/{id}.json` mengembalikan **satu record langsung**, tanpa envelope.
 
-`/v1/meta.json` berisi `version`, `generated_at`, `counts` (`all`, `banks`, `ewallets`, `verified`), dan `sources` (SHA-256 tiap file sumber resmi yang dipakai).
+`/v1/meta.json` berisi `version`, `generated_at`, `counts` (`all`, `banks`, `ewallets`, `bprs`, `verified`), dan `sources` (SHA-256 tiap file sumber resmi yang dipakai).
 
 ## Batasan
 

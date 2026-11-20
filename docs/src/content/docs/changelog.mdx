@@ -13,6 +13,12 @@ Dataset mengikuti semver, dan versinya sama dengan field `version` di setiap res
 - **Minor:** field opsional atau endpoint baru.
 - **Major:** perubahan yang merusak, sekaligus path `/vN` baru.
 
+## 1.1.0 — 21 November 2026
+
+- Endpoint baru `/v1/bprs.json`: {stats.bprs} BPR dan BPRS dari daftar OJK. Nggak termasuk di `all.json` atau `banks.json`.
+- Field opsional baru `ojk_code` (sandi OJK 6 digit, bukan kode transfer) dan kategori `bpr` / `bprs`.
+- `bank_code` kini berasal dari "Sandi Bank" OJK; empat bank yang tadinya tanpa kode terisi.
+
 ## 1.0.0 — 20 November 2026
 
 Rilis pertama.

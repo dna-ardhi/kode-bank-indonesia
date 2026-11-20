@@ -4,6 +4,7 @@ import { parseIndonesianDate } from "../scripts/lib/pdf-table.ts";
 import { parseAspiQris } from "../scripts/sync/parse-aspi-qris.ts";
 import { parseBifast } from "../scripts/sync/parse-bifast.ts";
 import { parseOjkBanks } from "../scripts/sync/parse-ojk.ts";
+import { parseOjkBpr } from "../scripts/sync/parse-ojk-bpr.ts";
 import { parseSknbi } from "../scripts/sync/parse-sknbi.ts";
 
 const fixture = (f: string) => readFileSync(new URL(`fixtures/${f}`, import.meta.url));
@@ -116,5 +117,24 @@ describe("parseOjkBanks (Juni 2026)", () => {
   });
   it("rejects input that is not an OJK workbook", () => {
     expect(() => parseOjkBanks(new Uint8Array([1, 2, 3]))).toThrow();
+  });
+});
+
+describe("parseOjkBpr (Juni 2026)", () => {
+  const bpr = parseOjkBpr(fixture("ojk-bpr-2026-06.xlsx"));
+  const bprs = parseOjkBpr(fixture("ojk-bprs-2026-06.xlsx"));
+  it("returns every bank", () => {
+    expect(bpr).toHaveLength(1252);
+    expect(bprs).toHaveLength(174);
+  });
+  it("reads the 6-digit sandi and name", () => {
+    expect(bpr[0]).toEqual({
+      code: "600001",
+      name: "PT Perusahaan Perseroan Daerah Bank Perekonomian Rakyat Jawa Timur",
+    });
+    expect(bprs[0].code).toBe("620002");
+  });
+  it("rejects the bank-umum workbook (different layout)", () => {
+    expect(() => parseOjkBpr(fixture("ojk-bank-umum-2026-06.xlsx"))).toThrow(/header/);
   });
 });

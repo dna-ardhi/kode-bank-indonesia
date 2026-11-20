@@ -24,7 +24,7 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
 
 ## Layout
 
-- `data/banks.json`, `data/ewallets.json`: source of truth, arrays of records.
+- `data/banks.json`, `data/ewallets.json`, `data/bprs.json`: source of truth, arrays of records.
 - `schema/institution.schema.json`: one record shape for both files.
 - `scripts/build.ts`: writes `dist/v1/*` (minified, sorted by lowercase `display_name`, then `id`) and `dist/index.html`. `/v1` paths are pinned by `tests/build.test.ts`.
 - `src/index.ts`: internal types and `search()` over `dist/v1/all.json` (build `dist/` first). Not
@@ -67,6 +67,11 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
   on our own knowledge. Records linked to a code list only through a former name or a BIC prefix,
   brands, and e-wallets whose operator isn't named by its BIC all stay `verified: false`.
   `display_name`, `aliases` and `category` are editorial and not covered by the flag.
+- BPR/BPRS (`data/bprs.json`, categories `bpr` / `bprs`) come only from OJK's two workbooks. The id is
+  `bpr-<sandi>` / `bprs-<sandi>` (the 6-digit `ojk_code`, never the name, which changes), `bank_code` and `bic`
+  stay `null`, and they are always `verified: false`: the sandi is OJK's, not a transfer code. They are
+  served at `/v1/bprs.json` and `/v1/by-id/`, never in `all.json` or `banks.json`. The sync applies new
+  and renamed ones in its PR (never safe, so a human merges) and only reports ones OJK no longer lists.
 - `name` is the BI-FAST name verbatim (e.g. `PT. BANK CENTRAL ASIA Tbk.`), so the sync diff can
   detect renames by exact comparison.
 - `bic` is the BI-FAST BIC. `sknbi_bic` is set only when SKNBI uses a different BIC for the same

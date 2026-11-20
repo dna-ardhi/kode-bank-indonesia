@@ -1,12 +1,14 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import banksJson from "../data/banks.json" with { type: "json" };
+import bprsJson from "../data/bprs.json" with { type: "json" };
 import ewalletsJson from "../data/ewallets.json" with { type: "json" };
 import type { ParticipantList } from "../scripts/lib/pdf-table.ts";
 import { diffSources, type Evidence } from "../scripts/sync/diff.ts";
 import { parseAspiQris } from "../scripts/sync/parse-aspi-qris.ts";
 import { parseBifast } from "../scripts/sync/parse-bifast.ts";
 import { parseOjkBanks } from "../scripts/sync/parse-ojk.ts";
+import { parseOjkBpr } from "../scripts/sync/parse-ojk-bpr.ts";
 import { parseSknbi } from "../scripts/sync/parse-sknbi.ts";
 import { validate } from "../scripts/validate.ts";
 import ignored from "../sources/ignored-bics.json" with { type: "json" };
@@ -198,5 +200,49 @@ describe("diffSources with ASPI QRIS", () => {
     });
     expect(find(r.banks, "smbc-indonesia")?.aliases).not.toContain("BTPN Baru");
     expect(r.safe).toBe(true); // listed for a human glance, not blocking
+  });
+});
+
+describe("diffSources with BPR / BPRS", () => {
+  const ojkBpr = {
+    bpr: parseOjkBpr(fixture("ojk-bpr-2026-06.xlsx")),
+    bprs: parseOjkBpr(fixture("ojk-bprs-2026-06.xlsx")),
+  };
+  const bprs = bprsJson as Institution[];
+  const run = (list = ojkBpr, data = bprs) =>
+    diffSources({ bifast, sknbi, banks, ewallets, ignored, bprs: data, ojkBpr: list, today });
+
+  it("finds no changes between the seed data and the lists it came from", () => {
+    const r = run();
+    expect(r.changes).toEqual([]);
+    expect(r.bprs).toEqual(bprs);
+    expect(r.safe).toBe(true);
+  });
+
+  it("adds a new BPR under an id built from its sandi, and needs review", () => {
+    const r = run({
+      ...ojkBpr,
+      bpr: [...ojkBpr.bpr, { code: "699999", name: "PT Bank Perekonomian Rakyat Contoh" }],
+    });
+    expect(r.changes).toEqual([
+      { kind: "bpr-added", id: "bpr-699999", code: "699999", name: "PT Bank Perekonomian Rakyat Contoh" },
+    ]);
+    expect(find(r.bprs, "bpr-699999")).toMatchObject({
+      category: "bpr",
+      ojk_code: "699999",
+      display_name: "Bank Perekonomian Rakyat Contoh",
+      verified: false,
+    });
+    expect(validate(r.banks, r.ewallets, r.bprs)).toEqual([]);
+    expect(r.safe).toBe(false);
+  });
+
+  it("renames by sandi and reports a missing bank without deactivating it", () => {
+    const [first, ...rest] = ojkBpr.bpr;
+    const r = run({ ...ojkBpr, bpr: [{ ...first, name: "PT BPR Nama Baru" }, ...rest.slice(1)] });
+    expect(r.changes.map((c) => c.kind).sort()).toEqual(["bpr-removed", "bpr-renamed"]);
+    expect(find(r.bprs, `bpr-${first.code}`)?.name).toBe("PT BPR Nama Baru");
+    expect(find(r.bprs, `bpr-${rest[0].code}`)?.status).toBe("active");
+    expect(r.safe).toBe(false);
   });
 });

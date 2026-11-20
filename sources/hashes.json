@@ -11,6 +11,14 @@
     "sha256": "4e87b30794245952ecb982bb03cf9ccdb294ed1b08498ab3715621a313d63b50",
     "updated_at": "2026-11-20"
   },
+  "ojk-bpr": {
+    "sha256": "3f726961f2f0f9eeb2afcbebdbf2d9bd4eb26bd893b88f6e625a999cf0ee7e3d",
+    "updated_at": "2026-11-20"
+  },
+  "ojk-bprs": {
+    "sha256": "c82e03e415a2b4c2e191697d3c39c3d6d4fec12631f120a65b067ddc5cf48e39",
+    "updated_at": "2026-11-20"
+  },
   "sknbi": {
     "sha256": "3d9f486f732ca54ee09b806ed4f6d76ccb2ea028669c50f4dc98c508dc83a6e9",
     "updated_at": "2026-11-20"

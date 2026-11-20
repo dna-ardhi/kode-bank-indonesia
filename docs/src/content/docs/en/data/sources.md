@@ -9,6 +9,7 @@ description: Where names, BICs and bank codes come from, including the limits of
 | [SKNBI participant list](https://www.bi.go.id/id/fungsi-utama/sistem-pembayaran/ritel/infrastruktur/Documents/List-Peserta-SKNBI.pdf) (Bank Indonesia, PDF) | `sknbi` membership, by BIC only |
 | [BI licensed payment providers](https://www.bi.go.id/id/layanan/informasi-perizinan/sistem-pembayaran/default.aspx) | E-wallet operators (checked by hand) |
 | [OJK head-office list, Bank Umum dan Syariah](https://ojk.go.id/id/kanal/perbankan/data-dan-statistik/Pages/Daftar-Alamat-Kantor-Pusat-Bank-Umum-Dan-Syariah.aspx) (xlsx) | `bank_code` ("Sandi Bank") |
+| [OJK head-office lists, BPR and BPRS](https://ojk.go.id/id/kanal/perbankan/data-dan-statistik/Pages/Daftar-Alamat-Kantor-Pusat-BPR.aspx) (xlsx) | `/v1/bprs.json`: names and `ojk_code` |
 | [ASPI QRIS directory](https://aspi-indonesia.or.id/standar-dan-layanan/qris/) | Operator ↔ app name links, as review evidence for aliases and new e-wallets (no BICs or codes) |
 | Published bank code lists | `bank_code` where OJK has no entry, and a cross-check |
 

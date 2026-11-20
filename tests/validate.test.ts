@@ -113,4 +113,31 @@ describe("validate", () => {
       "banks.json[0] (bca): account_number.min_length > max_length",
     ]);
   });
+
+  describe("BPR / BPRS records", () => {
+    const bpr = (over: Record<string, unknown> = {}) =>
+      bank({
+        id: "bpr-600001",
+        category: "bpr",
+        bank_code: null,
+        bic: null,
+        ojk_code: "600001",
+        bi_fast: false,
+        sknbi: false,
+        verified: false,
+        ...over,
+      });
+    it("accepts a BPR with an OJK code and no transfer code", () => {
+      expect(validate([], [], [bpr()])).toEqual([]);
+    });
+    it("rejects a malformed or duplicated OJK code", () => {
+      expect(validate([], [], [bpr({ ojk_code: "6001" })]).join()).toMatch(/ojk_code/);
+      expect(validate([], [], [bpr(), bpr({ id: "bpr-600002" })]).join()).toMatch(
+        /duplicate ojk_code "600001"/,
+      );
+    });
+    it("does not treat records without an OJK code as duplicates of each other", () => {
+      expect(validate([bank(), bank({ id: "bni", bank_code: "009", bic: "BNINIDJA" })], [])).toEqual([]);
+    });
+  });
 });
