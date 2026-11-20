@@ -2,7 +2,6 @@
   "name": "kode-bank-indonesia",
   "version": "0.0.0",
   "description": "Indonesian banks and e-wallets with bank codes and BICs, as a static JSON API and a typed npm package",
-  "private": true,
   "type": "module",
   "license": "MIT",
   "keywords": [
@@ -47,7 +46,8 @@
     "sync:fetch": "node scripts/sync/fetch-sources.ts",
     "build": "node scripts/build.ts",
     "prepack": "node scripts/build.ts && tsc -p tsconfig.build.json",
-    "build:lib": "tsc -p tsconfig.build.json"
+    "build:lib": "tsc -p tsconfig.build.json",
+    "sync:diff": "node scripts/sync/diff.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.6.8",
@@ -56,5 +56,6 @@
     "pdfjs-dist": "^6.5.438",
     "typescript": "^7.0.2",
     "vitest": "^5.1.1"
-  }
+  },
+  "packageManager": "pnpm@12.21.0"
 }

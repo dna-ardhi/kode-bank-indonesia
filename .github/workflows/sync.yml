@@ -1,0 +1,77 @@
+name: Sync official sources
+
+on:
+  schedule:
+    - cron: "0 2 * * 1" # Mondays 02:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Fetch sources
+        run: pnpm sync:fetch --write
+
+      - name: Check for changed hashes
+        id: hashes
+        run: |
+          if git diff --quiet -- sources/hashes.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Parse and diff against data/
+        if: steps.hashes.outputs.changed == 'true'
+        run: |
+          pnpm sync:diff --write --report "$RUNNER_TEMP/sync-report.md"
+          pnpm exec biome format --write data
+          pnpm validate
+
+      - name: Open pull request
+        if: steps.hashes.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          # PRs opened with the default token don't trigger CI; add a SYNC_TOKEN secret to fix that.
+          token: ${{ secrets.SYNC_TOKEN || github.token }}
+          branch: sync/official-sources
+          delete-branch: true
+          commit-message: "chore(sync): update official source data"
+          title: "chore(sync): official source changes"
+          body-path: ${{ runner.temp }}/sync-report.md
+          add-paths: |
+            data/*.json
+            sources/hashes.json
+
+      - name: Open an issue on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh label create sync-failure --color B60205 --description "Scheduled source sync failed" --force
+          open=$(gh issue list --label sync-failure --state open --json number --jq '.[0].number')
+          if [ -n "$open" ]; then
+            gh issue comment "$open" --body "Failed again: $RUN_URL"
+          else
+            gh issue create --label sync-failure --title "Official source sync failed" --body "The source sync failed: $RUN_URL
+
+          Likely causes: bi.go.id blocked the runner or was down (the fetch step failed), or a BI PDF changed layout (the diff step failed with a parser error). For a layout change, add the new PDF to tests/fixtures/, update the parser and its row-count tests, then rerun this workflow."
+          fi

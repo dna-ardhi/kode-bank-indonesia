@@ -16,6 +16,7 @@ pnpm typecheck       # tsc --noEmit
 pnpm build           # data/ -> dist/ (static API; refuses invalid data, wipes dist/ first)
 pnpm build:lib       # compile the npm package src/ -> lib/
 pnpm sync:fetch      # download official sources to sources/raw/ and report hash changes (--write to record)
+pnpm sync:diff       # parse sources/raw/ PDFs, diff against data/ (--write to apply, --report <file>)
 ```
 
 Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before considering a change done.
@@ -31,7 +32,11 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
   tarball ships the data once, in `dist/`. `tests/types.test.ts` fails when the types drift from
   the schema.
 - `scripts/validate.ts`: schema plus checks the schema can't express (unique id/bic/bank_code, references).
-- `scripts/sync/`: `fetch-sources.ts` (download + SHA-256), `parse-*.ts` (PDF participant lists).
+- `scripts/sync/`: `fetch-sources.ts` (download + SHA-256), `parse-*.ts` (PDF participant lists),
+  `diff.ts` (proposes record changes, all `verified: false`; never deletes or deactivates).
+- `.github/workflows/`: `ci.yml` (PRs and main, Node 22 + 24), `deploy-pages.yml` (main → Pages),
+  `sync.yml` (Mondays 02:00 UTC: PR on source changes, issue labelled `sync-failure` on failure),
+  `publish-npm.yml` (`v*` tag → npm with provenance; tag must equal the package.json version).
 - `scripts/lib/pdf-table.ts`: shared strict parser for BI participant tables.
 - `sources/hashes.json`: last-seen hash per source. `sources/raw/` is gitignored.
 - `sources/bank-codes.json`: evidence for every `bank_code` (publisher URLs, matched lines, votes).
@@ -93,7 +98,6 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
 
 ## Working agreements
 
-- `package.json` stays `"private": true` until the publish workflow is approved.
 - Never push, publish to npm, create GitHub repos, or add secrets without asking first.
 - `PLAN.md` holds local planning notes, is gitignored, and must never be committed.
 - Conventional Commits (`type(scope): subject`, imperative, lowercase, ≤ 72 chars), one logical

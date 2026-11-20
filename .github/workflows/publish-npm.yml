@@ -1,0 +1,31 @@
+name: Publish to npm
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+  id-token: write # npm provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Check that the tag matches package.json
+        run: test "v$(node -p 'require("./package.json").version')" = "$GITHUB_REF_NAME"
+      - run: pnpm validate
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: npm publish --provenance --access public # prepack builds dist/ and lib/
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
