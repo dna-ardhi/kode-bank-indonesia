@@ -6,7 +6,6 @@ node_modules/
 .DS_Store
 
 # local planning notes, never committed
-/PLAN.md
 /docs/dist/
 /docs/.astro/
 /docs/public/v1/

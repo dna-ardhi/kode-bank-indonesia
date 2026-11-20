@@ -139,6 +139,5 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
 ## Working agreements
 
 - Never push, create GitHub repos, or add secrets without asking first.
-- `PLAN.md` holds local planning notes, is gitignored, and must never be committed.
 - Conventional Commits (`type(scope): subject`, imperative, lowercase, ≤ 72 chars), one logical
   change per commit, no AI attribution or session links.
