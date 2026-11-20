@@ -28,8 +28,8 @@ const t = strings[lang].form;
 </div>
 
 <script>
-  import { search } from "../../../src/index.ts";
   import type { Institution } from "../../../src/index.ts";
+  import { matches, pickable } from "./filter.ts";
 
   const root = document.querySelector<HTMLElement>(".kbi-form");
   if (root) {
@@ -81,8 +81,7 @@ const t = strings[lang].form;
         results.hidden = true;
         return;
       }
-      // A query of only punctuation or emoji normalizes to "" inside search(), which returns everything.
-      const rows = (/[\p{L}\p{N}]/u.test(q) ? search(q) : []).filter((r) => r.status === "active").slice(0, 8);
+      const rows = pickable(matches(q));
       results.replaceChildren(
         ...rows.map((r) => {
           const li = document.createElement("li");
