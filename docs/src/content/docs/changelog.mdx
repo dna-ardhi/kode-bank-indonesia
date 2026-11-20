@@ -7,7 +7,7 @@ import { stats } from "@/stats.ts";
 
 ## Kebijakan versi
 
-Dataset mengikuti semver, dan versinya sama dengan field `version` di setiap respons API. Tag tidak dipublikasikan ke npm.
+Dataset mengikuti semver, dan versinya sama dengan field `version` di setiap respons API.
 
 - **Patch:** perubahan data (record baru, koreksi, atau penonaktifan).
 - **Minor:** field opsional atau endpoint baru.
@@ -19,9 +19,4 @@ Rilis pertama.
 
 - API statis `/v1`: `all`, `banks`, `ewallets`, `by-id/{id}`, dan `meta`.
 - {stats.total} record: {stats.banks} bank dan {stats.ewallets} e-wallet, {stats.verified} di antaranya `verified`.
-- Paket npm ber-TypeScript dengan `all`, `banks`, `ewallets`, `findById`, dan `search`.
 - Sinkronisasi mingguan dengan daftar peserta BI-FAST dan SKNBI Bank Indonesia.
-
-## Paket npm dihapus
-
-Paket npm `kode-bank-indonesia` sudah dihapus dari npm, karena hanya diperbarui lewat rilis manual dan bisa tertinggal dari API. 1.0.1 adalah versi terakhirnya. `npm install kode-bank-indonesia` tidak lagi berfungsi, dan mirror jsDelivr/unpkg ikut hilang. Kalau proyekmu masih memakainya, pindah ke API statis: [mulai cepat](../quick-start/).

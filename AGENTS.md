@@ -124,7 +124,7 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
   changes are major plus a new `/vN` path.
 - The `version` in `package.json` is the dataset version: `scripts/build.ts` writes it into every API
   response. Bump it in a `chore(release): <x.y.z>` commit. Merging to `main` deploys; there is no tag
-  or publish step. The package is `private` and was unpublished from npm (1.0.1 was the last release). Don't re-publish it.
+  or publish step. The package is `private`; it is not published to npm.
 
 ## Working agreements
 

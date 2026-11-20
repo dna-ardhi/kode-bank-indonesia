@@ -7,7 +7,7 @@ import { stats } from "@/stats.ts";
 
 ## Versioning policy
 
-The dataset follows semver, and its version is the `version` field in every API response. Tags are not published to npm.
+The dataset follows semver, and its version is the `version` field in every API response.
 
 - **Patch:** data changes (new, corrected or deactivated records).
 - **Minor:** new optional fields or endpoints.
@@ -19,9 +19,4 @@ First release.
 
 - Static `/v1` API: `all`, `banks`, `ewallets`, `by-id/{id}` and `meta`.
 - {stats.total} records: {stats.banks} banks and {stats.ewallets} e-wallets, {stats.verified} of them `verified`.
-- Typed npm package with `all`, `banks`, `ewallets`, `findById` and `search`.
 - Weekly sync with Bank Indonesia's BI-FAST and SKNBI participant lists.
-
-## npm package removed
-
-The `kode-bank-indonesia` npm package has been unpublished from npm, because it only refreshed on a manual release and could lag behind the API. 1.0.1 was its last version. `npm install kode-bank-indonesia` no longer works, and the jsDelivr/unpkg mirrors are gone. If your project still depends on it, switch to the static API: [quick start](../quick-start/).

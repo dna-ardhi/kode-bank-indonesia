@@ -48,10 +48,6 @@ export async function loadInstitutions() {
 }
 ```
 
-> The `kode-bank-indonesia` npm package has been unpublished from npm (1.0.1 was the last release),
-> because it only refreshed on a manual release and could lag behind the API. `npm install` no longer
-> works and the jsDelivr/unpkg mirrors are gone. Use the API above.
-
 ## Record shape
 
 ```json
