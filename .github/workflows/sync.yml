@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
@@ -47,7 +47,7 @@ jobs:
 
       - name: Open pull request
         if: steps.hashes.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           # PRs opened with the default token don't trigger CI; add a SYNC_TOKEN secret to fix that.
           token: ${{ secrets.SYNC_TOKEN || github.token }}
