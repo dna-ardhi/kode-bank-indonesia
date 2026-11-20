@@ -96,6 +96,13 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
   so their logic can be unit-tested.
 - Biome handles lint and format. Markdown is excluded from Biome.
 
+## Releases
+
+- Data-only changes are a patch release, new optional fields or endpoints are minor, and breaking
+  changes are major plus a new `/vN` path.
+- `npm version <x.y.z> -m "chore(release): %s"`, then `git push origin main --follow-tags`. The
+  `v*` tag triggers `publish-npm.yml`. Pushing needs the user's OK.
+
 ## Working agreements
 
 - Never push, publish to npm, create GitHub repos, or add secrets without asking first.
