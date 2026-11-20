@@ -1,0 +1,23 @@
+---
+title: Changelog
+description: Riwayat versi dan kebijakan penomoran versi kode-bank-indonesia.
+---
+
+import { stats } from "@/stats.ts";
+
+## Kebijakan versi
+
+Paket npm mengikuti semver, dan versinya sama dengan field `version` di setiap respons API.
+
+- **Patch:** perubahan data (record baru, koreksi, atau penonaktifan).
+- **Minor:** field opsional atau endpoint baru.
+- **Major:** perubahan yang merusak, sekaligus path `/vN` baru.
+
+## 1.0.0 — 20 November 2026
+
+Rilis pertama.
+
+- API statis `/v1`: `all`, `banks`, `ewallets`, `by-id/{id}`, dan `meta`.
+- {stats.total} record: {stats.banks} bank dan {stats.ewallets} e-wallet, {stats.verified} di antaranya `verified`.
+- Paket npm ber-TypeScript dengan `all`, `banks`, `ewallets`, `findById`, dan `search`.
+- Sinkronisasi mingguan dengan daftar peserta BI-FAST dan SKNBI Bank Indonesia.

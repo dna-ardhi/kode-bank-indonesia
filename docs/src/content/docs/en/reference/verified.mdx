@@ -1,0 +1,46 @@
+---
+title: The verified flag
+description: What verified true and false mean, and which records are always unverified.
+---
+
+import { Aside } from "@astrojs/starlight/components";
+import { stats } from "@/stats.ts";
+
+Every record has a `verified` flag. Right now **{stats.verified} of {stats.total}** records are `true`.
+
+## What it means
+
+**`verified: true`** means:
+
+- the name and BIC come from Bank Indonesia's BI-FAST participant list, and
+- the bank code is reported consistently by several independent published lists ([how we decide](../../data/sources/)), and
+- no field relies on "our own knowledge".
+
+**`verified: false`** means at least one field isn't confirmed that way. Show these records, but **don't treat their `bank_code` as certain**.
+
+## Always `verified: false`
+
+- **Brands** (Jenius, TMRW, digibank, LINE Bank), because no official list names them.
+- **Most sharia units**, because their codes aren't published.
+- **Banks linked to a code only through a former name** or a BIC prefix.
+- **E-wallets whose brand-to-operator link hasn't been checked** against Bank Indonesia's licence register. Only DANA is `true`, because its BIC carries its name.
+
+Right now: {stats.withCode} records have a `bank_code`, and {stats.withoutCode} are still `null`.
+
+<Aside type="note">
+  `display_name`, `aliases` and `category` are editorial and **not** covered by the flag.
+</Aside>
+
+## Using it in your app
+
+```ts
+import { findById } from "kode-bank-indonesia";
+
+const bank = findById("jenius");
+if (bank && !bank.verified) {
+  // still show it, but don't treat it as the single source of truth
+  console.warn(`Code ${bank.bank_code} is not verified`);
+}
+```
+
+For real money transfers, always double-check critical values with the bank or your payment provider.

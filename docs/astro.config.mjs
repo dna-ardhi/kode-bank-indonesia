@@ -17,6 +17,27 @@ export default defineConfig({
       },
       social: [{ icon: "github", label: "GitHub", href: repo }],
       editLink: { baseUrl: `${repo}/edit/main/docs/src/content/docs/` },
+      sidebar: [
+        {
+          label: "Mulai",
+          translations: { en: "Get started" },
+          items: ["quick-start"],
+        },
+        {
+          label: "Referensi",
+          translations: { en: "Reference" },
+          items: ["reference/api", "reference/npm", "reference/schema", "reference/verified"],
+        },
+        {
+          label: "Data",
+          items: ["data/sources", "data/updates"],
+        },
+        {
+          label: "Proyek",
+          translations: { en: "Project" },
+          items: ["contributing", "faq", "changelog"],
+        },
+      ],
     }),
   ],
 });

@@ -1,0 +1,42 @@
+---
+title: FAQ
+description: Pertanyaan yang sering muncul soal verifikasi nama, kode bank kosong, dan lisensi.
+---
+
+import { stats } from "@/stats.ts";
+
+## Bisa nggak buat mengecek nama pemilik rekening?
+
+**Nggak bisa.** Daftar ini hanya membantu user memilih bank atau e-wallet yang benar. Memastikan bahwa "1234567890 / Budi Santoso" adalah rekening yang nyata butuh API *account inquiry* berbayar dari bank atau penyedia pembayaran. Proyek ini nggak punya akses ke data rekening, dan memang nggak dimaksudkan begitu.
+
+## Kenapa ada `bank_code` yang `null`?
+
+Saat ini {stats.withoutCode} dari {stats.total} record belum punya kode. Sebagian besar adalah unit usaha syariah yang kodenya nggak dipublikasikan. Daripada menebak, kami biarkan `null`. Soal "jangan menebak" adalah aturan utama proyek ini. Kamu tahu kodenya dan punya buktinya? Kirim lewat [PR](../contributing/).
+
+## Kenapa ada yang `verified: false`?
+
+Karena minimal satu field-nya belum terkonfirmasi. Rinciannya ada di halaman [flag verified](../reference/verified/). Singkatnya: tampilkan saja, tapi jangan anggap kodenya pasti benar.
+
+## Kenapa nomor rekening nggak punya panjang minimal atau maksimal?
+
+Format nomor rekening (`min_length`, `max_length`, `pattern`) baru diisi kalau sudah terkonfirmasi, dan sampai sekarang belum ada yang terkonfirmasi. Jadi `account_number` baru berisi `kind` dan `label` untuk form.
+
+## Bank yang sudah merger masih ada di daftar?
+
+Ya, sebagai `status: "inactive"` dengan `merged_into` yang menunjuk ke penerusnya. `id` nggak pernah dihapus atau dipakai ulang, supaya data lama di sistemmu tetap bisa dirujuk. Untuk dropdown, filter saja `status === "active"`.
+
+## Seberapa sering datanya diperbarui?
+
+Setiap Senin kami mengecek daftar resmi BI-FAST dan SKNBI. Kalau ada yang berubah, terbuka PR untuk di-review manusia, jadi nggak ada perubahan yang masuk tanpa dilihat. Detailnya ada di [cara data diperbarui](../data/updates/).
+
+## Boleh dipakai untuk produk komersial?
+
+Boleh. Kodenya berlisensi [MIT](https://github.com/dna-ardhi/kode-bank-indonesia/blob/main/LICENSE). Datanya berasal dari daftar publik Bank Indonesia dan sumber lain yang dicantumkan di [sumber data](../data/sources/). Untuk transfer uang sungguhan, cek nilai penting langsung ke bank.
+
+## Apakah URL `/v1` bisa tiba-tiba berubah?
+
+Nggak. Path, field, dan `id` di `/v1` stabil. Perubahan yang merusak akan masuk ke `/v2` berdampingan dengan `/v1`.
+
+## Nemu data yang salah?
+
+Buka [issue](https://github.com/dna-ardhi/kode-bank-indonesia/issues) atau langsung kirim PR. Lihat [panduan kontribusi](../contributing/).

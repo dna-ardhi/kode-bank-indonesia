@@ -1,0 +1,42 @@
+---
+title: FAQ
+description: Common questions about name verification, missing bank codes, and licensing.
+---
+
+import { stats } from "@/stats.ts";
+
+## Can I use this to verify an account holder's name?
+
+**No.** This list only helps users pick the right bank or e-wallet. Confirming that "1234567890 / Budi Santoso" is a real account needs a paid *account inquiry* API from a bank or payment provider. This project has no access to account data, and isn't meant to.
+
+## Why is some `bank_code` `null`?
+
+Right now {stats.withoutCode} of {stats.total} records have no code. Most are sharia units whose codes aren't published. Rather than guess, we leave them `null`. "Never guess" is this project's main rule. Know the code and have proof? Send a [PR](../contributing/).
+
+## Why are some records `verified: false`?
+
+Because at least one field isn't confirmed. The details are on the [verified flag](../reference/verified/) page. In short: show them, but don't treat the code as certain.
+
+## Why do account numbers have no min or max length?
+
+Account number formats (`min_length`, `max_length`, `pattern`) are only filled in once confirmed, and none are yet. So `account_number` currently only has `kind` and a form `label`.
+
+## Are merged banks still in the list?
+
+Yes, as `status: "inactive"` with `merged_into` pointing to the successor. An `id` is never deleted or reused, so old data in your system can still be resolved. For dropdowns, just filter on `status === "active"`.
+
+## How often is the data updated?
+
+Every Monday we check the official BI-FAST and SKNBI lists. If anything changed, a PR opens for human review, so nothing lands unseen. Details in [how data stays current](../data/updates/).
+
+## Can I use it in a commercial product?
+
+Yes. The code is [MIT](https://github.com/dna-ardhi/kode-bank-indonesia/blob/main/LICENSE) licensed. The data comes from public lists by Bank Indonesia and the other sources listed under [data sources](../data/sources/). For real money transfers, check critical values with the bank.
+
+## Could the `/v1` URLs suddenly change?
+
+No. `/v1` paths, fields and ids are stable. Breaking changes will go to `/v2`, next to `/v1`.
+
+## Found wrong data?
+
+Open an [issue](https://github.com/dna-ardhi/kode-bank-indonesia/issues) or send a PR directly. See the [contributing guide](../contributing/).

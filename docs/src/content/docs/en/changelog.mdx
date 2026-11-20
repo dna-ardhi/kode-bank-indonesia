@@ -1,0 +1,23 @@
+---
+title: Changelog
+description: Version history and versioning policy for kode-bank-indonesia.
+---
+
+import { stats } from "@/stats.ts";
+
+## Versioning policy
+
+The npm package follows semver, and its version is the `version` field in every API response.
+
+- **Patch:** data changes (new, corrected or deactivated records).
+- **Minor:** new optional fields or endpoints.
+- **Major:** breaking changes, which also get a new `/vN` path.
+
+## 1.0.0 — 20 November 2026
+
+First release.
+
+- Static `/v1` API: `all`, `banks`, `ewallets`, `by-id/{id}` and `meta`.
+- {stats.total} records: {stats.banks} banks and {stats.ewallets} e-wallets, {stats.verified} of them `verified`.
+- Typed npm package with `all`, `banks`, `ewallets`, `findById` and `search`.
+- Weekly sync with Bank Indonesia's BI-FAST and SKNBI participant lists.

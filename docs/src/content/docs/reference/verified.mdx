@@ -1,0 +1,46 @@
+---
+title: Flag verified
+description: Arti verified true dan false, dan record mana yang selalu belum terverifikasi.
+---
+
+import { Aside } from "@astrojs/starlight/components";
+import { stats } from "@/stats.ts";
+
+Setiap record punya `verified`. Saat ini **{stats.verified} dari {stats.total}** record bernilai `true`.
+
+## Artinya
+
+**`verified: true`** berarti:
+
+- nama dan BIC berasal dari daftar peserta BI-FAST milik Bank Indonesia, dan
+- kode bank dilaporkan konsisten oleh beberapa daftar terbitan independen ([cara kami menentukannya](../../data/sources/)), dan
+- nggak ada field yang hanya berdasarkan "pengetahuan kami sendiri".
+
+**`verified: false`** berarti minimal satu field belum terkonfirmasi dengan cara itu. Tampilkan saja recordnya, tapi **jangan anggap `bank_code`-nya pasti benar**.
+
+## Yang selalu `verified: false`
+
+- **Brand** (Jenius, TMRW, digibank, LINE Bank), karena nggak ada daftar resmi yang menamai mereka.
+- **Sebagian besar unit usaha syariah**, karena kodenya nggak dipublikasikan.
+- **Bank yang kodenya baru tersambung lewat nama lama** atau awalan BIC.
+- **E-wallet yang hubungan brand ke operatornya belum dicek** ke daftar izin penyelenggara jasa pembayaran Bank Indonesia. Hanya DANA yang `true`, karena BIC-nya memuat namanya.
+
+Saat ini: {stats.withCode} record punya `bank_code`, dan {stats.withoutCode} masih `null`.
+
+<Aside type="note">
+  `display_name`, `aliases`, dan `category` bersifat editorial dan **nggak** tercakup oleh flag ini.
+</Aside>
+
+## Cara memakainya di aplikasimu
+
+```ts
+import { findById } from "kode-bank-indonesia";
+
+const bank = findById("jenius");
+if (bank && !bank.verified) {
+  // tetap tampilkan, tapi jangan jadikan satu-satunya sumber kebenaran
+  console.warn(`Kode ${bank.bank_code} belum terverifikasi`);
+}
+```
+
+Untuk transfer uang sungguhan, selalu cek nilai penting langsung ke bank atau penyedia pembayaranmu.
