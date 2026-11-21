@@ -20,4 +20,5 @@ First release.
 - Static `/v1` API: `all`, `banks`, `ewallets`, `bprs`, `by-id/{id}` and `meta`.
 - {stats.total} records: {stats.banks} banks and {stats.ewallets} e-wallets, {stats.verified} of them `verified`. Plus {stats.bprs} BPR and BPRS in `/v1/bprs.json`.
 - `bank_code` from OJK's "Sandi Bank"; names and BICs from Bank Indonesia's BI-FAST participant list.
-- Weekly sync with the BI-FAST, SKNBI and OJK lists and ASPI's QRIS directory.
+- E-wallets have no bank code. An e-wallet becomes `verified` once its operator's licence is checked by hand on Bank Indonesia's register.
+- Weekly sync with the BI-FAST, SKNBI and OJK lists and ASPI's QRIS directory, which also flags OJK renames and records ASPI no longer lists.
