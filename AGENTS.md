@@ -45,6 +45,8 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
 - `sources/hashes.json`: last-seen hash per source. `sources/raw/` is gitignored.
 - `sources/bank-codes.json`: evidence for every `bank_code` (publisher URLs, matched lines, votes).
 - `sources/ignored-bics.json`: BI participants deliberately not published as banks, with reasons.
+- `sources/ewallet-licences.json`: hand checks of e-wallet operators on BI's licence register (licence
+  number, date, operator page and its archived copy). `tests/ewallet-licences.test.ts` ties it to `bi-pjp`.
 - `tests/fixtures/`: official files, named `<source>-<edition date>.pdf`.
 
 ## Data rules (non-negotiable)
@@ -61,12 +63,24 @@ Run `pnpm validate && pnpm test && pnpm lint && pnpm typecheck` before consideri
   units, brands, e-wallets), it is the code most news publishers in that file report (at least 2,
   no tie), confirmed only when no rival code has 2 or more publishers. Those news lists copy each
   other, so treat agreement as evidence, not proof. When OJK and a news majority disagree, OJK
-  wins on paper but the code is not confirmed: the sync report flags it for a human.
-- `verified: true` means: name and BIC come from the BI-FAST list, the bank code is confirmed as
-  above (listed by OJK under the same current legal name, or the news rule), and no field relies
-  on our own knowledge. Records linked to a code list only through a former name or a BIC prefix,
-  brands, and e-wallets whose operator isn't named by its BIC all stay `verified: false`.
-  `display_name`, `aliases` and `category` are editorial and not covered by the flag.
+  wins on paper but the code is not confirmed: the sync report flags it for a human. A publisher
+  whose codes contradict OJK's is not evidence: Rapyd's payout docs were dropped for that (see
+  `excluded` in the file). Each OJK code we use has an `ojk: <name> → <code>` line in its record's
+  `matches`; when OJK lists the code under another name (a rename or reassigned code) or drops it,
+  the sync reports `ojk-changed`, and the reviewer adds the new line once the bank is confirmed.
+  OJK's footnotes record renames and mergers officially; use them for former-name aliases.
+- For a bank, `verified: true` means: name and BIC come from the BI-FAST list, the bank code is
+  confirmed as above (listed by OJK under the same current legal name, or the news rule), and no
+  field relies on our own knowledge. Records linked to a code list only through a former name or a
+  BIC prefix, and brands, stay `verified: false`, and so does any bank without a `bank_code`
+  (`pnpm validate` rejects it without a `bank_code`, a `bic` or `bi_fast: true`).
+- E-wallets have no sandi bank: `bank_code` stays `null`, which for them means "none", not
+  "unknown". One is `verified: true` only when a human found its operator licensed on BI's register
+  (`bi-pjp` in `sources`, with a complete entry in `sources/ewallet-licences.json`), ASPI's QRIS
+  directory (`aspi-qris`) and the operator's own page both name it as the brand's operator, and any
+  BIC is BI-FAST's. `pnpm validate` rejects a verified e-wallet that has a code (LinkAja's
+  news-only 911 was dropped for that) or lacks either source.
+- `display_name`, `aliases` and `category` are editorial and not covered by the flag.
 - BPR/BPRS (`data/bprs.json`, categories `bpr` / `bprs`) come only from OJK's two workbooks. The id is
   `bpr-<sandi>` / `bprs-<sandi>` (the 6-digit `ojk_code`, never the name, which changes), `bank_code` and `bic`
   stay `null`, and they are always `verified: false`: the sandi is OJK's, not a transfer code. They are

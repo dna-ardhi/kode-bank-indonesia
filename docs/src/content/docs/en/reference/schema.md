@@ -38,7 +38,7 @@ Banks and e-wallets share one record shape. Here is BCA:
 | `name` | Legal name exactly as Bank Indonesia's BI-FAST list writes it; for e-wallets, the operator's legal name |
 | `display_name`, `aliases` | What to show users, and other names to match in search |
 | `parent_id` | For brands (Jenius, TMRW, digibank, LINE Bank) and sharia units: the bank they belong to |
-| `bank_code` | 3-digit sandi bank as a string, leading zeros kept. `null` when no code could be confirmed. Brands use their parent's code. |
+| `bank_code` | 3-digit sandi bank as a string, leading zeros kept. `null` when no code could be confirmed; e-wallets have none. Brands use their parent's code. |
 | `bic` | BIC/SWIFT code from the BI-FAST list. `null` for brands and some e-wallets. |
 | `sknbi_bic` | Present only when the SKNBI list uses a different BIC than `bic` |
 | `ojk_code` | Present only on BPR/BPRS: the 6-digit OJK sandi. Not a transfer code; `bank_code` stays `null` for these. |
@@ -46,7 +46,7 @@ Banks and e-wallets share one record shape. Here is BCA:
 | `account_number` | `kind` (`account` or `phone`) and a form `label`. `min_length`, `max_length` and `pattern` appear only when confirmed; none are yet. |
 | `logo` | Reserved; always `null` for now |
 | `status`, `merged_into` | `active` or `inactive`. Merged or rebranded institutions stay listed as `inactive`, with `merged_into` pointing to the successor. |
-| `sources` | Which official lists the record appears in (`bi-fast`, `sknbi`) |
+| `sources` | Which source lists the record appears in: `bi-fast`, `sknbi`, `ojk` (its `bank_code`), `aspi-qris` (ASPI's QRIS directory names its operator), `bi-pjp` (licence checked by hand on Bank Indonesia's register) |
 | `verified` | See the [verified flag](../verified/) |
 | `updated_at` | Date the record last changed (YYYY-MM-DD) |
 

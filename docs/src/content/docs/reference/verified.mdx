@@ -10,20 +10,29 @@ Setiap record punya `verified`. Saat ini **{stats.verified} dari {stats.total}**
 
 ## Artinya
 
-**`verified: true`** berarti:
+Untuk bank, **`verified: true`** berarti:
 
 - nama dan BIC berasal dari daftar peserta BI-FAST milik Bank Indonesia, dan
-- kode bank dilaporkan konsisten oleh beberapa daftar terbitan independen ([cara kami menentukannya](../../data/sources/)), dan
+- kode bank adalah "Sandi Bank" OJK untuk bank itu, atau, kalau OJK nggak punya entrinya, kode yang disepakati daftar terbitan lain ([cara kami menentukannya](../../data/sources/)), dan
 - nggak ada field yang hanya berdasarkan "pengetahuan kami sendiri".
 
-**`verified: false`** berarti minimal satu field belum terkonfirmasi dengan cara itu. Tampilkan saja recordnya, tapi **jangan anggap `bank_code`-nya pasti benar**.
+**`verified: false`** berarti minimal satu field belum terkonfirmasi dengan cara itu. Tampilkan saja recordnya, tapi **jangan anggap `bank_code`-nya pasti benar**. Bank tanpa `bank_code` nggak pernah `verified`.
 
 ## Yang selalu `verified: false`
 
 - **Brand** (Jenius, TMRW, digibank, LINE Bank), karena nggak ada daftar resmi yang menamai mereka.
 - **Sebagian besar unit usaha syariah**, karena kodenya nggak dipublikasikan.
 - **Bank yang kodenya baru tersambung lewat nama lama** atau awalan BIC.
-- **E-wallet yang hubungan brand ke operatornya belum dicek** ke daftar izin penyelenggara jasa pembayaran Bank Indonesia. Hanya DANA yang `true`, karena BIC-nya memuat namanya.
+
+## E-wallet
+
+E-wallet bukan bank, jadi nggak punya sandi bank dan `bank_code`-nya selalu `null`. E-wallet bernilai `verified: true` kalau:
+
+- register izin Bank Indonesia mencantumkan operatornya sebagai berizin (dicek manual; nomor dan tanggal izinnya ada di [`sources/ewallet-licences.json`](https://github.com/dna-ardhi/kode-bank-indonesia/blob/main/sources/ewallet-licences.json)),
+- direktori QRIS ASPI dan halaman resmi operatornya sama-sama menyebutnya sebagai operator brand itu, dan
+- BIC-nya, kalau ada, berasal dari daftar BI-FAST.
+
+Aplikasi yang membaca `verified` sebagai "kode banknya aman dipakai" nggak terpengaruh: e-wallet yang terverifikasi memang nggak punya kode. Kamu menjangkaunya lewat nomor HP, atau lewat BIC-nya di BI-FAST.
 
 Saat ini: {stats.withCode} record punya `bank_code`, dan {stats.withoutCode} masih `null`.
 

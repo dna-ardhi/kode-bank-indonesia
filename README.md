@@ -95,7 +95,7 @@ export async function loadInstitutions() {
 | `name` | Legal name exactly as Bank Indonesia's BI-FAST list writes it; for e-wallets, the operator's legal name |
 | `display_name`, `aliases` | What to show users, and other names to match in search |
 | `parent_id` | For brands (Jenius, TMRW, digibank, LINE Bank) and sharia units: the bank they belong to |
-| `bank_code` | 3-digit sandi bank as a string, leading zeros kept. `null` when no code could be confirmed. Brands use their parent's code. |
+| `bank_code` | 3-digit sandi bank as a string, leading zeros kept. `null` when no code could be confirmed; e-wallets have none. Brands use their parent's code. |
 | `bic` | BIC/SWIFT code from the BI-FAST list. `null` for brands and some e-wallets. |
 | `sknbi_bic` | Present only when the SKNBI list uses a different BIC than `bic` |
 | `ojk_code` | Present only on BPR/BPRS: the 6-digit OJK sandi. Not a transfer code; `bank_code` stays `null` for these. |
@@ -103,7 +103,7 @@ export async function loadInstitutions() {
 | `account_number` | `kind` (`account` or `phone`) and a form `label`. `min_length`, `max_length` and `pattern` appear only when confirmed; none are yet. |
 | `logo` | Reserved; always `null` for now |
 | `status`, `merged_into` | `active` or `inactive`. Merged or rebranded institutions stay listed as `inactive`, with `merged_into` pointing to the successor. |
-| `sources` | Which official lists the record appears in (`bi-fast`, `sknbi`) |
+| `sources` | Which source lists the record appears in: `bi-fast`, `sknbi`, `ojk` (its `bank_code`), `aspi-qris` (ASPI's QRIS directory names its operator), `bi-pjp` (licence checked by hand on Bank Indonesia's register) |
 | `verified` | See below |
 | `updated_at` | Date the record last changed (YYYY-MM-DD) |
 
@@ -111,16 +111,26 @@ The full definition is in [`schema/institution.schema.json`](schema/institution.
 
 ### The `verified` flag
 
-`verified: true` means the name and BIC come from Bank Indonesia's BI-FAST participant list, and
-the bank code is reported consistently by independent published lists (details below).
-`verified: false` means at least one field isn't confirmed that way. Show these records, but don't
-treat their `bank_code` as certain. Always unverified:
+For a bank, `verified: true` means the name and BIC come from Bank Indonesia's BI-FAST participant
+list, and the bank code is OJK's "Sandi Bank" for that bank or, where OJK has no entry, the code
+published lists agree on (details below). `verified: false` means at least one field isn't
+confirmed that way. Show these records, but don't treat their `bank_code` as certain. A bank
+without a `bank_code` is never verified. Always unverified:
 
 - brands (no official list names them),
 - most sharia units (their codes aren't published),
-- banks linked to a code only through a former name,
-- e-wallets whose brand-to-operator link hasn't been checked against Bank Indonesia's licence
-  register (all except DANA, whose BIC carries its name).
+- banks linked to a code only through a former name.
+
+E-wallets aren't banks, so they have no sandi bank and their `bank_code` is always `null`. An
+e-wallet is `verified: true` when:
+
+- Bank Indonesia's licence register lists its operator as licensed (checked by hand; the licence
+  number and date are in [`sources/ewallet-licences.json`](sources/ewallet-licences.json)),
+- ASPI's QRIS directory and the operator's own page both name it as the brand's operator, and
+- its BIC, if it has one, comes from the BI-FAST list.
+
+Apps that read `verified` as "the bank code is safe to use" aren't affected: a verified e-wallet has
+no code. You reach it by phone number, or by its BIC through BI-FAST.
 
 `display_name`, `aliases` and `category` are editorial and not covered by the flag.
 
@@ -130,16 +140,18 @@ treat their `bank_code` as certain. Always unverified:
 |---|---|
 | [BI-FAST participant list](https://www.bi.go.id/id/fungsi-utama/sistem-pembayaran/ritel/infrastruktur/Documents/List-Peserta-BI-FAST.pdf) (Bank Indonesia, PDF) | Names, BICs, `bi_fast` |
 | [SKNBI participant list](https://www.bi.go.id/id/fungsi-utama/sistem-pembayaran/ritel/infrastruktur/Documents/List-Peserta-SKNBI.pdf) (Bank Indonesia, PDF) | `sknbi` membership by BIC only. The current edition's name column doesn't line up with its BICs, so its names aren't used. |
-| [BI licensed payment providers](https://www.bi.go.id/id/layanan/informasi-perizinan/sistem-pembayaran/default.aspx) | E-wallet operators (checked by hand) |
-| [OJK head-office list, Bank Umum dan Syariah](https://ojk.go.id/id/kanal/perbankan/data-dan-statistik/Pages/Daftar-Alamat-Kantor-Pusat-Bank-Umum-Dan-Syariah.aspx) (xlsx) | `bank_code` ("Sandi Bank") |
+| [BI licensed payment providers](https://www.bi.go.id/id/layanan/informasi-perizinan/sistem-pembayaran/default.aspx) | E-wallet operator licences (`bi-pjp`, checked by hand; see `sources/ewallet-licences.json`) |
+| [OJK head-office list, Bank Umum dan Syariah](https://ojk.go.id/id/kanal/perbankan/data-dan-statistik/Pages/Daftar-Alamat-Kantor-Pusat-Bank-Umum-Dan-Syariah.aspx) (xlsx) | `bank_code` ("Sandi Bank"); former names in its footnotes, as aliases |
 | [OJK head-office lists, BPR and BPRS](https://ojk.go.id/id/kanal/perbankan/data-dan-statistik/Pages/Daftar-Alamat-Kantor-Pusat-BPR.aspx) (xlsx) | `/v1/bprs.json`: names and `ojk_code` |
 | [ASPI QRIS directory](https://aspi-indonesia.or.id/standar-dan-layanan/qris/) | Operator ↔ app name links, as review evidence for aliases and new e-wallets (no BICs or codes) |
-| Published bank code lists | `bank_code` where OJK has no entry, and a cross-check |
+| Bank code lists published by Indonesian financial news sites | `bank_code` where OJK has no entry, and a cross-check |
 
 `bank_code` is the "Sandi Bank" in OJK's head-office list. For records OJK doesn't list (sharia
-units, brands), it is the code that most of eight published lists (Indonesian financial news sites
-and a payment provider's docs) report, with at least two agreeing. Every vote, with the source URLs and the matched
-lines, is recorded in [`sources/bank-codes.json`](sources/bank-codes.json).
+units, brands), it is the code that most of seven news site lists report, with at least two
+agreeing and no rival code reported by two. Those lists often copy each other, so agreement is
+evidence, not proof. Every vote, with the source URLs and the matched lines, is recorded in
+[`sources/bank-codes.json`](sources/bank-codes.json). A payment provider's list (Rapyd) no longer
+counts: for 10 of the banks OJK lists, its code differs from OJK's (BCA as 624 instead of 014).
 
 Participants deliberately left out (Bank Indonesia itself, KSEI, and others) are listed with reasons
 in [`sources/ignored-bics.json`](sources/ignored-bics.json).
@@ -153,11 +165,12 @@ in [`sources/ignored-bics.json`](sources/ignored-bics.json).
    proposed changes and a report. Every touched record is set to `verified: false`, and nothing is
    deleted or deactivated automatically. A patch version bump is included when `data/` changed.
 3. Two low-risk changes are applied by the sync itself: an OJK code for a bank that had none, and
-   ASPI app names as aliases of a matched record. If a run contains **only** those (or nothing but a
+   ASPI app names as aliases (and the `aspi-qris` source) of a matched record. If a run contains **only** those (or nothing but a
    hash change), the PR merges itself once CI passes. This needs a `SYNC_TOKEN` secret, because PRs
    opened with the default token don't run CI.
 4. Anything else (new, removed or renamed participants, an OJK code that disagrees with ours, an OJK
-   bank we don't have) waits for a maintainer, who fills in what can't be automated (category,
+   bank we don't have, a code we use that OJK renamed or dropped, a record ASPI no longer lists)
+   waits for a maintainer, who fills in what can't be automated (category,
    display name, bank code evidence) and merges it.
 5. Merging to `main` redeploys GitHub Pages.
 

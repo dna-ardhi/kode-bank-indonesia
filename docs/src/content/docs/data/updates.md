@@ -9,8 +9,8 @@ Datanya dijaga dengan kombinasi otomatisasi dan review manusia.
 
 1. **Setiap Senin pukul 02:00 UTC**, [workflow sync](https://github.com/dna-ardhi/kode-bank-indonesia/blob/main/.github/workflows/sync.yml) mengunduh PDF BI-FAST dan SKNBI, daftar bank OJK, dan halaman QRIS ASPI, lalu membandingkan hash SHA-256-nya dengan [`sources/hashes.json`](https://github.com/dna-ardhi/kode-bank-indonesia/blob/main/sources/hashes.json).
 2. **Kalau ada sumber yang berubah**, workflow mem-parse-nya dan membandingkan dengan `data/`. Hasilnya pull request berisi usulan perubahan dan laporan, plus kenaikan versi patch kalau `data/` berubah.
-3. **Perubahan berisiko rendah di-merge otomatis.** Sinkronisasi menerapkan sendiri dua jenis perubahan: kode bank OJK untuk bank yang belum punya kode, dan nama aplikasi ASPI sebagai alias. Kalau satu putaran hanya berisi itu (atau cuma perubahan hash), PR di-merge otomatis setelah CI lolos.
-4. **Sisanya menunggu maintainer**: peserta baru, dihapus, atau berganti nama, kode OJK yang berbeda dengan punya kami, bank OJK yang belum ada di data. Maintainer mengisi hal yang nggak bisa diotomatisasi (kategori, nama tampilan, bukti kode bank), lalu merge.
+3. **Perubahan berisiko rendah di-merge otomatis.** Sinkronisasi menerapkan sendiri dua jenis perubahan: kode bank OJK untuk bank yang belum punya kode, dan nama aplikasi ASPI sebagai alias (beserta sumber `aspi-qris`). Kalau satu putaran hanya berisi itu (atau cuma perubahan hash), PR di-merge otomatis setelah CI lolos.
+4. **Sisanya menunggu maintainer**: peserta baru, dihapus, atau berganti nama, kode OJK yang berbeda dengan punya kami, bank OJK yang belum ada di data, kode yang kami pakai tapi diganti namanya atau dihapus oleh OJK, dan record yang nggak lagi ada di direktori QRIS ASPI. Maintainer mengisi hal yang nggak bisa diotomatisasi (kategori, nama tampilan, bukti kode bank), lalu merge.
 5. **Merge ke `main`** memicu deploy ulang GitHub Pages.
 
 ## Aturan keselamatan

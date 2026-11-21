@@ -10,20 +10,29 @@ Every record has a `verified` flag. Right now **{stats.verified} of {stats.total
 
 ## What it means
 
-**`verified: true`** means:
+For a bank, **`verified: true`** means:
 
 - the name and BIC come from Bank Indonesia's BI-FAST participant list, and
-- the bank code is reported consistently by several independent published lists ([how we decide](../../data/sources/)), and
+- the bank code is OJK's "Sandi Bank" for that bank or, where OJK has no entry, the code published lists agree on ([how we decide](../../data/sources/)), and
 - no field relies on "our own knowledge".
 
-**`verified: false`** means at least one field isn't confirmed that way. Show these records, but **don't treat their `bank_code` as certain**.
+**`verified: false`** means at least one field isn't confirmed that way. Show these records, but **don't treat their `bank_code` as certain**. A bank without a `bank_code` is never verified.
 
 ## Always `verified: false`
 
 - **Brands** (Jenius, TMRW, digibank, LINE Bank), because no official list names them.
 - **Most sharia units**, because their codes aren't published.
 - **Banks linked to a code only through a former name** or a BIC prefix.
-- **E-wallets whose brand-to-operator link hasn't been checked** against Bank Indonesia's licence register. Only DANA is `true`, because its BIC carries its name.
+
+## E-wallets
+
+E-wallets aren't banks, so they have no sandi bank and their `bank_code` is always `null`. An e-wallet is `verified: true` when:
+
+- Bank Indonesia's licence register lists its operator as licensed (checked by hand; the licence number and date are in [`sources/ewallet-licences.json`](https://github.com/dna-ardhi/kode-bank-indonesia/blob/main/sources/ewallet-licences.json)),
+- ASPI's QRIS directory and the operator's own page both name it as the brand's operator, and
+- its BIC, if it has one, comes from the BI-FAST list.
+
+Apps that read `verified` as "the bank code is safe to use" aren't affected: a verified e-wallet has no code. You reach it by phone number, or by its BIC through BI-FAST.
 
 Right now: {stats.withCode} records have a `bank_code`, and {stats.withoutCode} are still `null`.
 
