@@ -18,9 +18,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast"],
-    "verified": true,
-    "updated_at": "2026-11-20"
+    "sources": ["bi-fast", "aspi-qris"],
+    "verified": false,
+    "updated_at": "2026-11-21"
   },
   {
     "id": "shopeepay",
@@ -41,9 +41,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": ["bi-fast"],
+    "sources": ["bi-fast", "aspi-qris"],
     "verified": false,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "gopay",
@@ -64,9 +64,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": [],
+    "sources": ["aspi-qris"],
     "verified": false,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "ovo",
@@ -87,9 +87,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": [],
+    "sources": ["aspi-qris"],
     "verified": false,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "linkaja",
@@ -99,7 +99,7 @@
     "display_name": "LinkAja",
     "aliases": ["T-Cash"],
     "parent_id": null,
-    "bank_code": "911",
+    "bank_code": null,
     "bic": null,
     "bi_fast": false,
     "sknbi": false,
@@ -110,9 +110,9 @@
     "logo": null,
     "status": "active",
     "merged_into": null,
-    "sources": [],
+    "sources": ["aspi-qris"],
     "verified": false,
-    "updated_at": "2026-11-20"
+    "updated_at": "2026-11-21"
   },
   {
     "id": "astrapay",
