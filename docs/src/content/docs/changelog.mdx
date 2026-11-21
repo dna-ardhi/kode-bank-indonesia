@@ -3,8 +3,6 @@ title: Changelog
 description: Riwayat versi dan kebijakan penomoran versi kode-bank-indonesia.
 ---
 
-import { stats } from "@/stats.ts";
-
 ## Kebijakan versi
 
 Dataset mengikuti semver, dan versinya sama dengan field `version` di setiap respons API.
@@ -13,16 +11,6 @@ Dataset mengikuti semver, dan versinya sama dengan field `version` di setiap res
 - **Minor:** field opsional atau endpoint baru.
 - **Major:** perubahan yang merusak, sekaligus path `/vN` baru.
 
-## 1.1.0 — 21 November 2026
+## Rilis
 
-- Endpoint baru `/v1/bprs.json`: {stats.bprs} BPR dan BPRS dari daftar OJK. Nggak termasuk di `all.json` atau `banks.json`.
-- Field opsional baru `ojk_code` (sandi OJK 6 digit, bukan kode transfer) dan kategori `bpr` / `bprs`.
-- `bank_code` kini berasal dari "Sandi Bank" OJK; empat bank yang tadinya tanpa kode terisi.
-
-## 1.0.0 — 20 November 2026
-
-Rilis pertama.
-
-- API statis `/v1`: `all`, `banks`, `ewallets`, `by-id/{id}`, dan `meta`.
-- {stats.total} record: {stats.banks} bank dan {stats.ewallets} e-wallet, {stats.verified} di antaranya `verified`.
-- Sinkronisasi mingguan dengan daftar peserta BI-FAST dan SKNBI Bank Indonesia.
+Belum ada rilis.
