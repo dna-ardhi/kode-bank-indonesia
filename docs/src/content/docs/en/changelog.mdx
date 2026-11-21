@@ -3,6 +3,8 @@ title: Changelog
 description: Version history and versioning policy for kode-bank-indonesia.
 ---
 
+import { stats } from "@/stats.ts";
+
 ## Versioning policy
 
 The dataset follows semver, and its version is the `version` field in every API response.
@@ -11,6 +13,11 @@ The dataset follows semver, and its version is the `version` field in every API 
 - **Minor:** new optional fields or endpoints.
 - **Major:** breaking changes, which also get a new `/vN` path.
 
-## Releases
+## 1.0.0 — 21 November 2026
 
-No releases yet.
+First release.
+
+- Static `/v1` API: `all`, `banks`, `ewallets`, `bprs`, `by-id/{id}` and `meta`.
+- {stats.total} records: {stats.banks} banks and {stats.ewallets} e-wallets, {stats.verified} of them `verified`. Plus {stats.bprs} BPR and BPRS in `/v1/bprs.json`.
+- `bank_code` from OJK's "Sandi Bank"; names and BICs from Bank Indonesia's BI-FAST participant list.
+- Weekly sync with the BI-FAST, SKNBI and OJK lists and ASPI's QRIS directory.
