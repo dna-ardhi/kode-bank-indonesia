@@ -19,8 +19,11 @@ export type Change =
   | { kind: "ojk-fill"; id: string; code: string; ojkName: string }
   | { kind: "ojk-conflict"; id: string; ours: string; code: string; ojkName: string }
   | { kind: "ojk-new"; code: string; ojkName: string }
+  /** OJK lists our code under a name nobody reviewed (rename or reassigned code), or `null`: not at all. */
+  | { kind: "ojk-changed"; id: string; code: string; ojkName: string | null }
   | { kind: "qris-apps"; id: string; apps: string[]; applied: boolean }
   | { kind: "qris-new"; operator: string; apps: string[] }
+  | { kind: "qris-gone"; id: string; name: string }
   | { kind: "bpr-added"; id: string; code: string; name: string }
   | { kind: "bpr-removed"; id: string; code: string; name: string }
   | { kind: "bpr-renamed"; id: string; from: string; to: string };
@@ -61,6 +64,9 @@ const slug = (name: string) =>
 const withSource = (sources: string[], key: string, on: boolean) =>
   on ? (sources.includes(key) ? sources : [...sources, key]) : sources.filter((s) => s !== key);
 
+/** The evidence line recording that a human accepted OJK's name for a code. */
+const ojkLine = (name: string, code: string) => `ojk: ${name} → ${code}`;
+
 /**
  * Compares parsed BI lists with data/ and proposes record changes. Every record it touches gets
  * verified: false. It never deletes or deactivates a record: leaving BI-FAST isn't proof of a
@@ -68,9 +74,10 @@ const withSource = (sources: string[], key: string, on: boolean) =>
  * names are unreliable, see parse-sknbi.ts).
  *
  * Two kinds of change are applied automatically because they are low risk: an OJK "Sandi Bank" for a
- * bank that has no bank_code yet, and ASPI app names as aliases of an already matched record (not
- * one that has brand records of its own, e.g. Jenius under SMBC). `safe` is true when nothing else
- * changed (e-wallet candidates from ASPI are only listed), so CI may merge without a human.
+ * bank that has no bank_code yet, and ASPI app names as aliases (plus the aspi-qris source) of an
+ * already matched record (aliases not on one that has brand records of its own, e.g. Jenius under
+ * SMBC). `safe` is true when nothing else changed (e-wallet candidates from ASPI are only listed),
+ * so CI may merge without a human.
  */
 export function diffSources(input: DiffInput) {
   const banks: Institution[] = structuredClone(input.banks);
@@ -190,35 +197,56 @@ export function diffSources(input: DiffInput) {
         e.confirmed = true;
         e.votes[o.code] ??= [];
         e.votes[o.code].push("ojk");
-        e.matches.push(`ojk: ${o.name} → ${o.code}`);
+        e.matches.push(ojkLine(o.name, o.code));
       }
       changes.push({ kind: "ojk-fill", id: r.id, code: o.code, ojkName: o.name });
     }
   }
+  // The skip above trusts any code we already use, so check that OJK still lists it under the name a
+  // human accepted (its line in the evidence). This is how a rename or a reassigned code shows up.
+  if (input.ojk && evidence) {
+    const ojkNames = new Map(input.ojk.map((o) => [o.code, o.name]));
+    for (const r of legal) {
+      if (!r.bank_code || !r.sources.includes("ojk")) continue;
+      const name = ojkNames.get(r.bank_code) ?? null;
+      if (name === null || !evidence.records[r.id]?.matches.includes(ojkLine(name, r.bank_code)))
+        changes.push({ kind: "ojk-changed", id: r.id, code: r.bank_code, ojkName: name });
+    }
+  }
 
-  // ASPI QRIS: operator -> app names. Report only, a human decides what becomes an alias or a record.
+  // ASPI QRIS: operator -> app names. A unique match records the source and adds new app names as
+  // aliases; operators we can't match and records ASPI stopped listing are only reported.
   if (input.qris) {
     const all = [...banks, ...ewallets];
     const named = (operator: string) =>
       all.filter((r) =>
         [r.name, r.display_name, ...r.aliases].some((n) => normName(n) === normName(operator)),
       );
+    const listed = new Set<Institution>();
     for (const { operator, apps } of [...input.qris.banks, ...input.qris.nonBanks]) {
       const rs = named(operator);
-      const known = new Set(rs.flatMap((r) => [r.display_name, ...r.aliases]).map((n) => n.toLowerCase()));
-      const fresh = apps.filter((a) => !known.has(a.toLowerCase()));
-      if (rs.length === 1 && fresh.length) {
+      for (const r of rs) listed.add(r);
+      if (rs.length === 1) {
         const r = rs[0];
-        const hasBrands = all.some((x) => x.parent_id === r.id && x.category !== "sharia-unit");
-        if (!hasBrands) {
-          r.aliases.push(...fresh);
+        // Brand records (e.g. Jenius under SMBC) carry some of their operator's app names.
+        const brands = all.filter((x) => x.parent_id === r.id && x.category !== "sharia-unit");
+        const known = new Set(
+          [r, ...brands].flatMap((x) => [x.display_name, ...x.aliases]).map((n) => n.toLowerCase()),
+        );
+        const fresh = apps.filter((a) => !known.has(a.toLowerCase()));
+        const apply = fresh.length > 0 && brands.length === 0;
+        if (apply) r.aliases.push(...fresh);
+        if (apply || !r.sources.includes("aspi-qris")) {
           r.sources = withSource(r.sources, "aspi-qris", true);
-          r.updated_at = today; // aliases are editorial: verified stays as it is
+          r.updated_at = today; // aliases and sources are not covered by verified: it stays as it is
         }
-        changes.push({ kind: "qris-apps", id: r.id, apps: fresh, applied: !hasBrands });
+        if (fresh.length) changes.push({ kind: "qris-apps", id: r.id, apps: fresh, applied: apply });
       } else if (rs.length === 0 && apps.length && input.qris.nonBanks.some((e) => e.operator === operator))
         changes.push({ kind: "qris-new", operator, apps });
     }
+    for (const r of all)
+      if (r.sources.includes("aspi-qris") && !listed.has(r))
+        changes.push({ kind: "qris-gone", id: r.id, name: r.name });
   }
 
   // BPR / BPRS: OJK sandi is the identity, so ids are `bpr-<sandi>` and never depend on a name.
@@ -338,6 +366,11 @@ function report({ bifast, sknbi }: DiffInput, changes: Change[]) {
     "| Sandi Bank | OJK name |",
     of("ojk-new").map((c) => `| ${code(c.code)} | ${c.ojkName} |`),
   );
+  section(
+    "OJK changed a code we use",
+    "| id | Sandi Bank | OJK name now |",
+    of("ojk-changed").map((c) => `| ${code(c.id)} | ${code(c.code)} | ${c.ojkName ?? "not listed"} |`),
+  );
 
   section(
     "BPR / BPRS added (OJK)",
@@ -367,6 +400,11 @@ function report({ bifast, sknbi }: DiffInput, changes: Change[]) {
     "| Operator | App names |",
     of("qris-new").map((c) => `| ${c.operator} | ${c.apps.join(", ")} |`),
   );
+  section(
+    "ASPI QRIS: records no longer listed",
+    "| id | Name |",
+    of("qris-gone").map((c) => `| ${code(c.id)} | ${c.name} |`),
+  );
 
   if (changes.length === 0) {
     lines.push("No participant changes. Only the source files' hashes changed.", "");
@@ -375,8 +413,8 @@ function report({ bifast, sknbi }: DiffInput, changes: Change[]) {
       "### Review checklist",
       "",
       "- [ ] New records: set `id`, `category`, `display_name`, `aliases`, and `bank_code` (with evidence in `sources/bank-codes.json`). Move e-wallet operators to `ewallets.json` or list them in `sources/ignored-bics.json`.",
-      "- [ ] OJK sections: a code applied to a bank that had none was matched by name, so check it is the same bank; for a conflict, decide which is right and update `sources/bank-codes.json`.",
-      "- [ ] ASPI QRIS sections: app names were added as aliases only to records whose name matches the operator; before adding an e-wallet, check its licence on the BI register by hand and that it can receive bank transfers.",
+      "- [ ] OJK sections: a code applied to a bank that had none was matched by name, so check it is the same bank; for a conflict, decide which is right and update `sources/bank-codes.json`. For a changed name, check whether the bank was renamed or the code reassigned, update `display_name` / `aliases`, and add the new `ojk: <name> → <code>` line to the record's `matches`; a code OJK no longer lists may mean a closure or merger.",
+      "- [ ] ASPI QRIS sections: app names were added as aliases only to records whose name matches the operator; before adding an e-wallet, check its licence on the BI register by hand and that it can receive bank transfers. A record ASPI no longer lists may have been renamed or lost its licence: check before changing `status`.",
       "- [ ] BPR / BPRS: an added bank is a permanent id; a bank missing from OJK's list may be closed or merged, so check before setting `status` / `merged_into`.",
       "- [ ] Removed participants: check whether the bank closed, merged or rebranded, and set `status` / `merged_into` if so. Records are never deleted.",
       "- [ ] Renames: update `display_name` / `aliases` if the brand changed.",

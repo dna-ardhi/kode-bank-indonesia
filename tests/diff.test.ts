@@ -11,6 +11,7 @@ import { parseOjkBanks } from "../scripts/sync/parse-ojk.ts";
 import { parseOjkBpr } from "../scripts/sync/parse-ojk-bpr.ts";
 import { parseSknbi } from "../scripts/sync/parse-sknbi.ts";
 import { validate } from "../scripts/validate.ts";
+import evidenceJson from "../sources/bank-codes.json" with { type: "json" };
 import ignored from "../sources/ignored-bics.json" with { type: "json" };
 import type { Institution } from "../src/index.ts";
 
@@ -21,6 +22,7 @@ const qris = parseAspiQris(fixture("aspi-qris-2026-11-21.html").toString("utf8")
 const ojk = parseOjkBanks(fixture("ojk-bank-umum-2026-06.xlsx"));
 const banks = banksJson as Institution[];
 const ewallets = ewalletsJson as Institution[];
+const evidence = evidenceJson as Evidence;
 const today = "2030-01-01";
 
 const run = (over: { bifast?: ParticipantList; sknbi?: ParticipantList } = {}) =>
@@ -80,7 +82,7 @@ describe("diffSources", () => {
     expect(find(r.banks, "smbc-indonesia")).toMatchObject({
       bi_fast: false,
       status: "active",
-      sources: ["sknbi", "ojk"],
+      sources: ["sknbi", "ojk", "aspi-qris"],
     });
     expect(find(r.banks, "jenius")?.bi_fast).toBe(false); // brand follows its parent
     expect(validate(r.banks, r.ewallets)).toEqual([]);
@@ -114,8 +116,8 @@ describe("diffSources with OJK", () => {
 
   it("applies the code for a bank that has none, and records the evidence", () => {
     const stripped = banks.map((b) => (b.id === "hibank" ? { ...b, bank_code: null } : b));
-    const evidence = { records: { hibank: { bank_code: null, confirmed: false, votes: {}, matches: [] } } };
-    const r = run(ojk, { banks: stripped, evidence });
+    const blank = { bank_code: null, confirmed: false, votes: {}, matches: [] };
+    const r = run(ojk, { banks: stripped, evidence: { records: { ...evidence.records, hibank: blank } } });
     expect(r.changes).toEqual([
       { kind: "ojk-fill", id: "hibank", code: "553", ojkName: "PT BANK HIBANK INDONESIA" },
     ]);
@@ -144,6 +146,28 @@ describe("diffSources with OJK", () => {
   it("reports an OJK bank the data has never heard of, and needs review", () => {
     const r = run([...ojk, { code: "888", name: "PT BANK BARU" }]);
     expect(r.changes).toEqual([{ kind: "ojk-new", code: "888", ojkName: "PT BANK BARU" }]);
+    expect(r.safe).toBe(false);
+  });
+
+  it("checks codes we use against the OJK names recorded in the evidence", () => {
+    expect(run(ojk, { evidence }).changes).toEqual([]);
+    const renamed = ojk.map((o) => (o.code === "157" ? { ...o, name: "PT BANK CONTOH Tbk" } : o));
+    const r = run(renamed, { evidence });
+    expect(r.changes).toEqual([
+      { kind: "ojk-changed", id: "bank-maspion", code: "157", ojkName: "PT BANK CONTOH Tbk" },
+    ]);
+    expect(find(r.banks, "bank-maspion")?.bank_code).toBe("157");
+    expect(r.report).toContain("OJK changed a code we use (1)");
+    expect(r.safe).toBe(false);
+  });
+
+  it("reports a code we use that OJK no longer lists", () => {
+    const r = run(
+      ojk.filter((o) => o.code !== "157"),
+      { evidence },
+    );
+    expect(r.changes).toEqual([{ kind: "ojk-changed", id: "bank-maspion", code: "157", ojkName: null }]);
+    expect(r.report).toContain("not listed");
     expect(r.safe).toBe(false);
   });
 });
@@ -192,14 +216,31 @@ describe("diffSources with ASPI QRIS", () => {
       e.operator === "PT Bank BTPN Tbk" ? { ...e, apps: ["Jenius QR", "BTPN Baru"] } : e,
     );
     const r = run({ ...qris, banks: smbc });
+    // "Jenius QR" is an alias of the jenius brand record, so only the unknown name is listed.
     expect(r.changes).toContainEqual({
       kind: "qris-apps",
       id: "smbc-indonesia",
-      apps: ["Jenius QR", "BTPN Baru"],
+      apps: ["BTPN Baru"],
       applied: false,
     });
     expect(find(r.banks, "smbc-indonesia")?.aliases).not.toContain("BTPN Baru");
     expect(r.safe).toBe(true); // listed for a human glance, not blocking
+  });
+
+  it("records the source on a match even without new app names", () => {
+    const unmarked = ewallets.map((e) => (e.id === "gopay" ? { ...e, sources: [] } : e));
+    const r = diffSources({ bifast, sknbi, banks, ewallets: unmarked, ignored, qris, today });
+    expect(find(r.ewallets, "gopay")).toMatchObject({ sources: ["aspi-qris"], updated_at: today });
+    expect(r.changes.filter((c) => c.kind === "qris-apps")).toEqual([]);
+    expect(r.safe).toBe(true);
+  });
+
+  it("reports a record ASPI no longer lists, without deactivating it", () => {
+    const r = run({ ...qris, nonBanks: qris.nonBanks.filter((e) => e.operator !== "PT Astra Digital Arta") });
+    expect(r.changes).toContainEqual({ kind: "qris-gone", id: "astrapay", name: "PT Astra Digital Arta" });
+    expect(find(r.ewallets, "astrapay")?.status).toBe("active");
+    expect(r.report).toContain("ASPI QRIS: records no longer listed (1)");
+    expect(r.safe).toBe(false);
   });
 });
 
