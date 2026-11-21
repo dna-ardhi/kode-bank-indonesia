@@ -34,7 +34,7 @@ export interface Institution {
   aliases: string[];
   /** Set for product brands and sharia units that route through a parent bank. */
   parent_id: string | null;
-  /** 3-digit sandi bank, leading zeros kept. null if unknown. */
+  /** 3-digit sandi bank, leading zeros kept. null if unknown; e-wallets have none. */
   bank_code: string | null;
   /** BIC from the BI-FAST list. */
   bic: string | null;

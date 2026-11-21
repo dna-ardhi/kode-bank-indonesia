@@ -1,0 +1,5 @@
+{
+  "register": "https://www.bi.go.id/id/layanan/informasi-perizinan/sistem-pembayaran/default.aspx",
+  "how": "Checked by hand: the register only works through its web form, so don't script it. Filter Kategori to Penyedia Jasa Pembayaran, search the operator's name and open Lihat Detail. Record operator (as the register writes it), licence_no (No. Keputusan / Persetujuan), licence_date (YYYY-MM-DD), status, checked_at (YYYY-MM-DD), operator_page (the operator's own page naming the brand and its BI licence) and archived (a Wayback Machine copy of that page). Then add bi-pjp to the record's sources.",
+  "records": {}
+}

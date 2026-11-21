@@ -68,7 +68,7 @@
       "type": ["string", "null"]
     },
     "bank_code": {
-      "description": "3-digit sandi bank, leading zeros kept. null if not verified.",
+      "description": "3-digit sandi bank, leading zeros kept. null if not verified; e-wallets have none.",
       "type": ["string", "null"],
       "pattern": "^\\d{3}$"
     },

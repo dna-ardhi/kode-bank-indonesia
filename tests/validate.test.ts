@@ -31,8 +31,11 @@ const ewallet = (over: Record<string, unknown> = {}) =>
     bank_code: null,
     bic: null,
     account_number: { kind: "phone", label: "Nomor HP" },
+    verified: false,
     ...over,
   });
+// A record without its own BIC (brand, merged bank) is never verified.
+const noBic = (over: Record<string, unknown>) => bank({ bic: null, verified: false, ...over });
 
 const errs = (banks: unknown[], ewallets: unknown[] = []) => validate(banks, ewallets);
 
@@ -40,7 +43,7 @@ describe("validate", () => {
   it("accepts empty data", () => expect(errs([])).toEqual([]));
 
   it("accepts a valid bank, brand and e-wallet", () => {
-    const brand = bank({ id: "jenius", parent_id: "bca", bic: null, category: "digital" });
+    const brand = noBic({ id: "jenius", parent_id: "bca", category: "digital" });
     expect(errs([bank(), brand], [ewallet()])).toEqual([]);
   });
 
@@ -77,7 +80,7 @@ describe("validate", () => {
 
   it("treats sknbi_bic as part of the BIC namespace", () => {
     expect(errs([bank({ sknbi_bic: "CENAIDBB" })])).toEqual([]);
-    const clash = bank({ id: "other", bank_code: "999", bic: null, sknbi_bic: "CENAIDJA" });
+    const clash = noBic({ id: "other", bank_code: "999", sknbi_bic: "CENAIDJA" });
     expect(errs([bank(), clash])).toEqual(['duplicate bic "CENAIDJA" on "bca" and "other"']);
     expect(errs([bank({ sknbi: false, sknbi_bic: "CENAIDBB" })])).toEqual([
       '"bca": sknbi_bic is set, so sknbi must be true',
@@ -85,14 +88,42 @@ describe("validate", () => {
   });
 
   it("rejects duplicate bank_code among active non-brands", () => {
-    const e = errs([bank(), bank({ id: "other", bic: null })]);
+    const e = errs([bank(), noBic({ id: "other" })]);
     expect(e).toEqual(['duplicate bank_code "014" on "bca" and "other"']);
   });
 
   it("allows shared bank_code for brands and inactive records", () => {
-    const brand = bank({ id: "brand", parent_id: "bca", bic: null });
-    const old = bank({ id: "old", bic: null, status: "inactive", merged_into: "bca" });
+    const brand = noBic({ id: "brand", parent_id: "bca" });
+    const old = noBic({ id: "old", status: "inactive", merged_into: "bca" });
     expect(errs([bank(), brand, old])).toEqual([]);
+  });
+
+  it.each([
+    ["no bank_code", { bank_code: null }],
+    ["no bic", { bic: null }],
+    ["not in BI-FAST", { bi_fast: false }],
+  ])("rejects verified with %s", (_, over) => {
+    expect(errs([bank(over)])).toEqual([
+      "banks.json[0] (bca): verified needs a bank_code, a bic and bi_fast: true",
+    ]);
+  });
+
+  describe("verified e-wallets", () => {
+    const checked = { verified: true, sources: ["aspi-qris", "bi-pjp"] };
+    it("accepts one with a licence check, the ASPI operator link and no code", () => {
+      expect(errs([], [ewallet(checked)])).toEqual([]);
+      expect(errs([], [ewallet({ ...checked, bic: "DANAIDJ1", bi_fast: true })])).toEqual([]);
+    });
+    it.each([
+      ["no licence check", { sources: ["aspi-qris"] }],
+      ["no ASPI link", { sources: ["bi-pjp"] }],
+      ["an unconfirmed code", { bank_code: "911" }],
+      ["a BIC BI-FAST doesn't list", { bic: "DANAIDJ1", bi_fast: false }],
+    ])("rejects one with %s", (_, over) => {
+      expect(errs([], [ewallet({ ...checked, ...over })])).toEqual([
+        "ewallets.json[0] (gopay): verified needs bi-pjp and aspi-qris in sources and no bank_code",
+      ]);
+    });
   });
 
   it("rejects dangling and self references", () => {
@@ -103,7 +134,7 @@ describe("validate", () => {
   });
 
   it("requires inactive status when merged_into is set", () => {
-    const e = errs([bank(), bank({ id: "old", bic: null, bank_code: null, merged_into: "bca" })]);
+    const e = errs([bank(), noBic({ id: "old", bank_code: null, merged_into: "bca" })]);
     expect(e).toEqual(['banks.json[1] (old): merged_into is set, so status must be "inactive"']);
   });
 

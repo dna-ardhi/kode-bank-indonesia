@@ -35,6 +35,23 @@ export function validate(banks: unknown, ewallets: unknown, bprs: unknown = []):
       if (rec.merged_into !== null && rec.status !== "inactive") {
         errors.push(`${where}: merged_into is set, so status must be "inactive"`);
       }
+      // The checkable half of the verified rule (AGENTS.md). Banks: name and BIC from BI-FAST, a
+      // confirmed code. E-wallets have no sandi bank: a licence checked on BI's register (bi-pjp), the
+      // operator named by ASPI, no unconfirmed code, and a BIC only when BI-FAST lists it.
+      if (rec.verified) {
+        const src = rec.sources as string[];
+        const ewallet = rec.type === "ewallet";
+        const ok = ewallet
+          ? rec.bank_code === null &&
+            src.includes("bi-pjp") &&
+            src.includes("aspi-qris") &&
+            (rec.bic === null || rec.bi_fast === true)
+          : rec.bank_code !== null && rec.bic !== null && rec.bi_fast === true;
+        if (!ok)
+          errors.push(
+            `${where}: verified needs ${ewallet ? "bi-pjp and aspi-qris in sources and no bank_code" : "a bank_code, a bic and bi_fast: true"}`,
+          );
+      }
       const an = rec.account_number as { min_length?: number; max_length?: number };
       if (an.min_length !== undefined && an.max_length !== undefined && an.min_length > an.max_length) {
         errors.push(`${where}: account_number.min_length > max_length`);
